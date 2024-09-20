@@ -12,6 +12,20 @@ class GoogleMapView extends StatefulWidget {
 class GoogleMapViewState extends State<GoogleMapView> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
+  Set<Marker> markers = {};
+
+  Set<Polyline> polylines = {
+    const Polyline(
+      polylineId: PolylineId('route1'),
+      points: [
+        LatLng(37.42796133580664, -122.085749655962),
+        LatLng(37.42796133580664, -122.100),
+      ],
+      geodesic: true,
+      color: Colors.blue,
+      width: 4,
+    ),
+  };
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -30,9 +44,9 @@ class GoogleMapViewState extends State<GoogleMapView> {
       body: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+        onMapCreated: _onMapCreated,
+        markers: markers,
+        polylines: polylines,
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToLocation,
@@ -40,6 +54,24 @@ class GoogleMapViewState extends State<GoogleMapView> {
         icon: const Icon(Icons.location_on),
       ),
     );
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+    setState(() {
+      markers.add(
+        const Marker(
+          markerId: MarkerId('marker1'),
+          position: LatLng(37.42796133580664, -122.085749655962),
+          infoWindow: InfoWindow(title: 'San Francisco'),
+        ),
+      );
+      markers.add(const Marker(
+        markerId: MarkerId('marker2'),
+        position: LatLng(37.42796133580664, -122.100),
+        infoWindow: InfoWindow(title: 'Mountain View'),
+      ));
+    });
   }
 
   Future<void> _goToLocation() async {
