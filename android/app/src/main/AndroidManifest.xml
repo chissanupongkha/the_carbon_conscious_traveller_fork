@@ -3,6 +3,12 @@
         android:label="the_carbon_conscious_traveller"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+
+        <!-- Read Google Maps API key -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="GOOGLE_API_KEY"/>
+               
         <activity
             android:name=".MainActivity"
             android:exported="true"
