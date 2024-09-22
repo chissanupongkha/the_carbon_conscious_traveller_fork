@@ -69,12 +69,6 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
       child: Column(
         children: [
           ...predictionsWidgets,
-          ElevatedButton(
-            onPressed: () async {
-              _predict();
-            },
-            child: Text('Predict and print to console'),
-          ),
         ],
       ),
     );
