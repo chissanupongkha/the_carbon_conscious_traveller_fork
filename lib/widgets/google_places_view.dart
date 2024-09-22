@@ -15,12 +15,37 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   final TextEditingController originController = TextEditingController();
   final TextEditingController destinationController = TextEditingController();
 
+  Place? origin; //starting location
+  Place? destination; //end location
   String? _predictLastText; // Last text used for prediction
   String fieldType = ""; // Origin or destination
   final List<String> _countries = ['au']; // Preset countries
   List<AutocompletePrediction>? _predictions; // Predictions
   bool _predicting = false; // Predicting state
+  bool _fetchingPlace = false; // Fetching place state
+  dynamic _fetchingPlaceErr; // Fetching place error
   dynamic _predictErr; // Prediction error
+
+  // Place fields to fetch when a prediction is clicked
+  final List<PlaceField> _placeFields = [
+    PlaceField.Address,
+    PlaceField.AddressComponents,
+    PlaceField.BusinessStatus,
+    PlaceField.Id,
+    PlaceField.Location,
+    PlaceField.Name,
+    PlaceField.OpeningHours,
+    PlaceField.PhoneNumber,
+    PlaceField.PhotoMetadatas,
+    PlaceField.PlusCode,
+    PlaceField.PriceLevel,
+    PlaceField.Rating,
+    PlaceField.Types,
+    PlaceField.UserRatingsTotal,
+    PlaceField.UTCOffset,
+    PlaceField.Viewport,
+    PlaceField.WebsiteUri,
+  ];
 
   @override
   void initState() {
@@ -71,10 +96,26 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
           label: Text("Enter a destination"),
         ),
       ),
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: (_predictions ?? [])
+            .map(_buildPredictionItem)
+            .toList(growable: false),
+      ),
       const Image(
         image: FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
     ];
+  }
+
+  Widget _buildPredictionItem(AutocompletePrediction item) {
+    return InkWell(
+      onTap: () => _onItemClicked(item),
+      child: Column(children: [
+        Text(item.fullText),
+        const Divider(thickness: 2),
+      ]),
+    );
   }
 
   //Save the last text input and the field type
@@ -82,6 +123,8 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     print("text changed: $value");
     _predictLastText = value;
     fieldType = field;
+
+    _predict();
   }
 
   //Predict the last text input
@@ -119,5 +162,38 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
       });
     }
     print("Predictions: $_predictions");
+  }
+
+  //When a predicted item is clicked, fetch the place details
+  void _onItemClicked(AutocompletePrediction item) async {
+    print("item: ${item.fullText}");
+
+    try {
+      final result =
+          await _places.fetchPlace(item.placeId, fields: _placeFields);
+
+      if (fieldType == "start") {
+        originController.text = item.fullText;
+
+        setState(() {
+          origin = result.place;
+          _fetchingPlace = false;
+        });
+      } else if (fieldType == "destination") {
+        destinationController.text = item.fullText;
+        setState(() {
+          destination = result.place;
+          _fetchingPlace = false;
+        });
+      }
+
+      print("start: $origin");
+      print("destination: $destination");
+    } catch (err) {
+      setState(() {
+        _fetchingPlaceErr = err;
+        _fetchingPlace = false;
+      });
+    }
   }
 }
