@@ -96,6 +96,8 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
             .map(_buildPredictionItem)
             .toList(growable: false),
       ),
+      _buildErrorWidget(_fetchingPlaceErr),
+      _buildErrorWidget(_predictErr),
       const Image(
         image: FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
@@ -110,6 +112,14 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
         const Divider(thickness: 2),
       ]),
     );
+  }
+
+  Widget _buildErrorWidget(dynamic err) {
+    final theme = Theme.of(context);
+    final errorText = err == null ? '' : err.toString();
+    return Text(errorText,
+        style: theme.textTheme.bodySmall
+            ?.copyWith(color: theme.colorScheme.error));
   }
 
   //Save the last text input and the field type
@@ -161,6 +171,10 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   //When a predicted item is clicked, fetch the place details
   void _onItemClicked(AutocompletePrediction item) async {
     print("item: ${item.fullText}");
+
+    if (_fetchingPlace) {
+      return; // Fetching in progress
+    }
 
     try {
       final result =
