@@ -16,14 +16,14 @@ class GoogleMapViewState extends State<GoogleMapView> {
       Completer<GoogleMapController>();
   Set<Marker> markers = {};
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
+  static const CameraPosition _originPlace = CameraPosition(
+    target: LatLng(-33.83312702503771, 151.0854297797668),
     zoom: 14.4746,
   );
 
-  static const CameraPosition _kDestinantion = CameraPosition(
+  static const CameraPosition _destinationPlace = CameraPosition(
       bearing: 192.8334901395799,
-      target: LatLng(37.42796133580664, -122.097899799974),
+      target: LatLng(-33.8271275189807, 151.08711818603933),
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
 
@@ -36,7 +36,7 @@ class GoogleMapViewState extends State<GoogleMapView> {
     return Scaffold(
       body: GoogleMap(
           mapType: MapType.normal,
-          initialCameraPosition: _kGooglePlex,
+          initialCameraPosition: _originPlace,
           onMapCreated: _onMapCreated,
           markers: markers,
           polylines: Set<Polyline>.of(polylines.values)),
@@ -51,14 +51,15 @@ class GoogleMapViewState extends State<GoogleMapView> {
         Marker(
           markerId: const MarkerId('marker1'),
           position: LatLng(
-              _kGooglePlex.target.latitude, _kGooglePlex.target.longitude),
-          infoWindow: const InfoWindow(title: 'San Francisco'),
+              _originPlace.target.latitude, _originPlace.target.longitude),
+          infoWindow: const InfoWindow(title: 'Delta Hair Studio'),
         ),
       );
-      markers.add(const Marker(
-        markerId: MarkerId('marker2'),
-        position: LatLng(37.42796133580664, -122.097899799974),
-        infoWindow: InfoWindow(title: 'Mountain View'),
+      markers.add(Marker(
+        markerId: const MarkerId('marker2'),
+        position: LatLng(_destinationPlace.target.latitude,
+            _destinationPlace.target.longitude),
+        infoWindow: const InfoWindow(title: 'Ontico Patisserie'),
       ));
     });
   }
@@ -79,9 +80,9 @@ class GoogleMapViewState extends State<GoogleMapView> {
       googleApiKey: Constants.googleApiKey,
       request: PolylineRequest(
         origin: PointLatLng(
-            _kGooglePlex.target.latitude, _kGooglePlex.target.longitude),
-        destination: PointLatLng(
-            _kDestinantion.target.latitude, _kDestinantion.target.longitude),
+            _originPlace.target.latitude, _originPlace.target.longitude),
+        destination: PointLatLng(_destinationPlace.target.latitude,
+            _destinationPlace.target.longitude),
         mode: TravelMode.driving,
       ),
     );
