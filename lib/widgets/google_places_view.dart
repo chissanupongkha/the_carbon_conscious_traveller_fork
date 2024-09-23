@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart'
     as places;
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_carbon_conscious_traveller/constants.dart';
 import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
+import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
 import 'package:provider/provider.dart';
+import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
 
 class GooglePlacesView extends StatefulWidget {
   const GooglePlacesView({super.key});
@@ -17,6 +20,8 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   late final places.FlutterGooglePlacesSdk _places;
   final TextEditingController originController = TextEditingController();
   final TextEditingController destinationController = TextEditingController();
+
+  PolylinePoints polylinePoints = PolylinePoints();
 
   places.Place? origin; //starting location
   places.Place? destination; //end location
@@ -223,6 +228,11 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     LatLng position = originLatLng;
     final markerModel = Provider.of<MarkerModel>(context, listen: false);
     markerModel.addMarker(LatLng(position.latitude, position.longitude));
+
+    final coordinatesModel =
+        Provider.of<CoordinatesModel>(context, listen: false);
+    coordinatesModel
+        .saveCoordinates(LatLng(position.latitude, position.longitude));
   }
 
   void _addDestinationMarker(LatLng destinationLatLng) {
@@ -230,6 +240,42 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     LatLng position = destinationLatLng;
 
     final markerModel = Provider.of<MarkerModel>(context, listen: false);
-    markerModel.addMarker(LatLng(position.latitude, position.longitude));
+    markerModel.addMarker(
+      LatLng(position.latitude, position.longitude),
+    );
+
+    final coordinatesModel =
+        Provider.of<CoordinatesModel>(context, listen: false);
+    coordinatesModel.saveCoordinates(
+      LatLng(position.latitude, position.longitude),
+    );
+
+    final polylineModel = Provider.of<PolylineModel>(context, listen: false);
+    polylineModel.getPolyline(coordinatesModel.coordinates[0]);
   }
+
+  // _getPolyline() async {
+  //   final testModel = Provider.of<CoordinatesModel>(context, listen: false);
+  //   final PolylineModel polylineModel =
+  //       Provider.of<PolylineModel>(context, listen: false);
+  //   final coordinates = testModel.coordinates;
+  //   print("testModel.coordinates: $coordinates");
+  //   print("Getting polyline");
+  //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+  //     googleApiKey: Constants.googleApiKey,
+  //     request: PolylineRequest(
+  //       origin: PointLatLng(coordinates[0].latitude, coordinates[0].longitude),
+  //       destination: const PointLatLng(-33.83006953635228, 151.08615356209725),
+  //       mode: TravelMode.driving,
+  //     ),
+  //   );
+  //   if (result.points.isNotEmpty) {
+  //     for (PointLatLng point in result.points) {
+  //       polylineModel.polylineCoordinates
+  //           .add(LatLng(point.latitude, point.longitude));
+  //     }
+  //   }
+  //   Provider.of<PolylineModel>(context, listen: false)
+  //       .drawPolyline(coordinates);
+  // }
 }
