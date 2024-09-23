@@ -108,8 +108,6 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
       const Image(
         image: places.FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
-      // FloatingActionButton(
-      //     onPressed: _updateMarker, child: const Icon(Icons.add)),
     ];
   }
 
