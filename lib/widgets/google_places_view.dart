@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart'
+    as places;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_carbon_conscious_traveller/constants.dart';
-import 'dart:core';
+import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
+import 'package:provider/provider.dart';
 
 class GooglePlacesView extends StatefulWidget {
   const GooglePlacesView({super.key});
@@ -11,40 +14,43 @@ class GooglePlacesView extends StatefulWidget {
 }
 
 class _GooglePlacesViewState extends State<GooglePlacesView> {
-  late final FlutterGooglePlacesSdk _places;
+  late final places.FlutterGooglePlacesSdk _places;
   final TextEditingController originController = TextEditingController();
   final TextEditingController destinationController = TextEditingController();
 
-  Place? origin; //starting location
-  Place? destination; //end location
+  places.Place? origin; //starting location
+  places.Place? destination; //end location
+  places.LatLng? originLatLng; //starting coordinates
+  places.LatLng? destinationLatLng; //end coordinates
   String? _predictLastText; // Last text used for prediction
   String fieldType = ""; // Origin or destination
   final List<String> _countries = ['au']; // Preset countries
-  List<AutocompletePrediction>? _predictions; // Predictions
+  List<places.AutocompletePrediction>? _predictions; // Predictions
   bool _predicting = false; // Predicting state
   bool _fetchingPlace = false; // Fetching place state
   dynamic _fetchingPlaceErr; // Fetching place error
   dynamic _predictErr; // Prediction error
 
   // Place fields to fetch when a prediction is clicked
-  final List<PlaceField> _placeFields = [
-    PlaceField.Address,
-    PlaceField.AddressComponents,
-    PlaceField.BusinessStatus,
-    PlaceField.Id,
-    PlaceField.Location,
-    PlaceField.Name,
-    PlaceField.OpeningHours,
-    PlaceField.PhoneNumber,
-    PlaceField.PhotoMetadatas,
-    PlaceField.PlusCode,
-    PlaceField.PriceLevel,
-    PlaceField.Rating,
-    PlaceField.Types,
-    PlaceField.UserRatingsTotal,
-    PlaceField.UTCOffset,
-    PlaceField.Viewport,
-    PlaceField.WebsiteUri,
+  final List<places.PlaceField> _placeFields = [
+    places.PlaceField.Address,
+    places.PlaceField.Location,
+    // PlaceField.AddressComponents,
+    // PlaceField.BusinessStatus,
+    // PlaceField.Id,
+    // PlaceField.Location,
+    // PlaceField.Name,
+    // PlaceField.OpeningHours,
+    // PlaceField.PhoneNumber,
+    // PlaceField.PhotoMetadatas,
+    // PlaceField.PlusCode,
+    // PlaceField.PriceLevel,
+    // PlaceField.Rating,
+    // PlaceField.Types,
+    // PlaceField.UserRatingsTotal,
+    // PlaceField.UTCOffset,
+    // PlaceField.Viewport,
+    // PlaceField.WebsiteUri,
   ];
 
   @override
@@ -55,7 +61,8 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     const initialLocale = Constants.initialLocale;
 
     // Initialize Google Places API
-    _places = FlutterGooglePlacesSdk(googleApiKey, locale: initialLocale);
+    _places =
+        places.FlutterGooglePlacesSdk(googleApiKey, locale: initialLocale);
     _places.isInitialized().then((value) {
       debugPrint('Places Initialised: $value');
     });
@@ -99,12 +106,14 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
       _buildErrorWidget(_fetchingPlaceErr),
       _buildErrorWidget(_predictErr),
       const Image(
-        image: FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
+        image: places.FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
+      // FloatingActionButton(
+      //     onPressed: _updateMarker, child: const Icon(Icons.add)),
     ];
   }
 
-  Widget _buildPredictionItem(AutocompletePrediction item) {
+  Widget _buildPredictionItem(places.AutocompletePrediction item) {
     return InkWell(
       onTap: () => _onItemClicked(item),
       child: Column(children: [
@@ -169,7 +178,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   }
 
   //When a predicted item is clicked, fetch the place details
-  void _onItemClicked(AutocompletePrediction item) async {
+  void _onItemClicked(places.AutocompletePrediction item) async {
     print("item: ${item.fullText}");
 
     if (_fetchingPlace) {
@@ -186,12 +195,17 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
         setState(() {
           origin = result.place;
           _fetchingPlace = false;
+          originLatLng = origin?.latLng;
+          _addOriginMarker(LatLng(originLatLng!.lat, originLatLng!.lng));
         });
       } else if (fieldType == "destination") {
         destinationController.text = item.fullText;
         setState(() {
           destination = result.place;
           _fetchingPlace = false;
+          destinationLatLng = destination?.latLng;
+          _addDestinationMarker(
+              LatLng(destinationLatLng!.lat, destinationLatLng!.lng));
         });
       }
 
@@ -203,5 +217,21 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
         _fetchingPlace = false;
       });
     }
+  }
+
+  void _addOriginMarker(LatLng originLatLng) {
+    print("addOriginMarker reached!!! $originLatLng");
+
+    LatLng position = originLatLng;
+    final markerModel = Provider.of<MarkerModel>(context, listen: false);
+    markerModel.addMarker(LatLng(position.latitude, position.longitude));
+  }
+
+  void _addDestinationMarker(LatLng destinationLatLng) {
+    print("addDestinationMarker reached!!! $destinationLatLng");
+    LatLng position = destinationLatLng;
+
+    final markerModel = Provider.of<MarkerModel>(context, listen: false);
+    markerModel.addMarker(LatLng(position.latitude, position.longitude));
   }
 }

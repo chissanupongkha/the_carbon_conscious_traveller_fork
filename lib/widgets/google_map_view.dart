@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_carbon_conscious_traveller/constants.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:provider/provider.dart';
+import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
 
 class GoogleMapView extends StatefulWidget {
   const GoogleMapView({super.key});
@@ -34,12 +36,23 @@ class GoogleMapViewState extends State<GoogleMapView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-          mapType: MapType.normal,
-          initialCameraPosition: _originPlace,
-          onMapCreated: _onMapCreated,
-          markers: markers,
-          polylines: Set<Polyline>.of(polylines.values)),
+      body: Consumer<MarkerModel>(
+        builder: (context, markerModel, child) {
+          return GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: _originPlace,
+            onMapCreated: _onMapCreated,
+            markers: markerModel.markers,
+            polylines: Set<Polyline>.of(polylines.values),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          //Provider.of<MarkerModel>(context, listen: false).addMarker();
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
