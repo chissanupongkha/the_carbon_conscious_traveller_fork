@@ -59,22 +59,6 @@ class GoogleMapViewState extends State<GoogleMapView> {
   void _onMapCreated(GoogleMapController controller) async {
     _controller.complete(controller);
     _getPolyline();
-    setState(() {
-      markers.add(
-        Marker(
-          markerId: const MarkerId('marker1'),
-          position: LatLng(
-              _originPlace.target.latitude, _originPlace.target.longitude),
-          infoWindow: const InfoWindow(title: 'Delta Hair Studio'),
-        ),
-      );
-      markers.add(Marker(
-        markerId: const MarkerId('marker2'),
-        position: LatLng(_destinationPlace.target.latitude,
-            _destinationPlace.target.longitude),
-        infoWindow: const InfoWindow(title: 'Ontico Patisserie'),
-      ));
-    });
   }
 
   _drawPolyline() {
