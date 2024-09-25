@@ -25,13 +25,14 @@ class PolylineModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getPolyline(LatLng coordinates) async {
+  void getPolyline(List<LatLng> coordinates) async {
     print("Getting polylines ${polylines.values}");
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       googleApiKey: Constants.googleApiKey,
       request: PolylineRequest(
-        origin: PointLatLng(coordinates.latitude, coordinates.longitude),
-        destination: const PointLatLng(-33.83006953635228, 151.08615356209725),
+        origin: PointLatLng(coordinates[0].latitude, coordinates[0].longitude),
+        destination:
+            PointLatLng(coordinates[1].latitude, coordinates[1].longitude),
         mode: TravelMode.driving,
       ),
     );

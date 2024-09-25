@@ -251,31 +251,6 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     );
 
     final polylineModel = Provider.of<PolylineModel>(context, listen: false);
-    polylineModel.getPolyline(coordinatesModel.coordinates[0]);
+    polylineModel.getPolyline(coordinatesModel.coordinates);
   }
-
-  // _getPolyline() async {
-  //   final testModel = Provider.of<CoordinatesModel>(context, listen: false);
-  //   final PolylineModel polylineModel =
-  //       Provider.of<PolylineModel>(context, listen: false);
-  //   final coordinates = testModel.coordinates;
-  //   print("testModel.coordinates: $coordinates");
-  //   print("Getting polyline");
-  //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-  //     googleApiKey: Constants.googleApiKey,
-  //     request: PolylineRequest(
-  //       origin: PointLatLng(coordinates[0].latitude, coordinates[0].longitude),
-  //       destination: const PointLatLng(-33.83006953635228, 151.08615356209725),
-  //       mode: TravelMode.driving,
-  //     ),
-  //   );
-  //   if (result.points.isNotEmpty) {
-  //     for (PointLatLng point in result.points) {
-  //       polylineModel.polylineCoordinates
-  //           .add(LatLng(point.latitude, point.longitude));
-  //     }
-  //   }
-  //   Provider.of<PolylineModel>(context, listen: false)
-  //       .drawPolyline(coordinates);
-  // }
 }

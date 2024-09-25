@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
 import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
+import 'package:provider/provider.dart';
 
 class GoogleMapView extends StatefulWidget {
   const GoogleMapView({super.key});
@@ -23,15 +23,8 @@ class GoogleMapViewState extends State<GoogleMapView> {
     zoom: 14.4746,
   );
 
-  static const CameraPosition _destinationPlace = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(-33.8271275189807, 151.08711818603933),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
-
   PolylinePoints polylinePoints = PolylinePoints();
   Map<PolylineId, Polyline> polylines = {};
-  //List<LatLng> polylineCoordinates = [];
 
   @override
   Widget build(BuildContext context) {
