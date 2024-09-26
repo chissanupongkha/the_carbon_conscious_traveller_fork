@@ -7,10 +7,34 @@ class PolylineModel extends ChangeNotifier {
   final PolylinePoints _polylinePoints = PolylinePoints();
   final Map<PolylineId, Polyline> _polylines = {};
   final List<LatLng> _polylineCoordinates = [];
+  TravelMode _transportMode = TravelMode.driving;
+  String _mode = 'driving';
 
   PolylinePoints get polylinePoints => _polylinePoints;
   Map<PolylineId, Polyline> get polylines => _polylines;
   List<LatLng> get polylineCoordinates => _polylineCoordinates;
+  String get mode => _mode;
+
+  set transportMode(String mode) {
+    switch (mode) {
+      case 'driving':
+        _transportMode = TravelMode.driving;
+        break;
+      case 'walking':
+        _transportMode = TravelMode.walking;
+        break;
+      case 'motorcycle':
+        _transportMode = TravelMode.driving;
+        break;
+      case 'transit':
+        _transportMode = TravelMode.transit;
+        break;
+      default:
+        throw ArgumentError('Invalid transport mode: $mode');
+    }
+    _mode = mode;
+    notifyListeners();
+  }
 
   void drawPolyline() {
     print("Drawing polyline");
@@ -33,7 +57,7 @@ class PolylineModel extends ChangeNotifier {
         origin: PointLatLng(coordinates[0].latitude, coordinates[0].longitude),
         destination:
             PointLatLng(coordinates[1].latitude, coordinates[1].longitude),
-        mode: TravelMode.driving,
+        mode: _transportMode,
       ),
     );
     if (result.points.isNotEmpty) {
