@@ -20,14 +20,14 @@ class PolylineModel extends ChangeNotifier {
       case 'driving':
         _transportMode = TravelMode.driving;
         break;
-      case 'walking':
-        _transportMode = TravelMode.walking;
-        break;
-      case 'motorcycle':
-        _transportMode = TravelMode.driving;
+      case 'motorcycling':
+        _transportMode = TravelMode.driving; // This must be motorcycling
         break;
       case 'transit':
         _transportMode = TravelMode.transit;
+        break;
+      case 'flying':
+        _transportMode = TravelMode.walking; // This must be flying
         break;
       default:
         throw ArgumentError('Invalid transport mode: $mode');

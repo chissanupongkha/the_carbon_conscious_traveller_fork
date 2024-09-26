@@ -3,14 +3,21 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
 
 const List<Widget> modes = <Widget>[
-  Icon(Icons.directions_car_outlined, key: Key('driving')),
+  Icon(
+    Icons.directions_car_outlined,
+    key: Key('driving'),
+  ),
+  Icon(
+    Icons.motorcycle_outlined,
+    key: Key('driving'), // This must be motorcycling
+  ),
   Icon(
     Icons.train_outlined,
     key: Key('transit'),
   ),
   Icon(
-    Icons.directions_walk_outlined,
-    key: Key('walking'),
+    Icons.airplanemode_active_outlined,
+    key: Key('walking'), // This must be flying
   ),
 ];
 
@@ -22,12 +29,16 @@ class TransportMode extends StatefulWidget {
 }
 
 class _TransportModeState extends State<TransportMode> {
-  final List<bool> _selectedModes = <bool>[true, false, false];
+  final List<bool> _selectedModes = <bool>[true, false, false, false];
 
   @override
   Widget build(BuildContext context) {
     final PolylineModel polylineModel =
         Provider.of<PolylineModel>(context, listen: false);
+
+    final selectedMode = modes[0];
+    final selectedKey = selectedMode.key as Key;
+    print("Selected key: ${selectedKey.toString()}");
     return Container(
       alignment: Alignment.center,
       color: Colors.white,
@@ -43,11 +54,14 @@ class _TransportModeState extends State<TransportMode> {
                 polylineModel.transportMode = "driving";
                 break;
               case 1:
-                polylineModel.transportMode = "transit";
+                polylineModel.transportMode =
+                    "driving"; // This must be motorcycling
                 break;
               case 2:
-                polylineModel.transportMode = "walking";
+                polylineModel.transportMode = "transit";
                 break;
+              case 3:
+                polylineModel.transportMode = "flying"; //
             }
             print("Transport mode: ${polylineModel.mode}");
           });
