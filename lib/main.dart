@@ -67,14 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.title),
         ),
-        body: const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              GooglePlacesView(),
-              SizedBox(width: 600, height: 300, child: GoogleMapView()),
-            ],
-          ),
+        body: Stack(
+          children: [
+            GoogleMapView(),
+            Container(child: GooglePlacesView()),
+          ],
         ),
       ),
     );
