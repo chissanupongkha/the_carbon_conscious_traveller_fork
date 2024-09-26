@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
+import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
+import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
 import 'package:the_carbon_conscious_traveller/widgets/drawer.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_map_view.dart';
+import 'package:the_carbon_conscious_traveller/widgets/google_places_view.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => MarkerModel()),
+        ChangeNotifierProvider(create: (context) => PolylineModel()),
+        ChangeNotifierProvider(create: (context) => CoordinatesModel()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -57,7 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              SizedBox(width: 600, height: 600, child: GoogleMapView()),
+              GooglePlacesView(),
+              SizedBox(width: 600, height: 300, child: GoogleMapView()),
             ],
           ),
         ),
