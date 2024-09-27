@@ -15,24 +15,17 @@ class PolylineModel extends ChangeNotifier {
   List<LatLng> get polylineCoordinates => _polylineCoordinates;
   String get mode => _mode;
 
+  static const Map<String, TravelMode> _modeMap = {
+    'driving': TravelMode.driving,
+    'motorcycling': TravelMode.driving, // This should be motorcycling
+    'transit': TravelMode.transit,
+    'flying': TravelMode.walking, // This should be flying
+  };
+
   set transportMode(String mode) {
-    switch (mode) {
-      case 'driving':
-        _transportMode = TravelMode.driving;
-        break;
-      case 'motorcycling':
-        _transportMode = TravelMode.driving; // This must be motorcycling
-        break;
-      case 'transit':
-        _transportMode = TravelMode.transit;
-        break;
-      case 'flying':
-        _transportMode = TravelMode.walking; // This must be flying
-        break;
-      default:
-        throw ArgumentError('Invalid transport mode: $mode');
-    }
+    _transportMode = _modeMap[mode]!;
     _mode = mode;
+    print("Transport mode in model: $_transportMode");
     notifyListeners();
   }
 
@@ -42,7 +35,7 @@ class PolylineModel extends ChangeNotifier {
     PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
         polylineId: id,
-        color: Color.fromARGB(255, 45, 61, 245),
+        color: const Color.fromARGB(255, 45, 61, 245),
         points: polylineCoordinates,
         width: 4);
     polylines[id] = polyline;
