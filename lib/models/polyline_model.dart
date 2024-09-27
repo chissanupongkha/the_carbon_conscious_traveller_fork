@@ -7,10 +7,27 @@ class PolylineModel extends ChangeNotifier {
   final PolylinePoints _polylinePoints = PolylinePoints();
   final Map<PolylineId, Polyline> _polylines = {};
   final List<LatLng> _polylineCoordinates = [];
+  TravelMode _transportMode = TravelMode.driving;
+  String _mode = 'driving';
 
   PolylinePoints get polylinePoints => _polylinePoints;
   Map<PolylineId, Polyline> get polylines => _polylines;
   List<LatLng> get polylineCoordinates => _polylineCoordinates;
+  String get mode => _mode;
+
+  static const Map<String, TravelMode> _modeMap = {
+    'driving': TravelMode.driving,
+    'motorcycling': TravelMode.driving, // This should be motorcycling
+    'transit': TravelMode.transit,
+    'flying': TravelMode.walking, // This should be flying
+  };
+
+  set transportMode(String mode) {
+    _transportMode = _modeMap[mode]!;
+    _mode = mode;
+    print("Transport mode in model: $_transportMode");
+    notifyListeners();
+  }
 
   void drawPolyline() {
     print("Drawing polyline");
@@ -18,7 +35,7 @@ class PolylineModel extends ChangeNotifier {
     PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
         polylineId: id,
-        color: Color.fromARGB(255, 45, 61, 245),
+        color: const Color.fromARGB(255, 45, 61, 245),
         points: polylineCoordinates,
         width: 4);
     polylines[id] = polyline;
@@ -33,7 +50,7 @@ class PolylineModel extends ChangeNotifier {
         origin: PointLatLng(coordinates[0].latitude, coordinates[0].longitude),
         destination:
             PointLatLng(coordinates[1].latitude, coordinates[1].longitude),
-        mode: TravelMode.driving,
+        mode: _transportMode,
       ),
     );
     if (result.points.isNotEmpty) {

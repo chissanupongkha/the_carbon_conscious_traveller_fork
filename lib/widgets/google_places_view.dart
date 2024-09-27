@@ -8,6 +8,7 @@ import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
+import 'package:the_carbon_conscious_traveller/widgets/transport_mode.dart';
 
 class GooglePlacesView extends StatefulWidget {
   const GooglePlacesView({super.key});
@@ -88,31 +89,41 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
 
   List<Widget> _buildPredictionWidgets() {
     return [
-      // --
-      TextFormField(
-        controller: originController,
-        onChanged: (value) => _onPredictTextChanged(value, "start"),
-        decoration:
-            const InputDecoration(label: Text("Enter a start location")),
-      ),
-      TextFormField(
-        controller: destinationController,
-        onChanged: (value) => _onPredictTextChanged(value, "destination"),
-        decoration: const InputDecoration(
-          label: Text("Enter a destination"),
+      Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            TextFormField(
+              controller: originController,
+              onChanged: (value) => _onPredictTextChanged(value, "start"),
+              decoration:
+                  const InputDecoration(label: Text("Enter a start location")),
+            ),
+            TextFormField(
+              controller: destinationController,
+              onChanged: (value) => _onPredictTextChanged(value, "destination"),
+              decoration: const InputDecoration(
+                label: Text("Enter a destination"),
+              ),
+            ),
+          ],
         ),
       ),
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: (_predictions ?? [])
-            .map(_buildPredictionItem)
-            .toList(growable: false),
+      Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: (_predictions ?? [])
+              .map(_buildPredictionItem)
+              .toList(growable: false),
+        ),
       ),
-      _buildErrorWidget(_fetchingPlaceErr),
-      _buildErrorWidget(_predictErr),
+      const TransportMode(),
       const Image(
         image: places.FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
+      _buildErrorWidget(_fetchingPlaceErr),
+      _buildErrorWidget(_predictErr),
     ];
   }
 
@@ -200,6 +211,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
           _fetchingPlace = false;
           originLatLng = origin?.latLng;
           _addOriginMarker(LatLng(originLatLng!.lat, originLatLng!.lng));
+          _predictions = [];
         });
       } else if (fieldType == "destination") {
         destinationController.text = item.fullText;
@@ -209,6 +221,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
           destinationLatLng = destination?.latLng;
           _addDestinationMarker(
               LatLng(destinationLatLng!.lat, destinationLatLng!.lng));
+          _predictions = [];
         });
       }
 
