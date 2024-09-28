@@ -51,11 +51,6 @@ class _CarSettingsState extends State<CarSettings> {
                 DropdownMenu<CarSize>(
                   width: 300,
                   initialSelection: CarSize.label,
-                  // controller: sizeController,
-                  // requestFocusOnTap is enabled/disabled by platforms when it is null.
-                  // On mobile platforms, this is false by default. Setting this to true will
-                  // trigger focus request on the text field and virtual keyboard will appear
-                  // afterward. On desktop platforms however, this defaults to true.
                   requestFocusOnTap: true,
                   label: const Text('Car Size'),
                   onSelected: (CarSize? size) {
@@ -85,11 +80,6 @@ class _CarSettingsState extends State<CarSettings> {
                 DropdownMenu<FuelType>(
                   width: 300,
                   initialSelection: FuelType.label,
-                  // controller: sizeController,
-                  // requestFocusOnTap is enabled/disabled by platforms when it is null.
-                  // On mobile platforms, this is false by default. Setting this to true will
-                  // trigger focus request on the text field and virtual keyboard will appear
-                  // afterward. On desktop platforms however, this defaults to true.
                   requestFocusOnTap: true,
                   label: const Text('Fuel Type'),
                   onSelected: (FuelType? fuelType) {
