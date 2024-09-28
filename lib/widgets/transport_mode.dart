@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
+import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_car.dart';
 
 class TransportMode extends StatefulWidget {
   const TransportMode({super.key});
@@ -34,6 +35,7 @@ class _TransportModeState extends State<TransportMode> {
                 polylineModel.transportMode = transportModes[i].mode;
               }
             });
+            _showModalBottomSheet();
           },
           selectedBorderColor: Colors.green[700],
           selectedColor: Colors.white,
@@ -55,5 +57,14 @@ class _TransportModeState extends State<TransportMode> {
         ),
       );
     });
+  }
+
+  void _showModalBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return const CarSettings();
+      },
+    );
   }
 }
