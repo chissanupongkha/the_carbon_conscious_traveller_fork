@@ -26,12 +26,19 @@ class PolylineModel extends ChangeNotifier {
     _transportMode = _modeMap[mode]!;
     _mode = mode;
     print("Transport mode in model: $_transportMode");
+    resetPolyline();
+    notifyListeners();
+  }
+
+  void resetPolyline() {
+    print("Resetting polyline");
+    _polylineCoordinates.clear();
+    _polylines.clear();
     notifyListeners();
   }
 
   void drawPolyline() {
     print("Drawing polyline");
-    print("Polyline coordinatesssss: $polylineCoordinates");
     PolylineId id = const PolylineId("poly");
     Polyline polyline = Polyline(
         polylineId: id,
@@ -43,7 +50,7 @@ class PolylineModel extends ChangeNotifier {
   }
 
   void getPolyline(List<LatLng> coordinates) async {
-    print("Getting polylines ${polylines.values}");
+    print("Getting polyline...");
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       googleApiKey: Constants.googleApiKey,
       request: PolylineRequest(
