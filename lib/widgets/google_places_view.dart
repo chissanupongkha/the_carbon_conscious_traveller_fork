@@ -9,11 +9,7 @@ import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
 import 'package:the_carbon_conscious_traveller/widgets/transport_mode.dart';
-import 'package:the_carbon_conscious_traveller/widgets/travel_mode_flying.dart';
-import 'package:the_carbon_conscious_traveller/widgets/travel_mode_transit.dart';
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
-import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_car.dart';
-import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_motorcyle.dart';
 
 class GooglePlacesView extends StatefulWidget {
   const GooglePlacesView({super.key});

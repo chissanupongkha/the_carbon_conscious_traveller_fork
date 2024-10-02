@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
 import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
-import 'package:the_carbon_conscious_traveller/widgets/travel_mode_flying.dart';
-import 'package:the_carbon_conscious_traveller/widgets/travel_mode_transit.dart';
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
-import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_car.dart';
-import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_motorcyle.dart';
 
 class TransportMode extends StatefulWidget {
   const TransportMode({super.key});
@@ -66,25 +62,6 @@ class _TransportModeState extends State<TransportMode> {
       );
     });
   }
-
-  // void _showModalBottomSheet() {
-  //   final polylineModel = Provider.of<PolylineModel>(context, listen: false);
-  //   String travelMode = polylineModel.mode;
-
-  //   showModalBottomSheet<void>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       if (travelMode == "motorcycling") {
-  //         return const MotorcyleSettings();
-  //       } else if (travelMode == "transit") {
-  //         return const Transit();
-  //       } else if (travelMode == "flying") {
-  //         return const Flying();
-  //       }
-  //       return const CarSettings();
-  //     },
-  //   );
-  // }
 
   void _showModalBottomSheet() {
     showModalBottomSheet<void>(
