@@ -1,8 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
+import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
+import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
 import 'package:the_carbon_conscious_traveller/widgets/drawer.dart';
+import 'package:the_carbon_conscious_traveller/widgets/google_map_view.dart';
+import 'package:the_carbon_conscious_traveller/widgets/google_places_view.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => MarkerModel()),
+        ChangeNotifierProvider(create: (context) => PolylineModel()),
+        ChangeNotifierProvider(create: (context) => CoordinatesModel()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -49,21 +64,14 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         drawer: const AppDrawer(),
         appBar: AppBar(
-          // TRY THIS: Try changing the color here to a specific color (to
-          // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-          // change color while the other colors stay the same.
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
         ),
-        body: const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Google Maps will be displayed here'),
-            ],
-          ),
+        body: const Stack(
+          children: [
+            GoogleMapView(),
+            GooglePlacesView(),
+          ],
         ),
       ),
     );
