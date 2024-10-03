@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
 import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
+import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
 
 class TransportMode extends StatefulWidget {
   const TransportMode({super.key});
@@ -31,9 +33,13 @@ class _TransportModeState extends State<TransportMode> {
               // The button that is tapped is set to true, and the others to false
               for (int i = 0; i < _selectedModes.length; i++) {
                 _selectedModes[i] = i == index;
-                polylineModel.transportMode = transportModes[i].mode;
               }
             });
+            polylineModel.transportMode = transportModes[index].mode;
+            final coordinatesModel =
+                Provider.of<CoordinatesModel>(context, listen: false);
+            polylineModel.getPolyline(coordinatesModel.coordinates);
+            _showModalBottomSheet();
           },
           selectedBorderColor: Colors.green[700],
           selectedColor: Colors.white,
@@ -55,5 +61,14 @@ class _TransportModeState extends State<TransportMode> {
         ),
       );
     });
+  }
+
+  void _showModalBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return const TravelModeBottomSheet();
+      },
+    );
   }
 }
