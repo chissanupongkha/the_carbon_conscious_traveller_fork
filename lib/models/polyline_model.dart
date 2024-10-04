@@ -6,7 +6,6 @@ import 'package:the_carbon_conscious_traveller/constants.dart';
 class PolylineModel extends ChangeNotifier {
   final PolylinePoints _polylinePoints = PolylinePoints();
   final Map<PolylineId, Polyline> _polylines = {};
-  //final List<LatLng> _polylineCoordinates = [];
   final List<List<LatLng>> _routeCoordinates = [];
   TravelMode _transportMode = TravelMode.driving;
   String _mode = 'driving';
@@ -14,9 +13,8 @@ class PolylineModel extends ChangeNotifier {
 
   PolylinePoints get polylinePoints => _polylinePoints;
   Map<PolylineId, Polyline> get polylines => _polylines;
-  //List<LatLng> get polylineCoordinates => _polylineCoordinates;
-  String get mode => _mode;
   List<List<LatLng>> get routeCoordinates => _routeCoordinates;
+  String get mode => _mode;
   int get activeRouteIndex => _activeRouteIndex;
 
   static const Map<String, TravelMode> _modeMap = {
@@ -36,24 +34,10 @@ class PolylineModel extends ChangeNotifier {
 
   void resetPolyline() {
     print("Resetting polyline");
-    //_polylineCoordinates.clear();
-    _polylines.clear();
     _routeCoordinates.clear();
     _activeRouteIndex = 0;
     notifyListeners();
   }
-
-  // void drawPolyline() {
-  //   print("Drawing polyline");
-  //   PolylineId id = const PolylineId("poly");
-  //   Polyline polyline = Polyline(
-  //       polylineId: id,
-  //       color: const Color.fromARGB(255, 45, 61, 245),
-  //       points: polylineCoordinates,
-  //       width: 4);
-  //   polylines[id] = polyline;
-  //   notifyListeners();
-  // }
 
   void getPolyline(List<LatLng> coordinates) async {
     print("Getting polyline...");
@@ -80,7 +64,6 @@ class PolylineModel extends ChangeNotifier {
       }
       _updateActiveRoute(0);
     }
-    //drawPolyline();
     notifyListeners();
   }
 
