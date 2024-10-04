@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
 import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
-import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
+import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 import 'package:the_carbon_conscious_traveller/widgets/drawer.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_map_view.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_places_view.dart';
@@ -12,7 +12,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MarkerModel()),
-        ChangeNotifierProvider(create: (context) => PolylineModel()),
+        ChangeNotifierProvider(create: (context) => RoutesModel()),
         ChangeNotifierProvider(create: (context) => CoordinatesModel()),
       ],
       child: const MyApp(),

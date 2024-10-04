@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
-import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
+import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 import 'package:provider/provider.dart';
 
 class GoogleMapView extends StatefulWidget {
@@ -29,7 +29,7 @@ class GoogleMapViewState extends State<GoogleMapView> {
   @override
   Widget build(BuildContext context) {
     final markerModel = Provider.of<MarkerModel>(context);
-    final polylineModel = Provider.of<PolylineModel>(context);
+    final polylineModel = Provider.of<RoutesModel>(context);
     return Scaffold(
       body: GoogleMap(
         mapType: MapType.normal,

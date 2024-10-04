@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
-import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
+import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
 
 class TransportMode extends StatefulWidget {
@@ -23,7 +23,7 @@ class _TransportModeState extends State<TransportMode> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PolylineModel>(builder: (context, polylineModel, child) {
+    return Consumer<RoutesModel>(builder: (context, polylineModel, child) {
       return Container(
         alignment: Alignment.center,
         color: Colors.white,

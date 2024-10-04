@@ -7,7 +7,7 @@ import 'package:the_carbon_conscious_traveller/constants.dart';
 import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
 import 'package:provider/provider.dart';
-import 'package:the_carbon_conscious_traveller/models/polyline_model.dart';
+import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 import 'package:the_carbon_conscious_traveller/widgets/transport_mode.dart';
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
 
@@ -265,7 +265,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
       LatLng(position.latitude, position.longitude),
     );
 
-    final polylineModel = Provider.of<PolylineModel>(context, listen: false);
+    final polylineModel = Provider.of<RoutesModel>(context, listen: false);
     polylineModel.getPolyline(coordinatesModel.coordinates);
   }
 

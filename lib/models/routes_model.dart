@@ -3,7 +3,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_carbon_conscious_traveller/constants.dart';
 
-class PolylineModel extends ChangeNotifier {
+class RoutesModel extends ChangeNotifier {
   final PolylinePoints _polylinePoints = PolylinePoints();
   final Map<PolylineId, Polyline> _polylines = {};
   final List<List<LatLng>> _routeCoordinates = [];
