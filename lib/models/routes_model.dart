@@ -92,6 +92,10 @@ class RoutesModel extends ChangeNotifier {
         onTap: () => setActiveRoute(i),
       );
       polylines[id] = polyline;
+      getDistanceValues();
+      getDurationValues();
+      getDistanceTexts();
+      getDurationTexts();
     }
 
     notifyListeners();
@@ -102,10 +106,10 @@ class RoutesModel extends ChangeNotifier {
       print("Setting active route to $index");
       _updateActiveRoute(index);
     }
-    getDistanceValues();
-    getDurationValues();
-    getDistanceTexts();
-    getDurationTexts();
+    // getDistanceValues();
+    // getDurationValues();
+    // getDistanceTexts();
+    // getDurationTexts();
   }
 
   void getDistanceValues() {

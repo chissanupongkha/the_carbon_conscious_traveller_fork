@@ -80,7 +80,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
               child: const Text("Calculate"),
             ),
             Text(
-              sizeValue?.value.toString() ?? "Size is empty",
+              'Value: ${sizeValue?.value.toString() ?? "Size is empty"}',
             ),
             ListView.separated(
               scrollDirection: Axis.vertical,
@@ -96,7 +96,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                       children: [
                         Text('Route ${index + 1}'),
                         Text(
-                            'Emmisions: ${routesModel.distances[index] * (sizeValue?.value ?? 0)}'),
+                            'Emmisions: ${(routesModel.distances[index] * (sizeValue?.value ?? 0)).round()}'),
                         Text('Distance: ${routesModel.distanceTexts[index]}'),
                         Text('Duration: ${routesModel.durationTexts[index]}'),
                       ],
