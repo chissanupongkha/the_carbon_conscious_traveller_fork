@@ -7,15 +7,23 @@ class RoutesModel extends ChangeNotifier {
   final PolylinePoints _polylinePoints = PolylinePoints();
   final Map<PolylineId, Polyline> _polylines = {};
   final List<List<LatLng>> _routeCoordinates = [];
+  List<PolylineResult> result = [];
   TravelMode _transportMode = TravelMode.driving;
-  String _mode = 'driving';
+  String _mode = 'motorcycling';
   int _activeRouteIndex = 0;
+  // List<int> distance = [];
+  final List<int> _distances = [];
+  final List<String> _distanceTexts = [];
+  final List<String> _durationTexts = [];
 
   PolylinePoints get polylinePoints => _polylinePoints;
   Map<PolylineId, Polyline> get polylines => _polylines;
   List<List<LatLng>> get routeCoordinates => _routeCoordinates;
   String get mode => _mode;
   int get activeRouteIndex => _activeRouteIndex;
+  List<int> get distances => _distances;
+  List<String> get distanceTexts => _distanceTexts;
+  List<String> get durationTexts => _durationTexts;
 
   static const Map<String, TravelMode> _modeMap = {
     'driving': TravelMode.driving,
@@ -28,7 +36,7 @@ class RoutesModel extends ChangeNotifier {
     _transportMode = _modeMap[mode]!;
     _mode = mode;
     print("Transport mode in model: $_transportMode");
-    resetPolyline();
+    //resetPolyline();
     notifyListeners();
   }
 
@@ -41,8 +49,9 @@ class RoutesModel extends ChangeNotifier {
 
   void getPolyline(List<LatLng> coordinates) async {
     print("Getting polyline...");
+    print("Active route index: $_activeRouteIndex");
 
-    List<PolylineResult> result = await polylinePoints.getRouteWithAlternatives(
+    result = await polylinePoints.getRouteWithAlternatives(
       googleApiKey: Constants.googleApiKey,
       request: PolylineRequest(
         origin: PointLatLng(coordinates[0].latitude, coordinates[0].longitude),
@@ -59,11 +68,10 @@ class RoutesModel extends ChangeNotifier {
         for (var point in result[i].points) {
           routeCoordinate.add(LatLng(point.latitude, point.longitude));
         }
-
         routeCoordinates.add(routeCoordinate);
       }
-      _updateActiveRoute(0);
     }
+    _updateActiveRoute(_activeRouteIndex);
     notifyListeners();
   }
 
@@ -71,7 +79,8 @@ class RoutesModel extends ChangeNotifier {
     _activeRouteIndex = index;
     polylines.clear();
 
-    for (int i = 0; i < routeCoordinates.length; i++) {
+    for (int i = 0; i < result.length; i++) {
+      // this was (int i = 0; i < routeCoordinates.length.length; i++) {
       PolylineId id = PolylineId('poly$i');
       Polyline polyline = Polyline(
         polylineId: id,
@@ -84,12 +93,64 @@ class RoutesModel extends ChangeNotifier {
       );
       polylines[id] = polyline;
     }
+
     notifyListeners();
   }
 
   void setActiveRoute(int index) {
     if (index >= 0 && index < _routeCoordinates.length) {
+      print("Setting active route to $index");
       _updateActiveRoute(index);
     }
+    getDistanceValues();
+    getDurationValues();
+    getDistanceTexts();
+    getDurationTexts();
+  }
+
+  void getDistanceValues() {
+    if (result.isNotEmpty && _distances.length < result.length) {
+      for (var route in result) {
+        distances.add(route.distanceValues!.first);
+      }
+    } else {
+      print("No results");
+    }
+  }
+
+  void getDistanceTexts() {
+    if (result.isNotEmpty && distanceTexts.length < result.length) {
+      print("distance text length: ${distanceTexts.length}");
+      print("result texts length: ${result.length}");
+      for (var route in result) {
+        distanceTexts.add(route.distanceTexts!.first);
+        print("Distance text: ${route.distanceTexts!.first}");
+        print("Distance text length: ${distanceTexts.length}");
+      }
+    } else {
+      print("No results");
+    }
+  }
+
+  void getDurationTexts() {
+    if (result.isNotEmpty && _durationTexts.length < result.length) {
+      for (var route in result) {
+        _durationTexts.add(route.durationTexts!.first);
+      }
+    } else {
+      print("No results");
+    }
+  }
+
+  void getDurationValues() {
+    List<int> duration = [];
+    if (result.isNotEmpty && _distanceTexts.length < result.length) {
+      for (var route in result) {
+        duration.add(route.durationValues!.first);
+      }
+    } else {
+      print("No results");
+    }
+    print("Duration: $duration");
   }
 }
