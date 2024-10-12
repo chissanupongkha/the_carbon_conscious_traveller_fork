@@ -12,9 +12,8 @@ class MotorcyleSettings extends StatefulWidget {
 }
 
 class _MotorcyleSettingsState extends State<MotorcyleSettings> {
-  MotorcycleSize? selectedSize;
-  MotorcycleSize? size;
-  MotorcycleSize? sizeValue;
+  MotorcycleSize? selectedSize = MotorcycleSize.label;
+  bool isVisible = false;
   late PrivateVehicleEmissionsCalculator _emissionCalculator;
 
   @override
@@ -22,11 +21,11 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
     return Consumer<RoutesModel>(builder: (context, routesModel, child) {
       _emissionCalculator = PrivateVehicleEmissionsCalculator(
         routesModel: routesModel,
-        vehicleSize: selectedSize ?? MotorcycleSize.label,
+        vehicleSize: selectedSize!,
       );
       return Scaffold(
         body: Column(
-          children: <Widget>[
+          children: [
             Title(
               color: Colors.black,
               child: Text(
@@ -41,12 +40,13 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                 children: <Widget>[
                   DropdownMenu<MotorcycleSize>(
                     width: 300,
-                    initialSelection: MotorcycleSize.label,
+                    initialSelection: selectedSize,
                     requestFocusOnTap: true,
-                    label: const Text('Car Size'),
+                    label: const Text('Motorcycle Size'),
                     onSelected: (MotorcycleSize? size) {
                       setState(() {
                         selectedSize = size;
+                        isVisible = true;
                       });
                     },
                     dropdownMenuEntries: MotorcycleSize.values
@@ -55,7 +55,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                       return DropdownMenuEntry<MotorcycleSize>(
                         value: size,
                         label: size.name,
-                        enabled: size.name != 'Size',
+                        enabled: size.name != MotorcycleSize.label.name,
                         style: MenuItemButton.styleFrom(
                             foregroundColor: Colors.black),
                       );
@@ -64,34 +64,43 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                 ],
               ),
             ),
-            Text(
-                'MinEmission: ${_emissionCalculator.calculateMinEmission().round()}g'),
-            Text(
-                'MaxEmission: ${_emissionCalculator.calculateMaxEmission().round()}g'),
-            ListView.separated(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(8),
-              itemCount: routesModel.distanceTexts.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  color: Colors.green[100],
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Route ${index + 1}'),
-                        Text(
-                            'Emission: ${_emissionCalculator.calculateEmission(index).round()}g'),
-                        Text('Distance: ${routesModel.distanceTexts[index]}'),
-                        Text('Duration: ${routesModel.durationTexts[index]}'),
-                      ],
-                    ),
+            Visibility(
+              visible: isVisible,
+              child: Column(
+                children: [
+                  Text(
+                      'MinEmission: ${_emissionCalculator.calculateMinEmission().round()}g'),
+                  Text(
+                      'MaxEmission: ${_emissionCalculator.calculateMaxEmission().round()}g'),
+                  ListView.separated(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.all(8),
+                    itemCount: routesModel.distanceTexts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        color: Colors.green[100],
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Route ${index + 1}'),
+                              Text(
+                                  'Emission: ${_emissionCalculator.calculateEmission(index).round()}g'),
+                              Text(
+                                  'Distance: ${routesModel.distanceTexts[index]}'),
+                              Text(
+                                  'Duration: ${routesModel.durationTexts[index]}'),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
                   ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
+                ],
+              ),
             ),
           ],
         ),
