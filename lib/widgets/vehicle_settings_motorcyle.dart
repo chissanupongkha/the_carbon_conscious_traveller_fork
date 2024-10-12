@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
+import 'package:the_carbon_conscious_traveller/models/private_vehicle_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
-
-// enum MotorcycleSize {
-//   small('Small'),
-//   medium('Medium'),
-//   large('Large'),
-//   label('Size');
-
-//   const MotorcycleSize(this.size);
-//   final String size;
-// }
 
 class MotorcyleSettings extends StatefulWidget {
   const MotorcyleSettings({super.key});
@@ -24,17 +15,15 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
   MotorcycleSize? selectedSize;
   MotorcycleSize? size;
   MotorcycleSize? sizeValue;
-
-  stateinit() {
-    super.initState();
-    for (size in MotorcycleSize.values) {
-      print("Size $size");
-    }
-  }
+  late PrivateVehicleEmissionsCalculator _emissionCalculator;
 
   @override
   Widget build(BuildContext context) {
     return Consumer<RoutesModel>(builder: (context, routesModel, child) {
+      _emissionCalculator = PrivateVehicleEmissionsCalculator(
+        routesModel: routesModel,
+        vehicleSize: selectedSize ?? MotorcycleSize.label,
+      );
       return Scaffold(
         body: Column(
           children: <Widget>[
@@ -75,13 +64,10 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                 ],
               ),
             ),
-            FilledButton(
-              onPressed: () => calculateValue(selectedSize),
-              child: const Text("Calculate"),
-            ),
             Text(
-              'Value: ${sizeValue?.value.toString() ?? "Size is empty"}',
-            ),
+                'MinEmission: ${_emissionCalculator.calculateMinEmission().round()}g'),
+            Text(
+                'MaxEmission: ${_emissionCalculator.calculateMaxEmission().round()}g'),
             ListView.separated(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -96,7 +82,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                       children: [
                         Text('Route ${index + 1}'),
                         Text(
-                            'Emmisions: ${(routesModel.distances[index] * (sizeValue?.value ?? 0)).round()}'),
+                            'Emission: ${_emissionCalculator.calculateEmission(index).round()}g'),
                         Text('Distance: ${routesModel.distanceTexts[index]}'),
                         Text('Duration: ${routesModel.durationTexts[index]}'),
                       ],
@@ -110,28 +96,6 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
           ],
         ),
       );
-    });
-  }
-
-  void calculateValue(MotorcycleSize? size) {
-    final routesModel = Provider.of<RoutesModel>(context, listen: false);
-
-    if (size != null) {
-      final vehicleSize = MotorcycleSize.values.firstWhere(
-        (e) => e.name == size.name,
-        orElse: () => MotorcycleSize.label,
-      );
-      print("Motorcycle Distance: ${routesModel.distances}");
-      print("motorcycle value again: ${vehicleSize.value}");
-      //ERROR - START HERE
-      print(
-          "Motorcycle emmisions: ${routesModel.distances[routesModel.activeRouteIndex] * vehicleSize.value}");
-      print("Motorcycle emmisions: ${vehicleSize.value}");
-      print(
-          "Motorcycle emmisions routes mpodel index: ${routesModel.activeRouteIndex}"); // the index keeps getting bigger
-    }
-    setState(() {
-      sizeValue = size;
     });
   }
 }
