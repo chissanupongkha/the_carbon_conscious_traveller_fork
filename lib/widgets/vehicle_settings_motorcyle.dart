@@ -24,84 +24,112 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
       routesModel: routesModel,
       vehicleSize: selectedSize ?? MotorcycleSize.label,
     );
-    return Scaffold(
-      body: Column(
-        children: [
-          Title(
-            color: Colors.black,
-            child: Text(
-              "Motorcycle",
-              style: Theme.of(context).textTheme.displayLarge,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Consumer<PrivateVehicleState>(
-                    builder: (context, dropdownState, child) {
-                  return DropdownMenu<MotorcycleSize>(
-                    width: 300,
-                    initialSelection: dropdownState.selectedValue,
-                    requestFocusOnTap: true,
-                    label: const Text('Motorcycle Size'),
-                    onSelected: (MotorcycleSize? size) {
-                      dropdownState
-                          .updateSelectedValue(size ?? MotorcycleSize.label);
-                      setState(() {
-                        selectedSize = dropdownState.selectedValue;
-                      });
-                    },
-                    dropdownMenuEntries: MotorcycleSize.values
-                        .map<DropdownMenuEntry<MotorcycleSize>>(
-                            (MotorcycleSize size) {
-                      return DropdownMenuEntry<MotorcycleSize>(
-                        value: size,
-                        label: size.name,
-                        enabled: size.name != MotorcycleSize.label.name,
-                        style: MenuItemButton.styleFrom(
-                            foregroundColor: Colors.black),
-                      );
-                    }).toList(),
-                  );
-                }),
-              ],
-            ),
-          ),
-          Consumer<PrivateVehicleState>(
-              builder: (context, dropdownState, child) {
-            void changeVisibility(bool isVisible) {
-              dropdownState.updateVisibility(isVisible);
-            }
+    return Consumer<PrivateVehicleState>(
+      builder: (context, dropdownState, child) {
+        void changeVisibility(bool isVisible) {
+          dropdownState.updateVisibility(isVisible);
+        }
 
-            int minEmission = 0;
-            int maxEmission = 0;
+        int minEmission = 0;
+        int maxEmission = 0;
 
-            void getMinMaxEmissions() {
-              minEmission = emissionCalculator.calculateMinEmission().round();
-              dropdownState.updateMinEmission(minEmission);
-              maxEmission = emissionCalculator.calculateMaxEmission().round();
-              dropdownState.updateMaxEmission(maxEmission);
-            }
+        void getMinMaxEmissions() {
+          minEmission = emissionCalculator.calculateMinEmission().round();
+          dropdownState.updateMinEmission(minEmission);
+          maxEmission = emissionCalculator.calculateMaxEmission().round();
+          dropdownState.updateMaxEmission(maxEmission);
+        }
 
-            void getEmissions() {
-              List<int> emissions = [];
-              for (int i = 0; i < routesModel.result.length; i++) {
-                emissions.add(emissionCalculator.calculateEmission(i).round());
-              }
-              dropdownState.saveEmissions(emissions);
-            }
+        void getEmissions() {
+          List<int> emissions = [];
+          for (int i = 0; i < routesModel.result.length; i++) {
+            emissions.add(emissionCalculator.calculateEmission(i).round());
+          }
+          dropdownState.saveEmissions(emissions);
+        }
 
-            return Column(
+        return Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Title(
+                    color: Colors.black,
+                    child: Text(
+                      "Motorcycle",
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      // Consumer<PrivateVehicleState>(
+                      //   builder: (context, dropdownState, child) {
+                      //     void changeVisibility(bool isVisible) {
+                      //       dropdownState.updateVisibility(isVisible);
+                      //     }
+
+                      //     int minEmission = 0;
+                      //     int maxEmission = 0;
+
+                      //     void getMinMaxEmissions() {
+                      //       minEmission =
+                      //           emissionCalculator.calculateMinEmission().round();
+                      //       dropdownState.updateMinEmission(minEmission);
+                      //       maxEmission =
+                      //           emissionCalculator.calculateMaxEmission().round();
+                      //       dropdownState.updateMaxEmission(maxEmission);
+                      //     }
+
+                      //     void getEmissions() {
+                      //       List<int> emissions = [];
+                      //       for (int i = 0; i < routesModel.result.length; i++) {
+                      //         emissions.add(
+                      //             emissionCalculator.calculateEmission(i).round());
+                      //       }
+                      //       dropdownState.saveEmissions(emissions);
+                      //     }
+
+                      //     return Column(
+                      DropdownMenu<MotorcycleSize>(
+                        width: 300,
+                        initialSelection: dropdownState.selectedValue,
+                        requestFocusOnTap: true,
+                        label: const Text('Motorcycle Size'),
+                        onSelected: (MotorcycleSize? size) {
+                          dropdownState.updateSelectedValue(
+                              size ?? MotorcycleSize.label);
+                          setState(() {
+                            selectedSize = dropdownState.selectedValue;
+                          });
+                        },
+                        dropdownMenuEntries: MotorcycleSize.values
+                            .map<DropdownMenuEntry<MotorcycleSize>>(
+                                (MotorcycleSize size) {
+                          return DropdownMenuEntry<MotorcycleSize>(
+                            value: size,
+                            label: size.name,
+                            enabled: size.name != MotorcycleSize.label.name,
+                            style: MenuItemButton.styleFrom(
+                                foregroundColor: Colors.black),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                ),
                 FilledButton(
-                    onPressed: () {
-                      changeVisibility(true);
-                      getMinMaxEmissions();
-                      getEmissions();
-                    },
-                    child: const Text('Calculate Emissions')),
+                  onPressed: () {
+                    changeVisibility(true);
+                    getMinMaxEmissions();
+                    getEmissions();
+                  },
+                  child: const Text('Calculate Emissions'),
+                ),
                 Visibility(
                   visible: dropdownState.isVisible,
                   child: Column(
@@ -109,7 +137,6 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                       Text('MinEmission: ${dropdownState.minEmissionValue}g'),
                       Text('MaxEmission: ${dropdownState.maxEmissionValue}g'),
                       ListView.separated(
-                        scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         padding: const EdgeInsets.all(8),
                         itemCount: routesModel.distanceTexts.length,
@@ -139,10 +166,10 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                   ),
                 ),
               ],
-            );
-          }),
-        ],
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
