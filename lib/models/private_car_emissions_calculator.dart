@@ -7,9 +7,6 @@ class PrivateCarEmissionsCalculator {
   final RoutesModel routesModel;
   final CarSize vehicleSize;
   final CarFuelType vehicleFuelType;
-
-  int carSizeCount = CarSize.values.length;
-  int carFuelTypeCount = CarFuelType.values.length;
   double factor = 0.0;
 
   PrivateCarEmissionsCalculator({
@@ -19,10 +16,15 @@ class PrivateCarEmissionsCalculator {
   });
 
   void calculateFactor() {
-    factor = carValuesMatrix[vehicleSize.index][vehicleFuelType.index];
+    print("Car Size: ${vehicleSize.index} ${vehicleFuelType.index}");
+    if (vehicleSize == CarSize.label || vehicleFuelType == CarFuelType.label) {
+      return; // Skip operation for enum 'label'
+    } else {
+      factor = carValuesMatrix[vehicleSize.index][vehicleFuelType.index];
+    }
   }
 
-  double calculateEmission(int index, CarSize size, CarFuelType fuelType) {
+  double calculateEmissions(int index, CarSize size, CarFuelType fuelType) {
     double emissionValue = 0.0;
     calculateFactor();
     for (var i = 0; i <= routesModel.distances.length; i++) {

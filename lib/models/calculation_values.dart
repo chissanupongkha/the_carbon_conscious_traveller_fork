@@ -147,6 +147,7 @@ enum CarSize {
   sports,
   dualPurpose4x4,
   mpv,
+  label,
 }
 
 extension CarSizeExtension on CarSize {
@@ -177,7 +178,7 @@ extension CarSizeExtension on CarSize {
       case CarSize.mpv:
         return "MPV";
       default:
-        return "";
+        return "Select";
     }
   }
 }
@@ -190,6 +191,7 @@ enum CarFuelType {
   lpg,
   phev,
   bev,
+  label,
 }
 
 extension CarFuelTypeExtension on CarFuelType {
@@ -210,7 +212,7 @@ extension CarFuelTypeExtension on CarFuelType {
       case CarFuelType.bev:
         return "Battery Electric Vehicle";
       default:
-        return "";
+        return "Select";
     }
   }
 }

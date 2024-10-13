@@ -2,21 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
 
 class PrivateCarState extends ChangeNotifier {
-  CarSize? _selectedValue;
+  CarSize? _selectedSize;
+  CarFuelType? _selectedFuelType;
   bool? _isVisible;
   int? _minEmission;
   int? _maxEmission;
   List<int> _emissions = [];
 
-  CarSize? get selectedValue => _selectedValue;
+  CarSize? get selectedSize => _selectedSize;
+  CarFuelType? get selectedFuelType => _selectedFuelType;
   bool get isVisible => _isVisible ?? false;
   int get minEmissionValue => _minEmission ?? 0;
   int get maxEmissionValue => _maxEmission ?? 0;
   List<int> get emissions => _emissions;
 
-  void updateSelectedValue(CarSize newValue) {
+  void updateSelectedSize(CarSize newValue) {
     print("updateSelectedValue: $newValue");
-    _selectedValue = newValue;
+    _selectedSize = newValue;
+    notifyListeners();
+  }
+
+  void updateSelectedFuelType(CarFuelType newValue) {
+    print("updateSelectedValue: $newValue");
+    _selectedFuelType = newValue;
     notifyListeners();
   }
 

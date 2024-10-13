@@ -22,8 +22,8 @@ class _CarSettingsState extends State<CarSettings> {
     RoutesModel routesModel = Provider.of<RoutesModel>(context);
     emissionCalculator = PrivateCarEmissionsCalculator(
       routesModel: routesModel,
-      vehicleSize: selectedSize ?? CarSize.smallCar,
-      vehicleFuelType: selectedFuelType ?? CarFuelType.petrol,
+      vehicleSize: selectedSize ?? CarSize.label,
+      vehicleFuelType: selectedFuelType ?? CarFuelType.label,
     );
 
     return Consumer<PrivateCarState>(
@@ -42,8 +42,7 @@ class _CarSettingsState extends State<CarSettings> {
           List<int> emissions = [];
           for (int i = 0; i < routesModel.result.length; i++) {
             emissions.add(emissionCalculator
-                .calculateEmission(i, selectedSize ?? CarSize.smallCar,
-                    selectedFuelType ?? CarFuelType.petrol)
+                .calculateEmissions(i, selectedSize!, selectedFuelType!)
                 .round());
           }
           print("CarEmissions: $emissions");
@@ -83,12 +82,13 @@ class _CarSettingsState extends State<CarSettings> {
                     children: <Widget>[
                       DropdownMenu<CarSize>(
                         width: 300,
-                        initialSelection: CarSize.smallCar,
+                        initialSelection: carState.selectedSize,
                         requestFocusOnTap: true,
                         label: const Text('Car Size'),
                         onSelected: (CarSize? size) {
+                          carState.updateSelectedSize(size ?? CarSize.label);
                           setState(() {
-                            selectedSize = size;
+                            selectedSize = carState.selectedSize;
                           });
                         },
                         dropdownMenuEntries: CarSize.values
@@ -96,7 +96,7 @@ class _CarSettingsState extends State<CarSettings> {
                           return DropdownMenuEntry<CarSize>(
                             value: size,
                             label: size.name,
-                            enabled: size.name != 'Size',
+                            enabled: size.name != 'Select',
                             style: MenuItemButton.styleFrom(
                                 foregroundColor: Colors.black),
                           );
@@ -112,10 +112,12 @@ class _CarSettingsState extends State<CarSettings> {
                     children: <Widget>[
                       DropdownMenu<CarFuelType>(
                         width: 300,
-                        initialSelection: CarFuelType.petrol,
+                        initialSelection: carState.selectedFuelType,
                         requestFocusOnTap: true,
                         label: const Text('Fuel Type'),
                         onSelected: (CarFuelType? fuelType) {
+                          carState.updateSelectedFuelType(
+                              fuelType ?? CarFuelType.label);
                           setState(() {
                             selectedFuelType = fuelType;
                           });
@@ -126,7 +128,7 @@ class _CarSettingsState extends State<CarSettings> {
                           return DropdownMenuEntry<CarFuelType>(
                             value: type,
                             label: type.name,
-                            enabled: type.name != 'Fuel Type',
+                            enabled: type.name != 'Select',
                             style: MenuItemButton.styleFrom(
                                 foregroundColor: Colors.black),
                           );
@@ -137,9 +139,13 @@ class _CarSettingsState extends State<CarSettings> {
                 ),
                 FilledButton(
                   onPressed: () {
-                    changeVisibility(true);
-                    getMinMaxEmissions();
-                    getCarEmissions();
+                    if (selectedSize == null || selectedFuelType == null) {
+                      return;
+                    } else {
+                      changeVisibility(true);
+                      getMinMaxEmissions();
+                      getCarEmissions();
+                    }
                   },
                   child: const Text("Calculate Emissions"),
                 ),
@@ -165,7 +171,6 @@ class _CarSettingsState extends State<CarSettings> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text('Route ${index + 1}'),
-                                    //Text('Emission: ${emissions[index]}g'),
                                     Text(
                                         'Emission: ${formatNumber(carState.getEmission(index))}g'),
                                     Text(
