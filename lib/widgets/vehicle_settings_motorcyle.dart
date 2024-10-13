@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
 import 'package:the_carbon_conscious_traveller/models/private_vehicle_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
+import 'package:the_carbon_conscious_traveller/models/private_vehicle_state.dart';
 
 class MotorcyleSettings extends StatefulWidget {
   const MotorcyleSettings({super.key});
@@ -12,41 +13,44 @@ class MotorcyleSettings extends StatefulWidget {
 }
 
 class _MotorcyleSettingsState extends State<MotorcyleSettings> {
-  MotorcycleSize? selectedSize = MotorcycleSize.label;
+  MotorcycleSize? selectedSize;
   bool isVisible = false;
-  late PrivateVehicleEmissionsCalculator _emissionCalculator;
+  late PrivateVehicleEmissionsCalculator emissionCalculator;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RoutesModel>(builder: (context, routesModel, child) {
-      _emissionCalculator = PrivateVehicleEmissionsCalculator(
-        routesModel: routesModel,
-        vehicleSize: selectedSize!,
-      );
-      return Scaffold(
-        body: Column(
-          children: [
-            Title(
-              color: Colors.black,
-              child: Text(
-                "Motorcycle",
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
+    RoutesModel routesModel = Provider.of<RoutesModel>(context);
+    emissionCalculator = PrivateVehicleEmissionsCalculator(
+      routesModel: routesModel,
+      vehicleSize: selectedSize ?? MotorcycleSize.label,
+    );
+    return Scaffold(
+      body: Column(
+        children: [
+          Title(
+            color: Colors.black,
+            child: Text(
+              "Motorcycle",
+              style: Theme.of(context).textTheme.displayLarge,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  DropdownMenu<MotorcycleSize>(
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Consumer<PrivateVehicleState>(
+                    builder: (context, dropdownState, child) {
+                  return DropdownMenu<MotorcycleSize>(
                     width: 300,
-                    initialSelection: selectedSize,
+                    initialSelection: dropdownState.selectedValue,
                     requestFocusOnTap: true,
                     label: const Text('Motorcycle Size'),
                     onSelected: (MotorcycleSize? size) {
+                      dropdownState
+                          .updateSelectedValue(size ?? MotorcycleSize.label);
                       setState(() {
-                        selectedSize = size;
-                        isVisible = true;
+                        selectedSize = dropdownState.selectedValue;
                       });
                     },
                     dropdownMenuEntries: MotorcycleSize.values
@@ -60,51 +64,85 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                             foregroundColor: Colors.black),
                       );
                     }).toList(),
-                  ),
-                ],
-              ),
+                  );
+                }),
+              ],
             ),
-            Visibility(
-              visible: isVisible,
-              child: Column(
-                children: [
-                  Text(
-                      'MinEmission: ${_emissionCalculator.calculateMinEmission().round()}g'),
-                  Text(
-                      'MaxEmission: ${_emissionCalculator.calculateMaxEmission().round()}g'),
-                  ListView.separated(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(8),
-                    itemCount: routesModel.distanceTexts.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        color: Colors.green[100],
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Route ${index + 1}'),
-                              Text(
-                                  'Emission: ${_emissionCalculator.calculateEmission(index).round()}g'),
-                              Text(
-                                  'Distance: ${routesModel.distanceTexts[index]}'),
-                              Text(
-                                  'Duration: ${routesModel.durationTexts[index]}'),
-                            ],
-                          ),
-                        ),
-                      );
+          ),
+          Consumer<PrivateVehicleState>(
+              builder: (context, dropdownState, child) {
+            void changeVisibility(bool isVisible) {
+              dropdownState.updateVisibility(isVisible);
+            }
+
+            int minEmission = 0;
+            int maxEmission = 0;
+
+            void getMinMaxEmissions() {
+              minEmission = emissionCalculator.calculateMinEmission().round();
+              dropdownState.updateMinEmission(minEmission);
+              maxEmission = emissionCalculator.calculateMaxEmission().round();
+              dropdownState.updateMaxEmission(maxEmission);
+            }
+
+            void getEmissions() {
+              List<int> emissions = [];
+              for (int i = 0; i < routesModel.result.length; i++) {
+                emissions.add(emissionCalculator.calculateEmission(i).round());
+              }
+              dropdownState.saveEmissions(emissions);
+            }
+
+            return Column(
+              children: [
+                FilledButton(
+                    onPressed: () {
+                      changeVisibility(true);
+                      getMinMaxEmissions();
+                      getEmissions();
                     },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
+                    child: const Text('Calculate Emissions')),
+                Visibility(
+                  visible: dropdownState.isVisible,
+                  child: Column(
+                    children: [
+                      Text('MinEmission: ${dropdownState.minEmissionValue}g'),
+                      Text('MaxEmission: ${dropdownState.maxEmissionValue}g'),
+                      ListView.separated(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(8),
+                        itemCount: routesModel.distanceTexts.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            color: Colors.green[100],
+                            child: Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('Route ${index + 1}'),
+                                  Text(
+                                      'Emission: ${dropdownState.getEmission(index).toString()}g'),
+                                  Text(
+                                      'Distance: ${routesModel.distanceTexts[index]}'),
+                                  Text(
+                                      'Duration: ${routesModel.durationTexts[index]}'),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    });
+                ),
+              ],
+            );
+          }),
+        ],
+      ),
+    );
   }
 }
