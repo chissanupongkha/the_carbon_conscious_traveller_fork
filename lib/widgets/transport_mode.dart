@@ -23,7 +23,7 @@ class _TransportModeState extends State<TransportMode> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RoutesModel>(builder: (context, polylineModel, child) {
+    return Consumer<RoutesModel>(builder: (context, routesModel, child) {
       return Container(
         alignment: Alignment.center,
         color: Colors.white,
@@ -35,10 +35,10 @@ class _TransportModeState extends State<TransportMode> {
                 _selectedModes[i] = i == index;
               }
             });
-            polylineModel.transportMode = transportModes[index].mode;
+            routesModel.transportMode = transportModes[index].mode;
             final coordinatesModel =
                 Provider.of<CoordinatesModel>(context, listen: false);
-            polylineModel.getPolyline(coordinatesModel.coordinates);
+            routesModel.getPolyline(coordinatesModel.coordinates);
             _showModalBottomSheet();
           },
           selectedBorderColor: Colors.green[700],
