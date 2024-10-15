@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class MarkerModel extends ChangeNotifier {
+class MarkerState extends ChangeNotifier {
   final Set<Marker> _markers = {};
 
   Set<Marker> get markers => _markers;

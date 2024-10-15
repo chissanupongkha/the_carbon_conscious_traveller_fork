@@ -4,11 +4,11 @@ import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart'
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_carbon_conscious_traveller/constants.dart';
-import 'package:the_carbon_conscious_traveller/models/marker_model.dart';
-import 'package:the_carbon_conscious_traveller/models/coordinates_model.dart';
+import 'package:the_carbon_conscious_traveller/models/marker_state.dart';
+import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
-import 'package:the_carbon_conscious_traveller/widgets/transport_mode.dart';
+import 'package:the_carbon_conscious_traveller/widgets/travel_mode_buttons.dart';
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
 
 class GooglePlacesView extends StatefulWidget {
@@ -119,7 +119,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
               .toList(growable: false),
         ),
       ),
-      const TransportMode(),
+      const TravelModeButtons(),
       const Image(
         image: places.FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
       ),
@@ -241,11 +241,11 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     print("addOriginMarker reached!!! $originLatLng");
 
     LatLng position = originLatLng;
-    final markerModel = Provider.of<MarkerModel>(context, listen: false);
+    final markerModel = Provider.of<MarkerState>(context, listen: false);
     markerModel.addMarker(LatLng(position.latitude, position.longitude));
 
     final coordinatesModel =
-        Provider.of<CoordinatesModel>(context, listen: false);
+        Provider.of<CoordinatesState>(context, listen: false);
     coordinatesModel
         .saveCoordinates(LatLng(position.latitude, position.longitude));
   }
@@ -254,13 +254,13 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     print("addDestinationMarker reached!!! $destinationLatLng");
     LatLng position = destinationLatLng;
 
-    final markerModel = Provider.of<MarkerModel>(context, listen: false);
+    final markerModel = Provider.of<MarkerState>(context, listen: false);
     markerModel.addMarker(
       LatLng(position.latitude, position.longitude),
     );
 
     final coordinatesModel =
-        Provider.of<CoordinatesModel>(context, listen: false);
+        Provider.of<CoordinatesState>(context, listen: false);
     coordinatesModel.saveCoordinates(
       LatLng(position.latitude, position.longitude),
     );

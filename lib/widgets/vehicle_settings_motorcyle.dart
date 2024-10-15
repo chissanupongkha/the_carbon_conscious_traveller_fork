@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
 import 'package:the_carbon_conscious_traveller/models/private_vehicle_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
-import 'package:the_carbon_conscious_traveller/models/private_vehicle_state.dart';
+import 'package:the_carbon_conscious_traveller/models/private_motorcycle_state.dart';
 
 class MotorcyleSettings extends StatefulWidget {
   const MotorcyleSettings({super.key});
@@ -24,7 +24,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
       routesModel: routesModel,
       vehicleSize: selectedSize ?? MotorcycleSize.label,
     );
-    return Consumer<PrivateVehicleState>(
+    return Consumer<PrivateMotorcycleState>(
       builder: (context, dropdownState, child) {
         void changeVisibility(bool isVisible) {
           dropdownState.updateVisibility(isVisible);

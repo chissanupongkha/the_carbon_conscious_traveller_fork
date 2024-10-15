@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
 
-class PrivateVehicleState extends ChangeNotifier {
+class PrivateMotorcycleState extends ChangeNotifier {
   MotorcycleSize? _selectedValue;
   bool? _isVisible;
   int? _minEmission;
