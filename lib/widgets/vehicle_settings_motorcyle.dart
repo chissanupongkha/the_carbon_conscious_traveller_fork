@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
 import 'package:the_carbon_conscious_traveller/models/private_vehicle_emissions_calculator.dart';
-import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
+import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/models/private_motorcycle_state.dart';
 
 class MotorcyleSettings extends StatefulWidget {
@@ -19,9 +19,9 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
 
   @override
   Widget build(BuildContext context) {
-    RoutesModel routesModel = Provider.of<RoutesModel>(context);
+    PolylinesState polylinesState = Provider.of<PolylinesState>(context);
     emissionCalculator = PrivateVehicleEmissionsCalculator(
-      routesModel: routesModel,
+      polylinesState: polylinesState,
       vehicleSize: selectedSize ?? MotorcycleSize.label,
     );
     return Consumer<PrivateMotorcycleState>(
@@ -42,7 +42,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
 
         void getEmissions() {
           List<int> emissions = [];
-          for (int i = 0; i < routesModel.result.length; i++) {
+          for (int i = 0; i < polylinesState.result.length; i++) {
             emissions.add(emissionCalculator.calculateEmission(i).round());
           }
           dropdownState.saveEmissions(emissions);
@@ -123,7 +123,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                         ListView.separated(
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
-                          itemCount: routesModel.result.length,
+                          itemCount: polylinesState.result.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
                               color: Colors.green[100],
@@ -135,9 +135,9 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                                     Text(
                                         'Emission: ${formatNumber(dropdownState.getEmission(index))}g'),
                                     Text(
-                                        'Distance: ${routesModel.distanceTexts[index]}'),
+                                        'Distance: ${polylinesState.distanceTexts[index]}'),
                                     Text(
-                                        'Duration: ${routesModel.durationTexts[index]}'),
+                                        'Duration: ${polylinesState.durationTexts[index]}'),
                                   ],
                                 ),
                               ),

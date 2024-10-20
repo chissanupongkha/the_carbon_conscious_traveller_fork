@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
-import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
+import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
 
 class TravelModeButtons extends StatefulWidget {
@@ -23,7 +23,7 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RoutesModel>(builder: (context, routesModel, child) {
+    return Consumer<PolylinesState>(builder: (context, polylineState, child) {
       return Container(
         alignment: Alignment.center,
         color: Colors.white,
@@ -35,10 +35,10 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
                 _selectedModes[i] = i == index;
               }
             });
-            routesModel.transportMode = transportModes[index].mode;
+            polylineState.transportMode = transportModes[index].mode;
             final coordinatesModel =
                 Provider.of<CoordinatesState>(context, listen: false);
-            routesModel.getPolyline(coordinatesModel.coordinates);
+            polylineState.getPolyline(coordinatesModel.coordinates);
             _showModalBottomSheet();
           },
           selectedBorderColor: Colors.green[700],

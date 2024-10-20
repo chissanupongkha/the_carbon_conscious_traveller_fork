@@ -3,18 +3,19 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
 import 'package:the_carbon_conscious_traveller/models/marker_state.dart';
 import 'package:the_carbon_conscious_traveller/models/private_car_state.dart';
-import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
+import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/models/private_motorcycle_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/drawer.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_map_view.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_places_view.dart';
+import 'package:the_carbon_conscious_traveller/widgets/test_directions.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MarkerState()),
-        ChangeNotifierProvider(create: (context) => RoutesModel()),
+        ChangeNotifierProvider(create: (context) => PolylinesState()),
         ChangeNotifierProvider(create: (context) => CoordinatesState()),
         ChangeNotifierProvider(create: (context) => PrivateMotorcycleState()),
         ChangeNotifierProvider(create: (context) => PrivateCarState()),
@@ -75,6 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             GoogleMapView(),
             GooglePlacesView(),
+            //TestDirections(),
           ],
         ),
       ),

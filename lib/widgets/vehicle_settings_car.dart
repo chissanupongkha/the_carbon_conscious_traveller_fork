@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
 import 'package:the_carbon_conscious_traveller/models/private_car_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/models/private_car_state.dart';
-import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
+import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
 
 class CarSettings extends StatefulWidget {
   const CarSettings({super.key});
@@ -19,9 +19,9 @@ class _CarSettingsState extends State<CarSettings> {
 
   @override
   Widget build(BuildContext context) {
-    RoutesModel routesModel = Provider.of<RoutesModel>(context);
+    PolylinesState polylineState = Provider.of<PolylinesState>(context);
     emissionCalculator = PrivateCarEmissionsCalculator(
-      routesModel: routesModel,
+      polylinesState: polylineState,
       vehicleSize: selectedSize ?? CarSize.label,
       vehicleFuelType: selectedFuelType ?? CarFuelType.label,
     );
@@ -40,7 +40,7 @@ class _CarSettingsState extends State<CarSettings> {
 
         void getCarEmissions() {
           List<int> emissions = [];
-          for (int i = 0; i < routesModel.result.length; i++) {
+          for (int i = 0; i < polylineState.result.length; i++) {
             emissions.add(emissionCalculator
                 .calculateEmissions(i, selectedSize!, selectedFuelType!)
                 .round());
@@ -162,7 +162,7 @@ class _CarSettingsState extends State<CarSettings> {
                         ListView.separated(
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
-                          itemCount: routesModel.result.length,
+                          itemCount: polylineState.result.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
                               color: Colors.green[100],
@@ -174,9 +174,9 @@ class _CarSettingsState extends State<CarSettings> {
                                     Text(
                                         'Emission: ${formatNumber(carState.getEmission(index))}g'),
                                     Text(
-                                        'Distance: ${routesModel.distanceTexts[index]}'),
+                                        'Distance: ${polylineState.distanceTexts[index]}'),
                                     Text(
-                                        'Duration: ${routesModel.durationTexts[index]}'),
+                                        'Duration: ${polylineState.durationTexts[index]}'),
                                   ],
                                 ),
                               ),

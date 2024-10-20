@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart'
     as places;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_directions_api/google_directions_api.dart' as dir;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_carbon_conscious_traveller/constants.dart';
 import 'package:the_carbon_conscious_traveller/models/marker_state.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
 import 'package:provider/provider.dart';
+import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 import 'package:the_carbon_conscious_traveller/widgets/travel_mode_buttons.dart';
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
@@ -38,6 +40,8 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   dynamic _fetchingPlaceErr; // Fetching place error
   dynamic _predictErr; // Prediction error
 
+  RoutesModel? routes;
+
   // Place fields to fetch when a prediction is clicked
   final List<places.PlaceField> _placeFields = [
     places.PlaceField.Address,
@@ -67,13 +71,15 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     const googleApiKey = Constants.googleApiKey;
     const initialLocale = Constants.initialLocale;
 
-    // Initialize Google Places API
+    // Initialise Google Places API
     _places =
         places.FlutterGooglePlacesSdk(googleApiKey, locale: initialLocale);
     _places.isInitialized().then((value) {
       debugPrint('Places Initialised: $value');
     });
   }
+
+  final travelMode = dir.TravelMode.driving;
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +253,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     final coordinatesModel =
         Provider.of<CoordinatesState>(context, listen: false);
     coordinatesModel
-        .saveCoordinates(LatLng(position.latitude, position.longitude));
+        .saveOriginCoords(LatLng(position.latitude, position.longitude));
   }
 
   void _addDestinationMarker(LatLng destinationLatLng) {
@@ -261,32 +267,16 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
 
     final coordinatesModel =
         Provider.of<CoordinatesState>(context, listen: false);
-    coordinatesModel.saveCoordinates(
+    coordinatesModel.saveDestinationCoords(
       LatLng(position.latitude, position.longitude),
     );
 
-    final polylineModel = Provider.of<RoutesModel>(context, listen: false);
+    print("object coords: ${coordinatesModel.destinationCoords}");
+
+    final polylineModel = Provider.of<PolylinesState>(context, listen: false);
     polylineModel.getPolyline(coordinatesModel.coordinates);
   }
 
-  // void _showModalBottomSheet() {
-  //   final polylineModel = Provider.of<PolylineModel>(context, listen: false);
-  //   String travelMode = polylineModel.mode;
-
-  //   showModalBottomSheet<void>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       if (travelMode == "motorcycling") {
-  //         return const MotorcyleSettings();
-  //       } else if (travelMode == "transit") {
-  //         return const Transit();
-  //       } else if (travelMode == "flying") {
-  //         return const Flying();
-  //       }
-  //       return const CarSettings();
-  //     },
-  //   );
-  // }
   void _showModalBottomSheet() {
     showModalBottomSheet<void>(
       context: context,
