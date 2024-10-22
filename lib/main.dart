@@ -8,7 +8,6 @@ import 'package:the_carbon_conscious_traveller/models/private_motorcycle_state.d
 import 'package:the_carbon_conscious_traveller/widgets/drawer.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_map_view.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_places_view.dart';
-import 'package:the_carbon_conscious_traveller/widgets/test_directions.dart';
 
 void main() {
   runApp(
@@ -76,7 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             GoogleMapView(),
             GooglePlacesView(),
-            //TestDirections(),
           ],
         ),
       ),
