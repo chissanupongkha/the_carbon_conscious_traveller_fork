@@ -3,6 +3,7 @@ import 'package:google_directions_api/google_directions_api.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
+import 'package:the_carbon_conscious_traveller/models/transit_emissions_calculator.dart';
 
 class Transit extends StatefulWidget {
   const Transit({super.key});
@@ -14,8 +15,16 @@ class Transit extends StatefulWidget {
 class _TransitState extends State<Transit> {
   final travelMode = TravelMode.transit;
   RoutesModel? routesModel;
-  dynamic routes;
+  List<DirectionsRoute>? routes = [];
   String? iconURL;
+  CoordinatesState coordsState = CoordinatesState();
+  TransitEmissionsCalculator? _transitEmissionsCalculator;
+
+  @override
+  void initState() {
+    _transitEmissionsCalculator = TransitEmissionsCalculator();
+    super.initState();
+  }
 
   Future<List<DirectionsRoute>> fetchRouteInfo() async {
     debugPrint("request sent");
@@ -33,8 +42,8 @@ class _TransitState extends State<Transit> {
     if (routes == null) {
       return [];
     } else {
-      debugPrint("routes returned? $routes");
-      return routes;
+      coordsState.saveRouteData(routes!);
+      return routes!;
     }
   }
 
@@ -46,6 +55,10 @@ class _TransitState extends State<Transit> {
       child: FutureBuilder<List<DirectionsRoute>>(
         future: fetchRouteInfo(),
         builder: (context, snapshot) {
+          final emissions =
+              _transitEmissionsCalculator?.calculateEmissions(context);
+          print(
+              "transitEmissionsCalculator: ${_transitEmissionsCalculator?.calculateEmissions(context)}");
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
@@ -101,6 +114,8 @@ class _TransitState extends State<Transit> {
                                     "${snapshot.data?[index].legs?.first.distance?.text}"),
                                 Text(
                                     "${snapshot.data?[index].legs?.first.duration?.text}"),
+                                Text(
+                                    "Emissions: ${emissions![index].roundToDouble() / 1000}g"),
                               ],
                             );
                           },
