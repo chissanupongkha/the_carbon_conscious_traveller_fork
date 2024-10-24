@@ -1,33 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart' as poly;
+import 'package:google_directions_api/google_directions_api.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:the_carbon_conscious_traveller/constants.dart';
+import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 
 class PolylinesState extends ChangeNotifier {
-  final PolylinePoints _polylinePoints = PolylinePoints();
+  final poly.PolylinePoints _polylinePoints = poly.PolylinePoints();
   final Map<PolylineId, Polyline> _polylines = {};
   final List<List<LatLng>> _routeCoordinates = [];
-  List<PolylineResult> result = [];
+  List<DirectionsRoute> result = [];
   TravelMode _transportMode = TravelMode.driving;
-  String _mode = 'motorcycling';
+  String _mode = 'driving';
   int _activeRouteIndex = 0;
-  // List<int> distance = [];
-  final List<int> _distances = [];
+  final List<num> _distances = [];
   final List<String> _distanceTexts = [];
   final List<String> _durationTexts = [];
 
-  PolylinePoints get polylinePoints => _polylinePoints;
+  RoutesModel? routesModel;
+
+  List<DirectionsRoute>? routes = [];
+
+  poly.PolylinePoints get polylinePoints => _polylinePoints;
   Map<PolylineId, Polyline> get polylines => _polylines;
   List<List<LatLng>> get routeCoordinates => _routeCoordinates;
   String get mode => _mode;
   int get activeRouteIndex => _activeRouteIndex;
-  List<int> get distances => _distances;
+  List<num> get distances => _distances;
   List<String> get distanceTexts => _distanceTexts;
   List<String> get durationTexts => _durationTexts;
 
   static const Map<String, TravelMode> _modeMap = {
     'driving': TravelMode.driving,
-    'motorcycling': TravelMode.driving, // This should be motorcycling
+    'motorcycling': TravelMode.driving,
     'transit': TravelMode.transit,
     'flying': TravelMode.walking, // This should be flying
   };
@@ -35,40 +39,56 @@ class PolylinesState extends ChangeNotifier {
   set transportMode(String mode) {
     _transportMode = _modeMap[mode]!;
     _mode = mode;
-    print("Transport mode in model: ${_modeMap[mode]}");
-    //resetPolyline();
+    debugPrint("Transport mode in model: ${_modeMap[mode]}");
     notifyListeners();
   }
 
   void resetPolyline() {
-    print("Resetting polyline");
+    debugPrint("Resetting polyline");
     _routeCoordinates.clear();
     _activeRouteIndex = 0;
     notifyListeners();
   }
 
-  void getPolyline(List<LatLng> coordinates) async {
-    print("Getting polyline...");
-    print("Active route index: $_activeRouteIndex");
+  Future<void> getPolyline(List<LatLng> coordinates) async {
+    debugPrint("Getting polyline...");
+    debugPrint("Active route index: $_activeRouteIndex");
 
     resetPolyline();
 
-    result = await polylinePoints.getRouteWithAlternatives(
-      googleApiKey: Constants.googleApiKey,
-      request: PolylineRequest(
-        origin: PointLatLng(coordinates[0].latitude, coordinates[0].longitude),
+    Future<List<DirectionsRoute>> fetchRouteInfo() async {
+      debugPrint("request sent");
+      routesModel = RoutesModel(
+        origin: GeoCoord(coordinates[0].latitude, coordinates[0].longitude),
         destination:
-            PointLatLng(coordinates[1].latitude, coordinates[1].longitude),
-        mode: _modeMap[mode]!,
-        alternatives: true,
-      ),
-    );
+            GeoCoord(coordinates[1].latitude, coordinates[1].longitude),
+        travelMode: _transportMode,
+      );
+      debugPrint("request is about to return");
+      routes = await routesModel?.getRouteInfo();
+      debugPrint("routes $routes");
+      if (routes == null) {
+        return [];
+      } else {
+        return routes!;
+      }
+    }
+
+    result = await fetchRouteInfo();
+
     if (result.isNotEmpty) {
       for (int i = 0; i < result.length; i++) {
         List<LatLng> routeCoordinate = [];
 
-        for (var point in result[i].points) {
-          routeCoordinate.add(LatLng(point.latitude, point.longitude));
+        if (result[i].overviewPolyline!.points!.isEmpty) {
+          print("No points found");
+          return;
+        } else {
+          List<LatLng> decodedPoints = _polylinePoints
+              .decodePolyline(result[i].overviewPolyline!.points!)
+              .map((point) => LatLng(point.latitude, point.longitude))
+              .toList();
+          routeCoordinate.addAll(decodedPoints);
         }
         routeCoordinates.add(routeCoordinate);
       }
@@ -93,7 +113,10 @@ class PolylinesState extends ChangeNotifier {
         //color: i == activeRouteIndex ? Colors.blue : Colors.grey,
         //color: routeSegments[i].travelMode == 'WALKING' ? Colors.green : Colors.blue,
         color: i == activeRouteIndex ? Colors.blue : Colors.grey,
-        patterns: _mode == "transit" ? dashPattern : [],
+        patterns: result.first.legs?.first.steps?.first.travelMode.toString() ==
+                "WALKING"
+            ? dashPattern
+            : [],
         points: routeCoordinates[i],
         width: i == activeRouteIndex ? 5 : 3,
         zIndex: i == _activeRouteIndex ? 1 : 0, // Put active route on top
@@ -115,16 +138,17 @@ class PolylinesState extends ChangeNotifier {
       print("Setting active route to $index");
       _updateActiveRoute(index);
     }
-    // getDistanceValues();
-    // getDurationValues();
-    // getDistanceTexts();
-    // getDurationTexts();
+    getDistanceValues();
+    getDurationValues();
+    getDistanceTexts();
+    getDurationTexts();
   }
 
   void getDistanceValues() {
+    print("Getting distance values");
     if (result.isNotEmpty && _distances.length < result.length) {
       for (var route in result) {
-        distances.add(route.distanceValues!.first);
+        distances.add(route.legs!.first.distance!.value ?? 0);
       }
     } else {
       print("No results");
@@ -132,38 +156,34 @@ class PolylinesState extends ChangeNotifier {
   }
 
   void getDistanceTexts() {
-    if (result.isNotEmpty && distanceTexts.length < result.length) {
-      print("distance text length: ${distanceTexts.length}");
-      print("result texts length: ${result.length}");
+    if (result.isNotEmpty && _distanceTexts.length < result.length) {
       for (var route in result) {
-        distanceTexts.add(route.distanceTexts!.first);
-        print("Distance text: ${route.distanceTexts!.first}");
-        print("Distance text length: ${distanceTexts.length}");
+        distanceTexts.add(route.legs!.first.distance!.text!);
       }
     } else {
-      print("No results");
+      debugPrint("No results");
     }
+  }
+
+  void getDurationValues() {
+    List<num> duration = [];
+    if (result.isNotEmpty && _distanceTexts.length < result.length) {
+      for (var route in result) {
+        duration.add(route.legs!.first.duration!.value!);
+      }
+    } else {
+      debugPrint("No results");
+    }
+    debugPrint("Duration: $duration");
   }
 
   void getDurationTexts() {
     if (result.isNotEmpty && _durationTexts.length < result.length) {
       for (var route in result) {
-        _durationTexts.add(route.durationTexts!.first);
+        _durationTexts.add(route.legs!.first.duration!.text!);
       }
     } else {
-      print("No results");
+      debugPrint("No results");
     }
-  }
-
-  void getDurationValues() {
-    List<int> duration = [];
-    if (result.isNotEmpty && _distanceTexts.length < result.length) {
-      for (var route in result) {
-        duration.add(route.durationValues!.first);
-      }
-    } else {
-      print("No results");
-    }
-    print("Duration: $duration");
   }
 }
