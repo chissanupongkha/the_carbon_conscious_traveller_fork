@@ -138,6 +138,8 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                                         'Distance: ${polylinesState.distanceTexts[index]}'),
                                     Text(
                                         'Duration: ${polylinesState.durationTexts[index]}'),
+                                    Text(
+                                        'Via: ${polylinesState.routeSummary[index]}'),
                                   ],
                                 ),
                               ),

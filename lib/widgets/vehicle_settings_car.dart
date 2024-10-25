@@ -177,6 +177,8 @@ class _CarSettingsState extends State<CarSettings> {
                                         'Distance: ${polylineState.distanceTexts[index]}'),
                                     Text(
                                         'Duration: ${polylineState.durationTexts[index]}'),
+                                    Text(
+                                        'Via: ${polylineState.routeSummary[index]}'),
                                   ],
                                 ),
                               ),

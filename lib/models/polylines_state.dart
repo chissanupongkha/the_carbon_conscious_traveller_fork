@@ -15,6 +15,7 @@ class PolylinesState extends ChangeNotifier {
   final List<num> _distances = [];
   final List<String> _distanceTexts = [];
   final List<String> _durationTexts = [];
+  final List<String> _routeSummary = [];
 
   RoutesModel? routesModel;
 
@@ -28,6 +29,7 @@ class PolylinesState extends ChangeNotifier {
   List<num> get distances => _distances;
   List<String> get distanceTexts => _distanceTexts;
   List<String> get durationTexts => _durationTexts;
+  List<String> get routeSummary => _routeSummary;
 
   static const Map<String, TravelMode> _modeMap = {
     'driving': TravelMode.driving,
@@ -128,6 +130,7 @@ class PolylinesState extends ChangeNotifier {
       getDurationValues();
       getDistanceTexts();
       getDurationTexts();
+      getRouteSummary();
     }
 
     notifyListeners();
@@ -142,6 +145,7 @@ class PolylinesState extends ChangeNotifier {
     getDurationValues();
     getDistanceTexts();
     getDurationTexts();
+    getRouteSummary();
   }
 
   void getDistanceValues() {
@@ -184,6 +188,17 @@ class PolylinesState extends ChangeNotifier {
       }
     } else {
       debugPrint("No results");
+    }
+  }
+
+  void getRouteSummary() {
+    if (result.isNotEmpty) {
+      for (var route in result) {
+        print("Route summary: ${route.summary}");
+        _routeSummary.add(route.summary!);
+      }
+    } else {
+      print("No results");
     }
   }
 }
