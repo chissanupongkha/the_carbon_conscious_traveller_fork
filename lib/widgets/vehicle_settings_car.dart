@@ -54,10 +54,10 @@ class _CarSettingsState extends State<CarSettings> {
         }
 
         String formatNumber(int number) {
-          if (number >= 1000 && number < 1000000) {
-            return '${(number / 1000).toStringAsFixed(2)} k';
+          if (number >= 1000) {
+            return '${(number / 1000).toStringAsFixed(2)} kg';
           } else {
-            return number.toString();
+            return '${number.round()} g';
           }
         }
 
@@ -156,9 +156,9 @@ class _CarSettingsState extends State<CarSettings> {
                     child: Column(
                       children: [
                         Text(
-                            'MinEmission: ${formatNumber(carState.minEmissionValue)}g'),
+                            'MinEmission: ${formatNumber(carState.minEmissionValue)}'),
                         Text(
-                            'MaxEmission: ${formatNumber(carState.maxEmissionValue)}g'),
+                            'MaxEmission: ${formatNumber(carState.maxEmissionValue)}'),
                         ListView.separated(
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
@@ -172,7 +172,7 @@ class _CarSettingsState extends State<CarSettings> {
                                   children: [
                                     Text('Route ${index + 1}'),
                                     Text(
-                                        'Emission: ${formatNumber(carState.getEmission(index))}g'),
+                                        'Emission: ${formatNumber(carState.getEmission(index))}'),
                                     Text(
                                         'Distance: ${polylineState.distanceTexts[index]}'),
                                     Text(

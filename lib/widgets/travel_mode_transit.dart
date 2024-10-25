@@ -47,6 +47,14 @@ class _TransitState extends State<Transit> {
     }
   }
 
+  String formatNumber(double number) {
+    if (number >= 1000) {
+      return '${(number / 1000).toStringAsFixed(2)} kg';
+    } else {
+      return '${number.round()} g';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -115,7 +123,7 @@ class _TransitState extends State<Transit> {
                                 Text(
                                     "${snapshot.data?[index].legs?.first.duration?.text}"),
                                 Text(
-                                    "Emissions: ${emissions![index].roundToDouble() / 1000}g"),
+                                    "Emissions: ${formatNumber(emissions![index])}"),
                               ],
                             );
                           },

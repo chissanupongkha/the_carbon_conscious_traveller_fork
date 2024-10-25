@@ -49,10 +49,10 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
         }
 
         String formatNumber(int number) {
-          if (number >= 1000 && number < 1000000) {
-            return '${(number / 1000).toStringAsFixed(2)} k';
+          if (number >= 1000) {
+            return '${(number / 1000).toStringAsFixed(2)} kg';
           } else {
-            return number.toString();
+            return '${number.round()} g';
           }
         }
 
@@ -117,9 +117,9 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                     child: Column(
                       children: [
                         Text(
-                            'MinEmission: ${formatNumber(dropdownState.minEmissionValue)}g'),
+                            'MinEmission: ${formatNumber(dropdownState.minEmissionValue)}'),
                         Text(
-                            'MaxEmission: ${formatNumber(dropdownState.maxEmissionValue)}g'),
+                            'MaxEmission: ${formatNumber(dropdownState.maxEmissionValue)}'),
                         ListView.separated(
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
@@ -133,7 +133,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                                   children: [
                                     Text('Route ${index + 1}'),
                                     Text(
-                                        'Emission: ${formatNumber(dropdownState.getEmission(index))}g'),
+                                        'Emission: ${formatNumber(dropdownState.getEmission(index))}'),
                                     Text(
                                         'Distance: ${polylinesState.distanceTexts[index]}'),
                                     Text(
