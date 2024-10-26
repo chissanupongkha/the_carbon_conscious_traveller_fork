@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_directions_api/google_directions_api.dart';
 import 'package:provider/provider.dart';
@@ -78,6 +79,10 @@ class _TransitState extends State<Transit> {
                 : SingleChildScrollView(
                     child: Column(
                       children: [
+                        Text(
+                            'MinEmissions: ${formatNumber(emissions!.reduce(min))}'),
+                        Text(
+                            'MinEmissions: ${formatNumber(emissions.reduce(max))}'),
                         ListView.separated(
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
@@ -123,7 +128,7 @@ class _TransitState extends State<Transit> {
                                 Text(
                                     "${snapshot.data?[index].legs?.first.duration?.text}"),
                                 Text(
-                                    "Emissions: ${formatNumber(emissions![index])}"),
+                                    "Emissions: ${formatNumber(emissions[index])}"),
                               ],
                             );
                           },
