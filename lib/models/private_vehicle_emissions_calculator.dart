@@ -12,11 +12,11 @@ class PrivateVehicleEmissionsCalculator {
   });
 
   double calculateEmission(int index) {
-    double distanceValue = 0.0;
+    double emissionValue = 0.0;
     for (var i = 0; i <= polylinesState.distances.length; i++) {
-      distanceValue = polylinesState.distances[index] * vehicleSize.value;
+      emissionValue = polylinesState.distances[index] * vehicleSize.value;
     }
-    return distanceValue;
+    return emissionValue;
   }
 
   double calculateMinEmission() {
