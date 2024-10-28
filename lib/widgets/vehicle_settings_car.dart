@@ -4,6 +4,8 @@ import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
 import 'package:the_carbon_conscious_traveller/models/private_car_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/models/private_car_state.dart';
 import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
+import 'package:the_carbon_conscious_traveller/models/tree_icons_calculator.dart';
+import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
 class CarSettings extends StatefulWidget {
   const CarSettings({super.key});
@@ -16,6 +18,7 @@ class _CarSettingsState extends State<CarSettings> {
   CarSize? selectedSize;
   CarFuelType? selectedFuelType;
   late PrivateCarEmissionsCalculator emissionCalculator;
+  List treeIconName = [];
 
   @override
   Widget build(BuildContext context) {
@@ -179,6 +182,10 @@ class _CarSettingsState extends State<CarSettings> {
                                         'Duration: ${polylineState.durationTexts[index]}'),
                                     Text(
                                         'Via: ${polylineState.routeSummary[index]}'),
+                                    TreeIcons(
+                                        treeIconName: treeIconName =
+                                            upDateTreeIcons(
+                                                carState.emissions, index)),
                                   ],
                                 ),
                               ),

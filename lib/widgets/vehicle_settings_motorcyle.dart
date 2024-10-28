@@ -4,6 +4,8 @@ import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
 import 'package:the_carbon_conscious_traveller/models/private_vehicle_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/models/private_motorcycle_state.dart';
+import 'package:the_carbon_conscious_traveller/models/tree_icons_calculator.dart';
+import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
 class MotorcyleSettings extends StatefulWidget {
   const MotorcyleSettings({super.key});
@@ -16,6 +18,8 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
   MotorcycleSize? selectedSize;
   bool isVisible = false;
   late PrivateVehicleEmissionsCalculator emissionCalculator;
+  List<int> emissions = [];
+  List treeIconName = [];
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
       polylinesState: polylinesState,
       vehicleSize: selectedSize ?? MotorcycleSize.label,
     );
+
     return Consumer<PrivateMotorcycleState>(
       builder: (context, dropdownState, child) {
         void changeVisibility(bool isVisible) {
@@ -41,7 +46,6 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
         }
 
         void getEmissions() {
-          List<int> emissions = [];
           for (int i = 0; i < polylinesState.result.length; i++) {
             emissions.add(emissionCalculator.calculateEmission(i).round());
           }
@@ -105,8 +109,8 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                 FilledButton(
                   onPressed: () {
                     changeVisibility(true);
-                    getMinMaxEmissions();
                     getEmissions();
+                    getMinMaxEmissions();
                   },
                   child: const Text('Calculate Emissions'),
                 ),
@@ -133,13 +137,16 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                                   children: [
                                     Text('Route ${index + 1}'),
                                     Text(
+                                        'Via: ${polylinesState.routeSummary[index]}'),
+                                    Text(
                                         'Emission: ${formatNumber(dropdownState.getEmission(index))}'),
                                     Text(
                                         'Distance: ${polylinesState.distanceTexts[index]}'),
                                     Text(
                                         'Duration: ${polylinesState.durationTexts[index]}'),
-                                    Text(
-                                        'Via: ${polylinesState.routeSummary[index]}'),
+                                    TreeIcons(
+                                        treeIconName: treeIconName =
+                                            upDateTreeIcons(emissions, index)),
                                   ],
                                 ),
                               ),

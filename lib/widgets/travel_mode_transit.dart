@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 import 'package:the_carbon_conscious_traveller/models/transit_emissions_calculator.dart';
+import 'package:the_carbon_conscious_traveller/models/tree_icons_calculator.dart';
+import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
 class Transit extends StatefulWidget {
   const Transit({super.key});
@@ -20,6 +22,7 @@ class _TransitState extends State<Transit> {
   String? iconURL;
   CoordinatesState coordsState = CoordinatesState();
   TransitEmissionsCalculator? _transitEmissionsCalculator;
+  List treeIconName = [];
 
   @override
   void initState() {
@@ -129,6 +132,13 @@ class _TransitState extends State<Transit> {
                                     "${snapshot.data?[index].legs?.first.duration?.text}"),
                                 Text(
                                     "Emissions: ${formatNumber(emissions[index])}"),
+                                TreeIcons(
+                                    treeIconName: treeIconName =
+                                        upDateTreeIcons(
+                                            emissions
+                                                .map((e) => e.toInt())
+                                                .toList(),
+                                            index)),
                               ],
                             );
                           },
