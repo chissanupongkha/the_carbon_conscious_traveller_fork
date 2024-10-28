@@ -8,13 +8,13 @@ class TreeIcons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('tree icons treeIconName $treeIconName');
-    return Row(
+    return Wrap(
       children: [
         for (String treeIcon in treeIconName)
           Image.asset(
             'assets/icons/$treeIcon',
-            width: 40,
-            height: 40,
+            width: 30,
+            height: 30,
           ),
       ],
     );

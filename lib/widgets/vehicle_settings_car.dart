@@ -159,35 +159,64 @@ class _CarSettingsState extends State<CarSettings> {
                     child: Column(
                       children: [
                         Text(
-                            'MinEmission: ${formatNumber(carState.minEmissionValue)}'),
-                        Text(
-                            'MaxEmission: ${formatNumber(carState.maxEmissionValue)}'),
+                            '${formatNumber(carState.minEmissionValue)} - ${formatNumber(carState.maxEmissionValue)}'),
                         ListView.separated(
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
                           itemCount: polylineState.result.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
-                              color: Colors.green[100],
-                              child: Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text('Route ${index + 1}'),
-                                    Text(
-                                        'Emission: ${formatNumber(carState.getEmission(index))}'),
-                                    Text(
-                                        'Distance: ${polylineState.distanceTexts[index]}'),
-                                    Text(
-                                        'Duration: ${polylineState.durationTexts[index]}'),
-                                    Text(
-                                        'Via: ${polylineState.routeSummary[index]}'),
-                                    TreeIcons(
-                                        treeIconName: treeIconName =
-                                            upDateTreeIcons(
-                                                carState.emissions, index)),
-                                  ],
-                                ),
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10),
+                                              child: const Icon(
+                                                Icons.directions_car_outlined,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                            Text(
+                                                'via ${polylineState.routeSummary[index]}'),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(formatNumber(
+                                                carState.getEmission(index))),
+                                            Image.asset('assets/icons/co2e.png',
+                                                width: 40, height: 40),
+                                          ],
+                                        ),
+                                        Text(
+                                            polylineState.distanceTexts[index]),
+                                        Text(
+                                            polylineState.durationTexts[index]),
+                                        TreeIcons(
+                                            treeIconName: treeIconName =
+                                                upDateTreeIcons(
+                                                    carState.emissions, index)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           },

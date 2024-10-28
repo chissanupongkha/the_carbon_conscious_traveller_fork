@@ -121,34 +121,66 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                     child: Column(
                       children: [
                         Text(
-                            'MinEmission: ${formatNumber(dropdownState.minEmissionValue)}'),
-                        Text(
-                            'MaxEmission: ${formatNumber(dropdownState.maxEmissionValue)}'),
+                            '${formatNumber(dropdownState.minEmissionValue)} - ${formatNumber(dropdownState.maxEmissionValue)}'),
                         ListView.separated(
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
                           itemCount: polylinesState.result.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
-                              color: Colors.green[100],
-                              child: Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text('Route ${index + 1}'),
-                                    Text(
-                                        'Via: ${polylinesState.routeSummary[index]}'),
-                                    Text(
-                                        'Emission: ${formatNumber(dropdownState.getEmission(index))}'),
-                                    Text(
-                                        'Distance: ${polylinesState.distanceTexts[index]}'),
-                                    Text(
-                                        'Duration: ${polylinesState.durationTexts[index]}'),
-                                    TreeIcons(
-                                        treeIconName: treeIconName =
-                                            upDateTreeIcons(emissions, index)),
-                                  ],
-                                ),
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.only(
+                                                  right: 10),
+                                              child: const Icon(
+                                                  Icons.motorcycle,
+                                                  color: Colors.green,
+                                                  size: 30),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                  'via ${polylinesState.routeSummary[index]}'),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(formatNumber(dropdownState
+                                                .getEmission(index))),
+                                            Image.asset('assets/icons/co2e.png',
+                                                width: 40, height: 40),
+                                          ],
+                                        ),
+                                        Text(polylinesState
+                                            .distanceTexts[index]),
+                                        Text(polylinesState
+                                            .durationTexts[index]),
+                                        TreeIcons(
+                                            treeIconName: treeIconName =
+                                                upDateTreeIcons(
+                                                    emissions, index)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           },
