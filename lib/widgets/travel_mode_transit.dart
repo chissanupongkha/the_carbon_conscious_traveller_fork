@@ -69,8 +69,6 @@ class _TransitState extends State<Transit> {
         builder: (context, snapshot) {
           final emissions =
               _transitEmissionsCalculator?.calculateEmissions(context);
-          print(
-              "transitEmissionsCalculator: ${_transitEmissionsCalculator?.calculateEmissions(context)}");
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
@@ -83,9 +81,7 @@ class _TransitState extends State<Transit> {
                     child: Column(
                       children: [
                         Text(
-                            'MinEmissions: ${formatNumber(emissions!.reduce(min))}'),
-                        Text(
-                            'MinEmissions: ${formatNumber(emissions.reduce(max))}'),
+                            '${formatNumber(emissions!.reduce(min))} - ${formatNumber(emissions.reduce(max))}'),
                         ListView.separated(
                           shrinkWrap: true,
                           itemCount: snapshot.data!.length,
@@ -93,53 +89,87 @@ class _TransitState extends State<Transit> {
                             int? stepsIdx =
                                 snapshot.data?[index].legs?.first.steps?.length;
                             int i = 0;
-                            return Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    for (i = 0; i < stepsIdx!; i++) ...[
-                                      if (snapshot
-                                              .data?[index]
-                                              .legs
-                                              ?.first
-                                              .steps?[i]
-                                              .transit
-                                              ?.line
-                                              ?.vehicle
-                                              ?.icon ==
-                                          null)
-                                        const Icon(Icons.directions_walk)
-                                      else
+                            return Container(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Wrap(
+                                            children: [
+                                              for (i = 0;
+                                                  i < stepsIdx!;
+                                                  i++) ...[
+                                                if (snapshot
+                                                        .data?[index]
+                                                        .legs
+                                                        ?.first
+                                                        .steps?[i]
+                                                        .transit
+                                                        ?.line
+                                                        ?.vehicle
+                                                        ?.icon ==
+                                                    null)
+                                                  const Icon(
+                                                      Icons.directions_walk)
+                                                else
+                                                  Wrap(
+                                                    children: [
+                                                      Image.network(
+                                                          "https:${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.vehicle?.icon}"),
+                                                      Text(
+                                                          "${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.shortName}"),
+                                                    ],
+                                                  ),
+                                              ],
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 10),
+                                            child: Text(
+                                                "${snapshot.data?[index].legs?.first.departureTime?.text} - ${snapshot.data?[index].legs?.first.arrivalTime?.text}"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
                                           children: [
-                                            Image.network(
-                                                "https:${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.vehicle?.icon}"),
                                             Text(
-                                                "${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.shortName}"),
+                                                formatNumber(emissions[index])),
+                                            Image.asset('assets/icons/co2e.png',
+                                                width: 40, height: 40),
                                           ],
                                         ),
-                                    ],
-                                  ],
-                                ),
-                                Text(
-                                    "${snapshot.data?[index].legs?.first.departureTime?.text} - ${snapshot.data?[index].legs?.first.arrivalTime?.text}"),
-                                Text(
-                                    "${snapshot.data?[index].legs?.first.distance?.text}"),
-                                Text(
-                                    "${snapshot.data?[index].legs?.first.duration?.text}"),
-                                Text(
-                                    "Emissions: ${formatNumber(emissions[index])}"),
-                                TreeIcons(
-                                    treeIconName: treeIconName =
-                                        upDateTreeIcons(
-                                            emissions
-                                                .map((e) => e.toInt())
-                                                .toList(),
-                                            index)),
-                              ],
+                                        Text(
+                                            "${snapshot.data?[index].legs?.first.distance?.text}"),
+                                        Text(
+                                            "${snapshot.data?[index].legs?.first.duration?.text}"),
+                                        TreeIcons(
+                                            treeIconName: treeIconName =
+                                                upDateTreeIcons(
+                                                    emissions
+                                                        .map((e) => e.toInt())
+                                                        .toList(),
+                                                    index)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) =>

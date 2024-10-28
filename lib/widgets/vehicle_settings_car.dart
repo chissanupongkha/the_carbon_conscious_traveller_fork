@@ -185,8 +185,10 @@ class _CarSettingsState extends State<CarSettings> {
                                                 color: Colors.green,
                                               ),
                                             ),
-                                            Text(
-                                                'via ${polylineState.routeSummary[index]}'),
+                                            Expanded(
+                                              child: Text(
+                                                  'via ${polylineState.routeSummary[index]}'),
+                                            ),
                                           ],
                                         ),
                                       ],
