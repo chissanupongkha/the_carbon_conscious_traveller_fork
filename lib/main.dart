@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
-import 'package:the_carbon_conscious_traveller/models/marker_state.dart';
-import 'package:the_carbon_conscious_traveller/models/private_car_state.dart';
-import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
-import 'package:the_carbon_conscious_traveller/models/private_motorcycle_state.dart';
+import 'package:the_carbon_conscious_traveller/state/coordinates_state.dart';
+import 'package:the_carbon_conscious_traveller/state/marker_state.dart';
+import 'package:the_carbon_conscious_traveller/state/private_car_state.dart';
+import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
+import 'package:the_carbon_conscious_traveller/state/private_motorcycle_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/drawer.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_map_view.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_places_view.dart';

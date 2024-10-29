@@ -2,10 +2,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_directions_api/google_directions_api.dart';
 import 'package:provider/provider.dart';
-import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
+import 'package:the_carbon_conscious_traveller/state/coordinates_state.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
-import 'package:the_carbon_conscious_traveller/models/transit_emissions_calculator.dart';
-import 'package:the_carbon_conscious_traveller/models/tree_icons_calculator.dart';
+import 'package:the_carbon_conscious_traveller/helpers/transit_emissions_calculator.dart';
+import 'package:the_carbon_conscious_traveller/helpers/tree_icons_calculator.dart';
 import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
 class Transit extends StatefulWidget {

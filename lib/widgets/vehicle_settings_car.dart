@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
-import 'package:the_carbon_conscious_traveller/models/private_car_emissions_calculator.dart';
-import 'package:the_carbon_conscious_traveller/models/private_car_state.dart';
-import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
-import 'package:the_carbon_conscious_traveller/models/tree_icons_calculator.dart';
+import 'package:the_carbon_conscious_traveller/data/calculation_values.dart';
+import 'package:the_carbon_conscious_traveller/helpers/private_car_emissions_calculator.dart';
+import 'package:the_carbon_conscious_traveller/state/private_car_state.dart';
+import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
+import 'package:the_carbon_conscious_traveller/helpers/tree_icons_calculator.dart';
 import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
 class CarSettings extends StatefulWidget {

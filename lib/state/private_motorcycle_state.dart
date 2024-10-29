@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
-import 'package:the_carbon_conscious_traveller/models/tree_icons_calculator.dart';
+import 'package:the_carbon_conscious_traveller/data/calculation_values.dart';
+import 'package:the_carbon_conscious_traveller/helpers/tree_icons_calculator.dart';
 
 class PrivateMotorcycleState extends ChangeNotifier {
   MotorcycleSize? _selectedValue;

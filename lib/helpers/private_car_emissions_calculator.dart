@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
-import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
+import 'package:the_carbon_conscious_traveller/data/calculation_values.dart';
+import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 
 class PrivateCarEmissionsCalculator {
   final PolylinesState polylinesState;

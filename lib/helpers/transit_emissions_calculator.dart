@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
-import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
+import 'package:the_carbon_conscious_traveller/state/coordinates_state.dart';
+import 'package:the_carbon_conscious_traveller/data/calculation_values.dart';
 
 class TransitEmissionsCalculator {
   double getPublicFactor(String vehicleTypeString) {

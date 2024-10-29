@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:the_carbon_conscious_traveller/models/coordinates_state.dart';
-import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
+import 'package:the_carbon_conscious_traveller/state/coordinates_state.dart';
+import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
 
 class TravelModeButtons extends StatefulWidget {

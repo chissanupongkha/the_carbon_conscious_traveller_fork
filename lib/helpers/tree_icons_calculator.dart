@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:the_carbon_conscious_traveller/models/tree_icon_values.dart';
+import 'package:the_carbon_conscious_traveller/data/tree_icon_values.dart';
 
 List<String> upDateTreeIcons(List<int> emissionValues, index) {
   if (emissionValues.length <= 1) {
