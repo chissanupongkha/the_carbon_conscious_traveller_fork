@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
+import 'package:the_carbon_conscious_traveller/models/tree_icons_calculator.dart';
 
 class PrivateMotorcycleState extends ChangeNotifier {
   MotorcycleSize? _selectedValue;
@@ -7,12 +8,14 @@ class PrivateMotorcycleState extends ChangeNotifier {
   int? _minEmission;
   int? _maxEmission;
   List<int> _emissions = [];
+  List<String> _treeIcons = [];
 
   MotorcycleSize? get selectedValue => _selectedValue;
   bool get isVisible => _isVisible ?? false;
   int get minEmissionValue => _minEmission ?? 0;
   int get maxEmissionValue => _maxEmission ?? 0;
   List<int> get emissions => _emissions;
+  List<String> get treeIcons => _treeIcons;
 
   void updateSelectedValue(MotorcycleSize newValue) {
     print("updateSelectedValue: $newValue");
@@ -38,6 +41,11 @@ class PrivateMotorcycleState extends ChangeNotifier {
   void saveEmissions(List<int> emissions) {
     _emissions = emissions;
     notifyListeners();
+  }
+
+  void getTreeIcons(index) {
+    _treeIcons = upDateTreeIcons(_emissions, index);
+    //notifyListeners();
   }
 
   int getEmission(int index) {

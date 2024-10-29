@@ -4,7 +4,6 @@ import 'package:the_carbon_conscious_traveller/models/calculation_values.dart';
 import 'package:the_carbon_conscious_traveller/models/private_vehicle_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/models/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/models/private_motorcycle_state.dart';
-import 'package:the_carbon_conscious_traveller/models/tree_icons_calculator.dart';
 import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
 class MotorcyleSettings extends StatefulWidget {
@@ -19,7 +18,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
   bool isVisible = false;
   late PrivateVehicleEmissionsCalculator emissionCalculator;
   List<int> emissions = [];
-  List treeIconName = [];
+  List<String> treeIconName = [];
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +126,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                           padding: const EdgeInsets.all(8),
                           itemCount: polylinesState.result.length,
                           itemBuilder: (BuildContext context, int index) {
+                            dropdownState.getTreeIcons(index);
                             return Container(
                               padding: const EdgeInsets.all(10),
                               child: Row(
@@ -174,9 +174,8 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                                         Text(polylinesState
                                             .durationTexts[index]),
                                         TreeIcons(
-                                            treeIconName: treeIconName =
-                                                upDateTreeIcons(
-                                                    emissions, index)),
+                                            treeIconName:
+                                                dropdownState.treeIcons),
                                       ],
                                     ),
                                   ),

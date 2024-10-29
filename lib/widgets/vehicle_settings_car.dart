@@ -18,7 +18,7 @@ class _CarSettingsState extends State<CarSettings> {
   CarSize? selectedSize;
   CarFuelType? selectedFuelType;
   late PrivateCarEmissionsCalculator emissionCalculator;
-  List treeIconName = [];
+  List<String> treeIcons = [];
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +212,7 @@ class _CarSettingsState extends State<CarSettings> {
                                         Text(
                                             polylineState.durationTexts[index]),
                                         TreeIcons(
-                                            treeIconName: treeIconName =
+                                            treeIconName: treeIcons =
                                                 upDateTreeIcons(
                                                     carState.emissions, index)),
                                       ],

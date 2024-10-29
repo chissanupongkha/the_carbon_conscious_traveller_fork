@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:the_carbon_conscious_traveller/models/tree_icon_values.dart';
 
 List<String> upDateTreeIcons(List<int> emissionValues, index) {
-  print('tree icons emissionValues length ${emissionValues.length}');
   if (emissionValues.length <= 1) {
     print("tree icons returning");
     return [];
@@ -12,6 +11,9 @@ List<String> upDateTreeIcons(List<int> emissionValues, index) {
   int baseTreeIconValue = TreeIconType.defaultOneLeafC02Gram.value.toInt();
   List<String> treeIconName = [];
 
+  if (emissionValues.isEmpty) {
+    return [];
+  }
   var dividend = maxEmission - emissionValues[index];
 
   // Show nothing for no reduction in emissions
@@ -20,8 +22,6 @@ List<String> upDateTreeIcons(List<int> emissionValues, index) {
   }
 
   if (dividend < baseTreeIconValue) {
-    print(
-        "tree icons dividend $dividend is less than baseTreeIconValue $baseTreeIconValue");
     treeIconName.add(TreeIconType.defaultOneLeafC02Gram.name);
     //continue;
   }
