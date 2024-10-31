@@ -35,10 +35,17 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
                 _selectedModes[i] = i == index;
               }
             });
+
             polylineState.transportMode = transportModes[index].mode;
+
             final coordinatesModel =
                 Provider.of<CoordinatesState>(context, listen: false);
-            polylineState.getPolyline(coordinatesModel.coordinates);
+
+            if (coordinatesModel.coordinates.isEmpty) {
+              return;
+            }
+            polylineState.getPolyline(coordinatesModel
+                .coordinates); // only call this function when the route coordinates are available
             _showModalBottomSheet();
           },
           selectedBorderColor: Colors.green[700],
