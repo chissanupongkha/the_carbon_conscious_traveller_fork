@@ -61,128 +61,125 @@ class _TransitState extends State<Transit> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 500,
-      height: 500,
+    return Scaffold(
+        body: SingleChildScrollView(
       child: FutureBuilder<List<DirectionsRoute>>(
         future: fetchRouteInfo(),
         builder: (context, snapshot) {
           final emissions =
               _transitEmissionsCalculator?.calculateEmissions(context);
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(
+              heightFactor: 10,
+              child: CircularProgressIndicator(),
+            );
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else if (snapshot.hasData) {
-            print("snapshot data: ${snapshot.data!.length}");
             return snapshot.data == null
                 ? const Text('No data available')
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Text(
-                            '${formatNumber(emissions!.reduce(min))} - ${formatNumber(emissions.reduce(max))}'),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            int? stepsIdx =
-                                snapshot.data?[index].legs?.first.steps?.length;
-                            int i = 0;
-                            return Container(
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Wrap(
-                                            children: [
-                                              for (i = 0;
-                                                  i < stepsIdx!;
-                                                  i++) ...[
-                                                if (snapshot
-                                                        .data?[index]
-                                                        .legs
-                                                        ?.first
-                                                        .steps?[i]
-                                                        .transit
-                                                        ?.line
-                                                        ?.vehicle
-                                                        ?.icon ==
-                                                    null)
-                                                  const Icon(
-                                                      Icons.directions_walk)
-                                                else
-                                                  Wrap(
-                                                    children: [
-                                                      Image.network(
-                                                          "https:${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.vehicle?.icon}"),
-                                                      Text(
-                                                          "${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.shortName}"),
-                                                    ],
-                                                  ),
-                                              ],
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 10),
-                                            child: Text(
-                                                "${snapshot.data?[index].legs?.first.departureTime?.text} - ${snapshot.data?[index].legs?.first.arrivalTime?.text}"),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
+                : Column(
+                    children: [
+                      Text(
+                          '${formatNumber(emissions!.reduce(min))} - ${formatNumber(emissions.reduce(max))}'),
+                      ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          int? stepsIdx =
+                              snapshot.data?[index].legs?.first.steps?.length;
+                          int i = 0;
+                          return Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Row(
+                                        Wrap(
                                           children: [
-                                            Text(
-                                                formatNumber(emissions[index])),
-                                            Image.asset('assets/icons/co2e.png',
-                                                width: 40, height: 40),
+                                            for (i = 0; i < stepsIdx!; i++) ...[
+                                              if (snapshot
+                                                      .data?[index]
+                                                      .legs
+                                                      ?.first
+                                                      .steps?[i]
+                                                      .transit
+                                                      ?.line
+                                                      ?.vehicle
+                                                      ?.icon ==
+                                                  null)
+                                                const Icon(
+                                                    Icons.directions_walk)
+                                              else
+                                                Wrap(
+                                                  children: [
+                                                    Image.network(
+                                                        "https:${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.vehicle?.icon}"),
+                                                    Text(
+                                                        "${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.shortName}"),
+                                                  ],
+                                                ),
+                                            ],
                                           ],
                                         ),
-                                        Text(
-                                            "${snapshot.data?[index].legs?.first.distance?.text}"),
-                                        Text(
-                                            "${snapshot.data?[index].legs?.first.duration?.text}"),
-                                        TreeIcons(
-                                            treeIconName: treeIconName =
-                                                upDateTreeIcons(
-                                                    emissions
-                                                        .map((e) => e.toInt())
-                                                        .toList(),
-                                                    index)),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10),
+                                          child: Text(
+                                              "${snapshot.data?[index].legs?.first.departureTime?.text} - ${snapshot.data?[index].legs?.first.arrivalTime?.text}"),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
-                        ),
-                      ],
-                    ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(formatNumber(emissions[index])),
+                                          Image.asset('assets/icons/co2e.png',
+                                              width: 40, height: 40),
+                                        ],
+                                      ),
+                                      Text(
+                                          "${snapshot.data?[index].legs?.first.distance?.text}"),
+                                      Text(
+                                          "${snapshot.data?[index].legs?.first.duration?.text}"),
+                                      TreeIcons(
+                                          treeIconName: treeIconName =
+                                              upDateTreeIcons(
+                                                  emissions
+                                                      .map((e) => e.toInt())
+                                                      .toList(),
+                                                  index)),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                      ),
+                    ],
                   );
           } else {
             return const Text('No data available');
           }
         },
       ),
-    );
+    ));
   }
 }

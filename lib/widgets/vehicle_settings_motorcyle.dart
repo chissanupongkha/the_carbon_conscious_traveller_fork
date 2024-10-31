@@ -63,55 +63,63 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Title(
-                    color: Colors.black,
-                    child: Text(
-                      "Motorcycle",
-                      style: Theme.of(context).textTheme.displayLarge,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      DropdownMenu<MotorcycleSize>(
-                        width: 300,
-                        initialSelection: dropdownState.selectedValue,
-                        requestFocusOnTap: true,
-                        label: const Text('Motorcycle Size'),
-                        onSelected: (MotorcycleSize? size) {
-                          dropdownState.updateSelectedValue(
-                              size ?? MotorcycleSize.label);
-                          setState(() {
-                            selectedSize = dropdownState.selectedValue;
-                          });
+                Visibility(
+                  visible: !dropdownState.isVisible,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Title(
+                          color: Colors.black,
+                          child: Text(
+                            "Motorcycle",
+                            style: Theme.of(context).textTheme.displayLarge,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            DropdownMenu<MotorcycleSize>(
+                              width: 300,
+                              initialSelection: dropdownState.selectedValue,
+                              requestFocusOnTap: true,
+                              label: const Text('Motorcycle Size'),
+                              onSelected: (MotorcycleSize? size) {
+                                dropdownState.updateSelectedValue(
+                                    size ?? MotorcycleSize.label);
+                                setState(() {
+                                  selectedSize = dropdownState.selectedValue;
+                                });
+                              },
+                              dropdownMenuEntries: MotorcycleSize.values
+                                  .map<DropdownMenuEntry<MotorcycleSize>>(
+                                      (MotorcycleSize size) {
+                                return DropdownMenuEntry<MotorcycleSize>(
+                                  value: size,
+                                  label: size.name,
+                                  enabled:
+                                      size.name != MotorcycleSize.label.name,
+                                  style: MenuItemButton.styleFrom(
+                                      foregroundColor: Colors.black),
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
+                      ),
+                      FilledButton(
+                        onPressed: () {
+                          changeVisibility(true);
+                          getEmissions();
+                          getMinMaxEmissions();
                         },
-                        dropdownMenuEntries: MotorcycleSize.values
-                            .map<DropdownMenuEntry<MotorcycleSize>>(
-                                (MotorcycleSize size) {
-                          return DropdownMenuEntry<MotorcycleSize>(
-                            value: size,
-                            label: size.name,
-                            enabled: size.name != MotorcycleSize.label.name,
-                            style: MenuItemButton.styleFrom(
-                                foregroundColor: Colors.black),
-                          );
-                        }).toList(),
+                        child: const Text('Calculate Emissions'),
                       ),
                     ],
                   ),
-                ),
-                FilledButton(
-                  onPressed: () {
-                    changeVisibility(true);
-                    getEmissions();
-                    getMinMaxEmissions();
-                  },
-                  child: const Text('Calculate Emissions'),
                 ),
                 Visibility(
                   visible: dropdownState.isVisible,
@@ -123,6 +131,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                             '${formatNumber(dropdownState.minEmissionValue)} - ${formatNumber(dropdownState.maxEmissionValue)}'),
                         ListView.separated(
                           shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
                           padding: const EdgeInsets.all(8),
                           itemCount:
                               polylinesState.resultForPrivateVehicle.length,
