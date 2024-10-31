@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/state/coordinates_state.dart';
 import 'package:the_carbon_conscious_traveller/state/marker_state.dart';
@@ -37,7 +38,14 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color.fromARGB(255, 7, 179, 110),
         textTheme: const TextTheme(
           displayLarge: TextStyle(fontSize: 24),
+          displayMedium: TextStyle(fontSize: 20),
+          displaySmall: TextStyle(fontSize: 16),
+          bodyLarge: TextStyle(fontSize: 18),
           bodyMedium: TextStyle(fontSize: 16),
+          bodySmall: TextStyle(
+            fontSize: 13,
+            color: Color.fromARGB(255, 125, 125, 125),
+          ),
           titleLarge: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
