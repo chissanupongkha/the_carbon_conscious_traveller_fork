@@ -29,9 +29,9 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
     );
 
     return Consumer<PrivateMotorcycleState>(
-      builder: (context, dropdownState, child) {
+      builder: (context, motorcycleState, child) {
         void changeVisibility(bool isVisible) {
-          dropdownState.updateVisibility(isVisible);
+          motorcycleState.updateVisibility(isVisible);
         }
 
         int minEmission = 0;
@@ -39,16 +39,16 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
 
         void getMinMaxEmissions() {
           minEmission = emissionCalculator.calculateMinEmission().round();
-          dropdownState.updateMinEmission(minEmission);
+          motorcycleState.updateMinEmission(minEmission);
           maxEmission = emissionCalculator.calculateMaxEmission().round();
-          dropdownState.updateMaxEmission(maxEmission);
+          motorcycleState.updateMaxEmission(maxEmission);
         }
 
         void getEmissions() {
           for (int i = 0; i < polylinesState.result.length; i++) {
             emissions.add(emissionCalculator.calculateEmission(i).round());
           }
-          dropdownState.saveEmissions(emissions);
+          motorcycleState.saveEmissions(emissions);
         }
 
         String formatNumber(int number) {
@@ -64,7 +64,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
             child: Column(
               children: [
                 Visibility(
-                  visible: !dropdownState.isVisible,
+                  visible: !motorcycleState.isVisible,
                   child: Column(
                     children: [
                       Padding(
@@ -84,14 +84,14 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                           children: <Widget>[
                             DropdownMenu<MotorcycleSize>(
                               width: 300,
-                              initialSelection: dropdownState.selectedValue,
+                              initialSelection: motorcycleState.selectedValue,
                               requestFocusOnTap: true,
                               label: const Text('Motorcycle Size'),
                               onSelected: (MotorcycleSize? size) {
-                                dropdownState.updateSelectedValue(
+                                motorcycleState.updateSelectedValue(
                                     size ?? MotorcycleSize.label);
                                 setState(() {
-                                  selectedSize = dropdownState.selectedValue;
+                                  selectedSize = motorcycleState.selectedValue;
                                 });
                               },
                               dropdownMenuEntries: MotorcycleSize.values
@@ -122,13 +122,13 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                   ),
                 ),
                 Visibility(
-                  visible: dropdownState.isVisible,
+                  visible: motorcycleState.isVisible,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 40),
                     child: Column(
                       children: [
                         Text(
-                            '${formatNumber(dropdownState.minEmissionValue)} - ${formatNumber(dropdownState.maxEmissionValue)}'),
+                            '${formatNumber(motorcycleState.minEmissionValue)} - ${formatNumber(motorcycleState.maxEmissionValue)}'),
                         ListView.separated(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -136,7 +136,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                           itemCount:
                               polylinesState.resultForPrivateVehicle.length,
                           itemBuilder: (BuildContext context, int index) {
-                            dropdownState.getTreeIcons(index);
+                            motorcycleState.getTreeIcons(index);
                             return Container(
                               padding: const EdgeInsets.all(10),
                               child: Row(
@@ -174,7 +174,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text(formatNumber(dropdownState
+                                            Text(formatNumber(motorcycleState
                                                 .getEmission(index))),
                                             Image.asset('assets/icons/co2e.png',
                                                 width: 40, height: 40),
@@ -186,7 +186,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                                             .durationTexts[index]),
                                         TreeIcons(
                                             treeIconName:
-                                                dropdownState.treeIcons),
+                                                motorcycleState.treeIcons),
                                       ],
                                     ),
                                   ),
