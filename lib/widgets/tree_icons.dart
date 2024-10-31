@@ -13,8 +13,8 @@ class TreeIcons extends StatelessWidget {
         for (String treeIcon in treeIconName)
           Image.asset(
             'assets/icons/$treeIcon',
-            width: 30,
-            height: 30,
+            width: 20,
+            height: 20,
           ),
       ],
     );

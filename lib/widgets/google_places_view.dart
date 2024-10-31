@@ -118,11 +118,14 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
       ),
       Container(
         color: Colors.white,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: (_predictions ?? [])
-              .map(_buildPredictionItem)
-              .toList(growable: false),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: (_predictions ?? [])
+                .map(_buildPredictionItem)
+                .toList(growable: false),
+          ),
         ),
       ),
       const TravelModeButtons(),
@@ -138,8 +141,8 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     return InkWell(
       onTap: () => _onItemClicked(item),
       child: Column(children: [
-        Text(item.fullText),
-        const Divider(thickness: 2),
+        Text(item.fullText, style: Theme.of(context).textTheme.bodyMedium),
+        const Divider(thickness: 1),
       ]),
     );
   }
