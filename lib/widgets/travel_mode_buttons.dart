@@ -72,6 +72,13 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
 
   void _showModalBottomSheet() {
     showModalBottomSheet<void>(
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
       context: context,
       builder: (BuildContext context) {
         return const TravelModeBottomSheet();
