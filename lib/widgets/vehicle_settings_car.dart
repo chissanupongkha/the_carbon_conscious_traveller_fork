@@ -163,7 +163,8 @@ class _CarSettingsState extends State<CarSettings> {
                         ListView.separated(
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
-                          itemCount: polylineState.result.length,
+                          itemCount:
+                              polylineState.resultForPrivateVehicle.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
                               padding: const EdgeInsets.all(10),

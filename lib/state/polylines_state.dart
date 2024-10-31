@@ -21,6 +21,8 @@ class PolylinesState extends ChangeNotifier {
 
   List<DirectionsRoute>? routes = [];
 
+  List<DirectionsRoute> resultForPrivateVehicle = [];
+
   poly.PolylinePoints get polylinePoints => _polylinePoints;
   Map<PolylineId, Polyline> get polylines => _polylines;
   List<List<LatLng>> get routeCoordinates => _routeCoordinates;
@@ -76,7 +78,18 @@ class PolylinesState extends ChangeNotifier {
       }
     }
 
+    // This result is used to render polylines
+    // and to get route info such as distance, duration, summary
     result = await fetchRouteInfo();
+
+    // This result is used to retrieve the correct array length for driving mode
+    // so that the app doesn't crash when switching from transit mode to car or motorcycle mode
+    // (used in vehicle_settings_motorcyle.dart and vehicle_settings_dar.dart)
+    // It appears that the above request does not get enough time to
+    // complete when switching back to car or driving mode
+    if (_transportMode == TravelMode.driving) {
+      resultForPrivateVehicle = await fetchRouteInfo();
+    }
 
     if (result.isNotEmpty) {
       for (int i = 0; i < result.length; i++) {

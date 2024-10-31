@@ -124,7 +124,8 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                         ListView.separated(
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
-                          itemCount: polylinesState.result.length,
+                          itemCount:
+                              polylinesState.resultForPrivateVehicle.length,
                           itemBuilder: (BuildContext context, int index) {
                             dropdownState.getTreeIcons(index);
                             return Container(
