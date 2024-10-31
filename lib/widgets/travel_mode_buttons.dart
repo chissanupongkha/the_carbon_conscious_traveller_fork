@@ -16,7 +16,7 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
 
   final List<({IconData icon, String mode})> transportModes = [
     (icon: Icons.directions_car_outlined, mode: 'driving'),
-    (icon: Icons.motorcycle_outlined, mode: 'motorcycling'),
+    (icon: Icons.sports_motorsports_outlined, mode: 'motorcycling'),
     (icon: Icons.train_outlined, mode: 'transit'),
     (icon: Icons.airplanemode_active_outlined, mode: 'flying'),
   ];

@@ -153,7 +153,8 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                                               padding: const EdgeInsets.only(
                                                   right: 10),
                                               child: const Icon(
-                                                  Icons.motorcycle,
+                                                  Icons
+                                                      .sports_motorsports_outlined,
                                                   color: Colors.green,
                                                   size: 30),
                                             ),
