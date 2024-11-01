@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:the_carbon_conscious_traveller/helpers/tree_icons_calculator.dart';
 import 'dart:math';
-
+import 'package:flutter/material.dart';
+import 'package:google_directions_api/google_directions_api.dart';
+import 'package:the_carbon_conscious_traveller/helpers/tree_icons_calculator.dart';
 import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
 class TransitListView extends StatelessWidget {
@@ -19,6 +19,13 @@ class TransitListView extends StatelessWidget {
     }
   }
 
+  Color parseColor(String? colorString, Color defaultColor) {
+    if (colorString != null) {
+      return Color(int.parse(colorString.replaceAll('#', '0xff')));
+    }
+    return defaultColor;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -30,9 +37,11 @@ class TransitListView extends StatelessWidget {
           shrinkWrap: true,
           itemCount: snapshot.data!.length,
           itemBuilder: (context, index) {
-            int? stepsIdx = snapshot.data?[index].legs?.first.steps?.length;
-            int i = 0;
+            dynamic legs = snapshot.data?[index].legs;
+            dynamic steps = snapshot.data?[index].legs?.first.steps;
+            int? stepsIdx = steps.length;
             return Container(
+              constraints: const BoxConstraints(minHeight: 100),
               padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
@@ -45,33 +54,85 @@ class TransitListView extends StatelessWidget {
                         children: [
                           Wrap(
                             children: [
-                              for (i = 0; i < stepsIdx!; i++) ...[
-                                if (snapshot.data?[index].legs?.first.steps?[i]
-                                        .transit?.line?.vehicle?.icon ==
-                                    null)
+                              for (int i = 0; i < stepsIdx!; i++) ...[
+                                if (steps[i].transit?.line?.vehicle?.icon ==
+                                        null &&
+                                    steps[i].travelMode == TravelMode.walking)
                                   const Icon(Icons.directions_walk)
+                                else if (steps[i]
+                                        .transit
+                                        ?.line
+                                        ?.vehicle
+                                        ?.localIcon !=
+                                    null)
+                                  Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Image.network(
+                                          "https:${steps[i].transit?.line?.vehicle?.localIcon}",
+                                          width: 25),
+                                      Text(
+                                        "${steps[i].transit?.line?.shortName}",
+                                        style: TextStyle(
+                                          color: steps[i]
+                                                      .transit
+                                                      ?.line
+                                                      ?.textColor !=
+                                                  null
+                                              ? parseColor(
+                                                  steps[i]
+                                                      .transit
+                                                      ?.line
+                                                      ?.textColor,
+                                                  Colors.black)
+                                              : Colors.black,
+                                          backgroundColor: parseColor(
+                                              steps[i].transit?.line?.color,
+                                              Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 else
                                   Wrap(
                                     crossAxisAlignment:
                                         WrapCrossAlignment.center,
                                     children: [
                                       Image.network(
-                                          "https:${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.vehicle?.icon}"),
+                                          "https:${steps[i].transit?.line?.vehicle?.icon}",
+                                          width: 25),
                                       Text(
-                                          "${snapshot.data?[index].legs?.first.steps?[i].transit?.line?.shortName}"),
+                                        "${steps[i].transit?.line?.shortName}",
+                                        style: TextStyle(
+                                          color: steps[i]
+                                                      .transit
+                                                      ?.line
+                                                      ?.textColor !=
+                                                  null
+                                              ? parseColor(
+                                                  steps[i]
+                                                      .transit
+                                                      ?.line
+                                                      ?.textColor,
+                                                  Colors.black)
+                                              : Colors.black,
+                                          backgroundColor: parseColor(
+                                              steps[i].transit?.line?.color,
+                                              Colors.white),
+                                        ),
+                                      ),
                                     ],
-                                  ),
+                                  )
                               ],
                             ],
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
-                              snapshot.data?[index].legs?.first.departureTime
-                                          ?.text ==
-                                      null
+                              legs.first.departureTime?.text == null
                                   ? ""
-                                  : "${snapshot.data?[index].legs?.first.departureTime?.text} - ${snapshot.data?[index].legs?.first.arrivalTime?.text}",
+                                  : "${legs.first.departureTime?.text} - ${legs.first.arrivalTime?.text}",
                             ),
                           ),
                         ],
@@ -92,11 +153,11 @@ class TransitListView extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          "${snapshot.data?[index].legs?.first.distance?.text}",
+                          "${legs.first.distance?.text}",
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
-                          "${snapshot.data?[index].legs?.first.duration?.text}",
+                          "${legs.first.duration?.text}",
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         TreeIcons(
