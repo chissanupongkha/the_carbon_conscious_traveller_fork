@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:google_directions_api/google_directions_api.dart';
 import 'package:the_carbon_conscious_traveller/helpers/tree_icons_calculator.dart';
+import 'package:the_carbon_conscious_traveller/widgets/transit_steps.dart';
 import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
 class TransitListView extends StatelessWidget {
@@ -19,12 +19,12 @@ class TransitListView extends StatelessWidget {
     }
   }
 
-  Color parseColor(String? colorString, Color defaultColor) {
-    if (colorString != null) {
-      return Color(int.parse(colorString.replaceAll('#', '0xff')));
-    }
-    return defaultColor;
-  }
+  // Color parseColor(String? colorString, Color defaultColor) {
+  //   if (colorString != null) {
+  //     return Color(int.parse(colorString.replaceAll('#', '0xff')));
+  //   }
+  //   return defaultColor;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,110 +37,112 @@ class TransitListView extends StatelessWidget {
           shrinkWrap: true,
           itemCount: snapshot.data!.length,
           itemBuilder: (context, index) {
-            dynamic legs = snapshot.data?[index].legs;
-            dynamic steps = snapshot.data?[index].legs?.first.steps;
-            int? stepsIdx = steps.length;
-            return Container(
-              constraints: const BoxConstraints(minHeight: 100),
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Wrap(
-                            children: [
-                              for (int i = 0; i < stepsIdx!; i++) ...[
-                                if (steps[i].transit?.line?.vehicle?.icon ==
-                                        null &&
-                                    steps[i].travelMode == TravelMode.walking)
-                                  const Icon(Icons.directions_walk)
-                                else if (steps[i]
-                                        .transit
-                                        ?.line
-                                        ?.vehicle
-                                        ?.localIcon !=
-                                    null)
-                                  Wrap(
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    children: [
-                                      Image.network(
-                                          "https:${steps[i].transit?.line?.vehicle?.localIcon}",
-                                          width: 25),
-                                      Text(
-                                        "${steps[i].transit?.line?.shortName}",
-                                        style: TextStyle(
-                                          color: steps[i]
-                                                      .transit
-                                                      ?.line
-                                                      ?.textColor !=
-                                                  null
-                                              ? parseColor(
-                                                  steps[i]
-                                                      .transit
-                                                      ?.line
-                                                      ?.textColor,
-                                                  Colors.black)
-                                              : Colors.black,
-                                          backgroundColor: parseColor(
-                                              steps[i].transit?.line?.color,
-                                              Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                else
-                                  Wrap(
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    children: [
-                                      Image.network(
-                                          "https:${steps[i].transit?.line?.vehicle?.icon}",
-                                          width: 25),
-                                      Text(
-                                        "${steps[i].transit?.line?.shortName}",
-                                        style: TextStyle(
-                                          color: steps[i]
-                                                      .transit
-                                                      ?.line
-                                                      ?.textColor !=
-                                                  null
-                                              ? parseColor(
-                                                  steps[i]
-                                                      .transit
-                                                      ?.line
-                                                      ?.textColor,
-                                                  Colors.black)
-                                              : Colors.black,
-                                          backgroundColor: parseColor(
-                                              steps[i].transit?.line?.color,
-                                              Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                              ],
-                            ],
+            List<dynamic> legs = snapshot.data?[index].legs;
+            List<dynamic> steps = snapshot.data?[index].legs?.first.steps;
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, top: 16, bottom: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TransitSteps(steps: steps),
+                        // Wrap(
+                        //   children: [
+                        //     for (int i = 0; i < stepsIdx!; i++) ...[
+                        //       if (steps[i].transit?.line?.vehicle?.icon ==
+                        //               null &&
+                        //           steps[i].travelMode == TravelMode.walking)
+                        //         const Icon(Icons.directions_walk)
+                        //       else if (steps[i]
+                        //               .transit
+                        //               ?.line
+                        //               ?.vehicle
+                        //               ?.localIcon !=
+                        //           null)
+                        //         Wrap(
+                        //           crossAxisAlignment:
+                        //               WrapCrossAlignment.center,
+                        //           children: [
+                        //             Image.network(
+                        //                 "https:${steps[i].transit?.line?.vehicle?.localIcon}",
+                        //                 width: 25),
+                        //             Text(
+                        //               "${steps[i].transit?.line?.shortName}",
+                        //               style: TextStyle(
+                        //                 color: steps[i]
+                        //                             .transit
+                        //                             ?.line
+                        //                             ?.textColor !=
+                        //                         null
+                        //                     ? parseColor(
+                        //                         steps[i]
+                        //                             .transit
+                        //                             ?.line
+                        //                             ?.textColor,
+                        //                         Colors.black)
+                        //                     : Colors.black,
+                        //                 backgroundColor: parseColor(
+                        //                     steps[i].transit?.line?.color,
+                        //                     Colors.white),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         )
+                        //       else
+                        //         Wrap(
+                        //           crossAxisAlignment:
+                        //               WrapCrossAlignment.center,
+                        //           children: [
+                        //             Image.network(
+                        //                 "https:${steps[i].transit?.line?.vehicle?.icon}",
+                        //                 width: 25),
+                        //             Text(
+                        //               "${steps[i].transit?.line?.shortName}",
+                        //               style: TextStyle(
+                        //                 color: steps[i]
+                        //                             .transit
+                        //                             ?.line
+                        //                             ?.textColor !=
+                        //                         null
+                        //                     ? parseColor(
+                        //                         steps[i]
+                        //                             .transit
+                        //                             ?.line
+                        //                             ?.textColor,
+                        //                         Colors.black)
+                        //                     : Colors.black,
+                        //                 backgroundColor: parseColor(
+                        //                     steps[i].transit?.line?.color,
+                        //                     Colors.white),
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         )
+                        //     ],
+                        //   ],
+                        // ),
+                        // TransitSteps(steps: steps, stepsIdx: stepsIdx),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            legs.first.departureTime?.text == null
+                                ? ""
+                                : "${legs.first.departureTime?.text} - ${legs.first.arrivalTime?.text}",
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(
-                              legs.first.departureTime?.text == null
-                                  ? ""
-                                  : "${legs.first.departureTime?.text} - ${legs.first.arrivalTime?.text}",
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -167,8 +169,8 @@ class TransitListView extends StatelessWidget {
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           },
           separatorBuilder: (BuildContext context, int index) =>
