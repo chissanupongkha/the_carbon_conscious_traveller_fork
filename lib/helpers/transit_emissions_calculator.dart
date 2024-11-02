@@ -40,7 +40,6 @@ class TransitEmissionsCalculator {
 
   List<double> calculateEmissions(BuildContext context) {
     var coordState = Provider.of<CoordinatesState>(context, listen: false);
-
     // Map over the route results and calculate the emissions for each leg
     return coordState.routeData.map((route) {
       var emissions = 0.0;
@@ -54,10 +53,23 @@ class TransitEmissionsCalculator {
           }
         }
       }
-      debugPrint("emissions $emissions");
-
       // Return the calculated emissions for each leg
       return emissions;
+    }).toList(); // Collect all emissions into a list
+  }
+
+  List<double> calculateStepEmissions(List<dynamic> steps) {
+    // Map over the steps in each leg and calculate the emissions for each step
+    return steps.map((step) {
+      var stepEmissions = 0.0;
+      var distance = step.distance?.value ?? 0;
+      if (step.travelMode.toString() == 'TRANSIT') {
+        stepEmissions = (getPublicFactor(
+                (step.transit?.line?.vehicle?.type.toString() ?? ''))) *
+            distance.round();
+      }
+      // Return the calculated emissions for each step
+      return stepEmissions;
     }).toList(); // Collect all emissions into a list
   }
 }

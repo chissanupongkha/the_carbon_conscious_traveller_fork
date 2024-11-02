@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:the_carbon_conscious_traveller/helpers/transit_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/helpers/tree_icons_calculator.dart';
 import 'package:the_carbon_conscious_traveller/widgets/transit_steps.dart';
 import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
@@ -28,6 +29,9 @@ class TransitListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TransitEmissionsCalculator? transitEmissionsCalculator =
+        TransitEmissionsCalculator();
+
     return Column(
       children: [
         Text(
@@ -39,6 +43,9 @@ class TransitListView extends StatelessWidget {
           itemBuilder: (context, index) {
             List<dynamic> legs = snapshot.data?[index].legs;
             List<dynamic> steps = snapshot.data?[index].legs?.first.steps;
+            List<double> stepEmissions =
+                transitEmissionsCalculator.calculateStepEmissions(steps);
+
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -50,7 +57,8 @@ class TransitListView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TransitSteps(steps: steps),
+                        TransitSteps(
+                            steps: steps, stepEmissions: stepEmissions),
                         // Wrap(
                         //   children: [
                         //     for (int i = 0; i < stepsIdx!; i++) ...[
