@@ -50,7 +50,7 @@ class PolylinesState extends ChangeNotifier {
   void resetPolyline() {
     debugPrint("Resetting polyline");
     _routeCoordinates.clear();
-    _activeRouteIndex = 0;
+    // _activeRouteIndex = 0;
     notifyListeners();
   }
 

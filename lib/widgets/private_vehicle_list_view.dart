@@ -30,7 +30,24 @@ class PrivateVehicleListview extends StatelessWidget {
           itemCount: polylinesState.resultForPrivateVehicle.length,
           itemBuilder: (BuildContext context, int index) {
             vehicleState.getTreeIcons(index);
+
+            //Change the border color of the active route
+            Color color = Colors.green;
+            if (polylinesState.activeRouteIndex == index) {
+              color = Colors.green;
+            } else {
+              color = Colors.transparent;
+            }
+
             return Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  left: BorderSide(
+                    color: color,
+                    width: 4.0,
+                  ),
+                ),
+              ),
               padding: const EdgeInsets.all(10),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
