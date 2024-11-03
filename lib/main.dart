@@ -5,6 +5,7 @@ import 'package:the_carbon_conscious_traveller/state/marker_state.dart';
 import 'package:the_carbon_conscious_traveller/state/private_car_state.dart';
 import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/state/private_motorcycle_state.dart';
+import 'package:the_carbon_conscious_traveller/state/transit_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/drawer.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_map_view.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_places_view.dart';
@@ -18,6 +19,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => CoordinatesState()),
         ChangeNotifierProvider(create: (context) => PrivateMotorcycleState()),
         ChangeNotifierProvider(create: (context) => PrivateCarState()),
+        ChangeNotifierProvider(create: (context) => TransitState()),
       ],
       child: const MyApp(),
     ),

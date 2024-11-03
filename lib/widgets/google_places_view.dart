@@ -98,34 +98,39 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     return [
       Container(
         color: Colors.white,
-        child: Column(
-          children: [
-            TextFormField(
-              controller: originController,
-              onChanged: (value) => _onPredictTextChanged(value, "start"),
-              decoration:
-                  const InputDecoration(label: Text("Enter a start location")),
-            ),
-            TextFormField(
-              controller: destinationController,
-              onChanged: (value) => _onPredictTextChanged(value, "destination"),
-              decoration: const InputDecoration(
-                label: Text("Enter a destination"),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 20),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: originController,
+                onChanged: (value) => _onPredictTextChanged(value, "start"),
+                decoration: const InputDecoration(
+                    label: Text("Enter a start location"),
+                    icon: Icon(Icons.location_searching_outlined,
+                        color: Colors.green)),
               ),
-            ),
-          ],
+              TextFormField(
+                controller: destinationController,
+                onChanged: (value) =>
+                    _onPredictTextChanged(value, "destination"),
+                decoration: const InputDecoration(
+                  label: Text("Enter a destination"),
+                  icon: Icon(Icons.location_searching_outlined,
+                      color: Colors.green),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       Container(
         color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: (_predictions ?? [])
-                .map(_buildPredictionItem)
-                .toList(growable: false),
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: (_predictions ?? [])
+              .map(_buildPredictionItem)
+              .toList(growable: false),
         ),
       ),
       const TravelModeButtons(),
@@ -140,10 +145,17 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   Widget _buildPredictionItem(places.AutocompletePrediction item) {
     return InkWell(
       onTap: () => _onItemClicked(item),
-      child: Column(children: [
-        Text(item.fullText, style: Theme.of(context).textTheme.bodyMedium),
-        const Divider(thickness: 1),
-      ]),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(item.fullText,
+                  style: Theme.of(context).textTheme.bodyMedium),
+            ),
+            const Divider(thickness: 1),
+          ]),
     );
   }
 

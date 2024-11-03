@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/helpers/transit_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/helpers/tree_icons_calculator.dart';
 import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
+import 'package:the_carbon_conscious_traveller/state/transit_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/transit_steps.dart';
 import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
@@ -34,6 +35,11 @@ class TransitListView extends StatelessWidget {
     TransitEmissionsCalculator? transitEmissionsCalculator =
         TransitEmissionsCalculator();
 
+    PolylinesState polylinesState = Provider.of<PolylinesState>(context);
+    TransitState transitState = Provider.of<TransitState>(context);
+    transitState.updateMaxEmissions(emissions.reduce(max).toInt());
+    transitState.updateMinEmissions(emissions.reduce(min).toInt());
+
     return Column(
       children: [
         Text(
@@ -47,9 +53,6 @@ class TransitListView extends StatelessWidget {
             List<dynamic> steps = snapshot.data?[index].legs?.first.steps;
             List<double> stepEmissions =
                 transitEmissionsCalculator.calculateStepEmissions(steps);
-
-            PolylinesState polylinesState =
-                Provider.of<PolylinesState>(context);
             Color color = Colors.transparent;
 
             if (polylinesState.activeRouteIndex == index) {
@@ -80,82 +83,6 @@ class TransitListView extends StatelessWidget {
                         children: [
                           TransitSteps(
                               steps: steps, stepEmissions: stepEmissions),
-                          // Wrap(
-                          //   children: [
-                          //     for (int i = 0; i < stepsIdx!; i++) ...[
-                          //       if (steps[i].transit?.line?.vehicle?.icon ==
-                          //               null &&
-                          //           steps[i].travelMode == TravelMode.walking)
-                          //         const Icon(Icons.directions_walk)
-                          //       else if (steps[i]
-                          //               .transit
-                          //               ?.line
-                          //               ?.vehicle
-                          //               ?.localIcon !=
-                          //           null)
-                          //         Wrap(
-                          //           crossAxisAlignment:
-                          //               WrapCrossAlignment.center,
-                          //           children: [
-                          //             Image.network(
-                          //                 "https:${steps[i].transit?.line?.vehicle?.localIcon}",
-                          //                 width: 25),
-                          //             Text(
-                          //               "${steps[i].transit?.line?.shortName}",
-                          //               style: TextStyle(
-                          //                 color: steps[i]
-                          //                             .transit
-                          //                             ?.line
-                          //                             ?.textColor !=
-                          //                         null
-                          //                     ? parseColor(
-                          //                         steps[i]
-                          //                             .transit
-                          //                             ?.line
-                          //                             ?.textColor,
-                          //                         Colors.black)
-                          //                     : Colors.black,
-                          //                 backgroundColor: parseColor(
-                          //                     steps[i].transit?.line?.color,
-                          //                     Colors.white),
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         )
-                          //       else
-                          //         Wrap(
-                          //           crossAxisAlignment:
-                          //               WrapCrossAlignment.center,
-                          //           children: [
-                          //             Image.network(
-                          //                 "https:${steps[i].transit?.line?.vehicle?.icon}",
-                          //                 width: 25),
-                          //             Text(
-                          //               "${steps[i].transit?.line?.shortName}",
-                          //               style: TextStyle(
-                          //                 color: steps[i]
-                          //                             .transit
-                          //                             ?.line
-                          //                             ?.textColor !=
-                          //                         null
-                          //                     ? parseColor(
-                          //                         steps[i]
-                          //                             .transit
-                          //                             ?.line
-                          //                             ?.textColor,
-                          //                         Colors.black)
-                          //                     : Colors.black,
-                          //                 backgroundColor: parseColor(
-                          //                     steps[i].transit?.line?.color,
-                          //                     Colors.white),
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         )
-                          //     ],
-                          //   ],
-                          // ),
-                          // TransitSteps(steps: steps, stepsIdx: stepsIdx),
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
