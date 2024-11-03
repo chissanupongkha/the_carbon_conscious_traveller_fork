@@ -35,8 +35,6 @@ class TransitListView extends StatelessWidget {
 
     return Column(
       children: [
-        Text(
-            '${formatNumber(emissions.reduce(min))} - ${formatNumber(emissions.reduce(max))}'),
         ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,

@@ -25,8 +25,6 @@ class PrivateVehicleListview extends StatelessWidget {
 
     return Column(
       children: [
-        Text(
-            '${formatNumber(vehicleState.minEmissionValue)} - ${formatNumber(vehicleState.maxEmissionValue)}'),
         ListView.separated(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
