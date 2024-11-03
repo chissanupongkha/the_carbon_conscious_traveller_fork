@@ -59,6 +59,9 @@ class TransitListView extends StatelessWidget {
             }
 
             return Container(
+              margin: const EdgeInsets.only(
+                left: 10,
+              ),
               decoration: BoxDecoration(
                 border: Border(
                   left: BorderSide(
@@ -74,7 +77,7 @@ class TransitListView extends StatelessWidget {
                     flex: 2,
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          left: 20, right: 20, top: 16, bottom: 10),
+                          left: 12, right: 20, top: 16, bottom: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
