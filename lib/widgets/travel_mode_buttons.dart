@@ -42,6 +42,10 @@ String getCurrentMinMaxEmissions(
     currentMinEmissions = formatNumber(transitState.minEmissionValue);
   }
 
+  if (currentMaxEmissions == currentMinEmissions && mode != 'transit') {
+    return currentMaxEmissions;
+  }
+
   return '$currentMinEmissions - $currentMaxEmissions';
 }
 
