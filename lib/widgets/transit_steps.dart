@@ -23,15 +23,21 @@ class TransitSteps extends StatelessWidget {
     }
   }
 
-  Widget _buildStepIcon(dynamic step) {
+  Widget _buildStepIcon(BuildContext context, dynamic step) {
     // Display icon for walking steps
     if (step.transit?.line?.vehicle?.icon == null &&
         step.travelMode == TravelMode.walking) {
       return Column(
         children: [
           const Icon(Icons.directions_walk),
-          Text(
-            formatNumber(stepEmissions[steps.indexOf(step)]),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              formatNumber(
+                stepEmissions[steps.indexOf(step)],
+              ),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           ),
         ],
       );
@@ -39,35 +45,43 @@ class TransitSteps extends StatelessWidget {
       return Padding(
         // Display local icon for transit steps
         padding: const EdgeInsets.only(right: 5),
-        child: Wrap(
+        child: Column(
           children: [
+            Wrap(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Image.network(
+                      "https:${step.transit?.line?.vehicle?.localIcon}",
+                      width: 25),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: parseColor(step.transit?.line?.color, Colors.white),
+                  ),
+                  child: Text(
+                    "${step.transit?.line?.shortName}",
+                    style: TextStyle(
+                        color: step.transit?.line?.textColor != null
+                            ? parseColor(
+                                step.transit?.line?.textColor, Colors.black)
+                            : Colors.black,
+                        backgroundColor: parseColor(
+                          step.transit?.line?.color,
+                          Colors.white,
+                        )),
+                  ),
+                ),
+              ],
+            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Image.network(
-                  "https:${step.transit?.line?.vehicle?.localIcon}",
-                  width: 25),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: parseColor(step.transit?.line?.color, Colors.white),
-              ),
+              padding: const EdgeInsets.only(top: 8.0),
               child: Text(
-                "${step.transit?.line?.shortName}",
-                style: TextStyle(
-                    color: step.transit?.line?.textColor != null
-                        ? parseColor(
-                            step.transit?.line?.textColor, Colors.black)
-                        : Colors.black,
-                    backgroundColor: parseColor(
-                      step.transit?.line?.color,
-                      Colors.white,
-                    )),
+                formatNumber(stepEmissions[steps.indexOf(step)]),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
-            ),
-            Text(
-              formatNumber(stepEmissions[steps.indexOf(step)]),
             ),
           ],
         ),
@@ -76,32 +90,42 @@ class TransitSteps extends StatelessWidget {
       return Padding(
         // Display icon for transit steps
         padding: const EdgeInsets.only(right: 5),
-        child: Wrap(
+        child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Image.network("https:${step.transit?.line?.vehicle?.icon}",
-                  width: 25),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: parseColor(step.transit?.line?.color, Colors.white),
-              ),
-              child: Text(
-                "${step.transit?.line?.shortName}",
-                style: TextStyle(
-                  color: step.transit?.line?.textColor != null
-                      ? parseColor(step.transit?.line?.textColor, Colors.black)
-                      : Colors.black,
-                  backgroundColor:
-                      parseColor(step.transit?.line?.color, Colors.white),
+            Wrap(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Image.network(
+                      "https:${step.transit?.line?.vehicle?.icon}",
+                      width: 25),
                 ),
-              ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: parseColor(step.transit?.line?.color, Colors.white),
+                  ),
+                  child: Text(
+                    "${step.transit?.line?.shortName}",
+                    style: TextStyle(
+                      color: step.transit?.line?.textColor != null
+                          ? parseColor(
+                              step.transit?.line?.textColor, Colors.black)
+                          : Colors.black,
+                      backgroundColor:
+                          parseColor(step.transit?.line?.color, Colors.white),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Text(
-              formatNumber(stepEmissions[steps.indexOf(step)]),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                formatNumber(stepEmissions[steps.indexOf(step)]),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             ),
           ],
         ),
@@ -117,13 +141,16 @@ class TransitSteps extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.start,
             children: [
               // Display arrow divider between steps
               if (steps.indexOf(step) != 0 &&
                   steps.indexOf(step) != steps.length)
-                const Icon(Icons.arrow_forward_ios, size: 15),
-              _buildStepIcon(step),
+                const Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: Icon(Icons.arrow_forward_ios, size: 15),
+                ),
+              _buildStepIcon(context, step),
             ],
           ),
         ),
