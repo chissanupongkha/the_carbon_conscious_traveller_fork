@@ -30,8 +30,8 @@ class TransitListView extends StatelessWidget {
 
     PolylinesState polylinesState = Provider.of<PolylinesState>(context);
     TransitState transitState = Provider.of<TransitState>(context);
-    transitState.updateMaxEmissions(emissions.reduce(max).toInt());
-    transitState.updateMinEmissions(emissions.reduce(min).toInt());
+    transitState.updateMaxEmissions(emissions.reduce(max).round());
+    transitState.updateMinEmissions(emissions.reduce(min).round());
 
     return Column(
       children: [
