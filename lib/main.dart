@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/state/coordinates_state.dart';
 import 'package:the_carbon_conscious_traveller/state/marker_state.dart';
