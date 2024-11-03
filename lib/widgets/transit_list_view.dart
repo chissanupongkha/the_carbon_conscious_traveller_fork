@@ -59,9 +59,6 @@ class TransitListView extends StatelessWidget {
             }
 
             return Container(
-              margin: const EdgeInsets.only(
-                left: 10,
-              ),
               decoration: BoxDecoration(
                 border: Border(
                   left: BorderSide(

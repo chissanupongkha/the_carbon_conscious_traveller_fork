@@ -172,8 +172,11 @@ class _TransitState extends State<Transit> {
                       //       const Divider(),
                       // ),
                       if (emissions != null)
-                        TransitListView(
-                            snapshot: snapshot, emissions: emissions)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TransitListView(
+                              snapshot: snapshot, emissions: emissions),
+                        )
                       else
                         const Text('No emissions data available')
                     ],
