@@ -51,14 +51,6 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
           motorcycleState.saveEmissions(emissions);
         }
 
-        // String formatNumber(int number) {
-        //   if (number >= 1000) {
-        //     return '${(number / 1000).toStringAsFixed(2)} kg';
-        //   } else {
-        //     return '${number.round()} g';
-        //   }
-        // }
-
         return Scaffold(
           body: SingleChildScrollView(
             child: Column(
@@ -127,76 +119,6 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                     padding: const EdgeInsets.only(bottom: 40),
                     child: Column(
                       children: [
-                        //     Text(
-                        //         '${formatNumber(motorcycleState.minEmissionValue)} - ${formatNumber(motorcycleState.maxEmissionValue)}'),
-                        //     ListView.separated(
-                        //       shrinkWrap: true,
-                        //       physics: const NeverScrollableScrollPhysics(),
-                        //       padding: const EdgeInsets.all(8),
-                        //       itemCount:
-                        //           polylinesState.resultForPrivateVehicle.length,
-                        //       itemBuilder: (BuildContext context, int index) {
-                        //         motorcycleState.getTreeIcons(index);
-                        //         return Container(
-                        //           padding: const EdgeInsets.all(10),
-                        //           child: Row(
-                        //             mainAxisSize: MainAxisSize.min,
-                        //             crossAxisAlignment: CrossAxisAlignment.start,
-                        //             children: [
-                        //               Expanded(
-                        //                 flex: 2,
-                        //                 child: Column(
-                        //                   children: [
-                        //                     Row(
-                        //                       children: [
-                        //                         Container(
-                        //                           padding: const EdgeInsets.only(
-                        //                               right: 10),
-                        //                           child: const Icon(
-                        //                               Icons
-                        //                                   .sports_motorsports_outlined,
-                        //                               color: Colors.green,
-                        //                               size: 30),
-                        //                         ),
-                        //                         Expanded(
-                        //                           child: Text(
-                        //                               'via ${polylinesState.routeSummary[index]}'),
-                        //                         ),
-                        //                       ],
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //               Expanded(
-                        //                 child: Column(
-                        //                   crossAxisAlignment:
-                        //                       CrossAxisAlignment.start,
-                        //                   children: [
-                        //                     Row(
-                        //                       children: [
-                        //                         Text(formatNumber(motorcycleState
-                        //                             .getEmission(index))),
-                        //                         Image.asset('assets/icons/co2e.png',
-                        //                             width: 40, height: 40),
-                        //                       ],
-                        //                     ),
-                        //                     Text(polylinesState
-                        //                         .distanceTexts[index]),
-                        //                     Text(polylinesState
-                        //                         .durationTexts[index]),
-                        //                     TreeIcons(
-                        //                         treeIconName:
-                        //                             motorcycleState.treeIcons),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         );
-                        //       },
-                        //       separatorBuilder: (BuildContext context, int index) =>
-                        //           const Divider(),
-                        //     ),
                         PrivateVehicleListview(
                           polylinesState: polylinesState,
                           vehicleState: motorcycleState,

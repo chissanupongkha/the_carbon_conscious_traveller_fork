@@ -46,22 +46,6 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   final List<places.PlaceField> _placeFields = [
     places.PlaceField.Address,
     places.PlaceField.Location,
-    // PlaceField.AddressComponents,
-    // PlaceField.BusinessStatus,
-    // PlaceField.Id,
-    // PlaceField.Location,
-    // PlaceField.Name,
-    // PlaceField.OpeningHours,
-    // PlaceField.PhoneNumber,
-    // PlaceField.PhotoMetadatas,
-    // PlaceField.PlusCode,
-    // PlaceField.PriceLevel,
-    // PlaceField.Rating,
-    // PlaceField.Types,
-    // PlaceField.UserRatingsTotal,
-    // PlaceField.UTCOffset,
-    // PlaceField.Viewport,
-    // PlaceField.WebsiteUri,
   ];
 
   @override

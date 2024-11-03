@@ -54,14 +54,6 @@ class _CarSettingsState extends State<CarSettings> {
           carState.updateVisibility(isVisible);
         }
 
-        // String formatNumber(int number) {
-        //   if (number >= 1000) {
-        //     return '${(number / 1000).toStringAsFixed(2)} kg';
-        //   } else {
-        //     return '${number.round()} g';
-        //   }
-        // }
-
         return Scaffold(
           body: SingleChildScrollView(
             child: Column(
@@ -166,75 +158,6 @@ class _CarSettingsState extends State<CarSettings> {
                     padding: const EdgeInsets.only(bottom: 40),
                     child: Column(
                       children: [
-                        // Text(
-                        //     '${formatNumber(carState.minEmissionValue)} - ${formatNumber(carState.maxEmissionValue)}'),
-                        // ListView.separated(
-                        //   shrinkWrap: true,
-                        //   physics: const NeverScrollableScrollPhysics(),
-                        //   padding: const EdgeInsets.all(8),
-                        //   itemCount:
-                        //       polylineState.resultForPrivateVehicle.length,
-                        //   itemBuilder: (BuildContext context, int index) {
-                        //     return Container(
-                        //       padding: const EdgeInsets.all(10),
-                        //       child: Row(
-                        //         mainAxisSize: MainAxisSize.min,
-                        //         crossAxisAlignment: CrossAxisAlignment.start,
-                        //         children: [
-                        //           Expanded(
-                        //             flex: 2,
-                        //             child: Column(
-                        //               children: [
-                        //                 Row(
-                        //                   children: [
-                        //                     Container(
-                        //                       padding: const EdgeInsets.only(
-                        //                           right: 10),
-                        //                       child: const Icon(
-                        //                         Icons.directions_car_outlined,
-                        //                         color: Colors.green,
-                        //                       ),
-                        //                     ),
-                        //                     Expanded(
-                        //                       child: Text(
-                        //                           'via ${polylineState.routeSummary[index]}'),
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //               ],
-                        //             ),
-                        //           ),
-                        //           Expanded(
-                        //             child: Column(
-                        //               crossAxisAlignment:
-                        //                   CrossAxisAlignment.start,
-                        //               children: [
-                        //                 Row(
-                        //                   children: [
-                        //                     Text(formatNumber(
-                        //                         carState.getEmission(index))),
-                        //                     Image.asset('assets/icons/co2e.png',
-                        //                         width: 40, height: 40),
-                        //                   ],
-                        //                 ),
-                        //                 Text(
-                        //                     polylineState.distanceTexts[index]),
-                        //                 Text(
-                        //                     polylineState.durationTexts[index]),
-                        //                 TreeIcons(
-                        //                     treeIconName: treeIcons =
-                        //                         upDateTreeIcons(
-                        //                             carState.emissions, index)),
-                        //               ],
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     );
-                        //   },
-                        //   separatorBuilder: (BuildContext context, int index) =>
-                        //       const Divider(),
-                        // ),
                         PrivateVehicleListview(
                           polylinesState: polylinesState,
                           vehicleState: carState,

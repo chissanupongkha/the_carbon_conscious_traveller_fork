@@ -23,13 +23,6 @@ class TransitListView extends StatelessWidget {
     }
   }
 
-  // Color parseColor(String? colorString, Color defaultColor) {
-  //   if (colorString != null) {
-  //     return Color(int.parse(colorString.replaceAll('#', '0xff')));
-  //   }
-  //   return defaultColor;
-  // }
-
   @override
   Widget build(BuildContext context) {
     TransitEmissionsCalculator? transitEmissionsCalculator =
