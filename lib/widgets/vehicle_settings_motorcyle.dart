@@ -77,7 +77,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                             DropdownMenu<MotorcycleSize>(
                               width: 300,
                               initialSelection: motorcycleState.selectedValue,
-                              requestFocusOnTap: true,
+                              requestFocusOnTap: false,
                               label: const Text('Motorcycle Size'),
                               onSelected: (MotorcycleSize? size) {
                                 motorcycleState.updateSelectedValue(

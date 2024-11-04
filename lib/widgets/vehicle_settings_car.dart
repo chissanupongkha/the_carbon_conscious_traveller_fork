@@ -80,7 +80,7 @@ class _CarSettingsState extends State<CarSettings> {
                             DropdownMenu<CarSize>(
                               width: 300,
                               initialSelection: carState.selectedSize,
-                              requestFocusOnTap: true,
+                              requestFocusOnTap: false,
                               label: const Text('Car Size'),
                               onSelected: (CarSize? size) {
                                 carState
@@ -112,7 +112,7 @@ class _CarSettingsState extends State<CarSettings> {
                             DropdownMenu<CarFuelType>(
                               width: 300,
                               initialSelection: carState.selectedFuelType,
-                              requestFocusOnTap: true,
+                              requestFocusOnTap: false,
                               label: const Text('Fuel Type'),
                               onSelected: (CarFuelType? fuelType) {
                                 carState.updateSelectedFuelType(
