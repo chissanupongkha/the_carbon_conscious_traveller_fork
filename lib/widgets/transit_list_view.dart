@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/helpers/transit_emissions_calculator.dart';
@@ -29,9 +28,15 @@ class TransitListView extends StatelessWidget {
         TransitEmissionsCalculator();
 
     PolylinesState polylinesState = Provider.of<PolylinesState>(context);
-    TransitState transitState = Provider.of<TransitState>(context);
-    transitState.updateMaxEmissions(emissions.reduce(max).round());
-    transitState.updateMinEmissions(emissions.reduce(min).round());
+
+    //Run after the UI has finished building
+    //Otherwise, notifylisteners() is called before the UI is built
+    //Causing the UI to refresh before it has finished building
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      TransitState transitState =
+          Provider.of<TransitState>(context, listen: false);
+      transitState.updateTransitEmissions(emissions);
+    });
 
     return Column(
       children: [

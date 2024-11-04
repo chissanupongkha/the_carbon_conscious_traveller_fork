@@ -14,15 +14,20 @@ class TravelModeButtons extends StatefulWidget {
   State<TravelModeButtons> createState() => _TravelModeButtonsState();
 }
 
+const String motorcycling = 'motorcycling';
+const String driving = 'driving';
+const String transit = 'transit';
+
+String motorcycleEmissions = '';
+String carEmissions = '';
+String transitEmissions = '';
+
 String getCurrentMinMaxEmissions(
   String mode,
   PrivateMotorcycleState motorcycleState,
   PrivateCarState carState,
   TransitState transitState,
 ) {
-  String currentMaxEmissions = '';
-  String currentMinEmissions = '';
-
   String formatNumber(int number) {
     if (number >= 1000) {
       return '${(number / 1000).toStringAsFixed(2)} kg';
@@ -31,22 +36,39 @@ String getCurrentMinMaxEmissions(
     }
   }
 
-  if (mode == 'motorcycling') {
-    currentMaxEmissions = formatNumber(motorcycleState.maxEmissionValue);
-    currentMinEmissions = formatNumber(motorcycleState.minEmissionValue);
-  } else if (mode == 'driving') {
-    currentMaxEmissions = formatNumber(carState.maxEmissionValue);
-    currentMinEmissions = formatNumber(carState.minEmissionValue);
-  } else if (mode == 'transit') {
-    currentMaxEmissions = formatNumber(transitState.maxEmissionValue);
-    currentMinEmissions = formatNumber(transitState.minEmissionValue);
+  String getEmissions(int maxEmissionValue, int minEmissionValue) {
+    String currentMaxEmissions = formatNumber(maxEmissionValue);
+    String currentMinEmissions = formatNumber(minEmissionValue);
+    if (maxEmissionValue == 0) {
+      return '';
+    } else if (maxEmissionValue == minEmissionValue) {
+      return currentMaxEmissions;
+    }
+    return '$currentMinEmissions - $currentMaxEmissions';
   }
 
-  if (currentMaxEmissions == currentMinEmissions && mode != 'transit') {
-    return currentMaxEmissions;
+  switch (mode) {
+    case motorcycling:
+      motorcycleEmissions = getEmissions(
+        motorcycleState.maxEmissionValue,
+        motorcycleState.minEmissionValue,
+      );
+      return motorcycleEmissions;
+    case driving:
+      carEmissions = getEmissions(
+        carState.maxEmissionValue,
+        carState.minEmissionValue,
+      );
+      return carEmissions;
+    case transit:
+      transitEmissions = getEmissions(
+        transitState.maxEmissionValue,
+        transitState.minEmissionValue,
+      );
+      return transitEmissions;
+    default:
+      return '';
   }
-
-  return '$currentMinEmissions - $currentMaxEmissions';
 }
 
 class _TravelModeButtonsState extends State<TravelModeButtons> {
@@ -68,7 +90,7 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
         TransitState transitState,
         PolylinesState polylineState,
         child) {
-      String currentMinMaxEmissions = getCurrentMinMaxEmissions(
+      getCurrentMinMaxEmissions(
         polylineState.mode,
         motorcycleState,
         carState,
@@ -81,51 +103,75 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
         color: Colors.white,
         child: Column(
           children: [
-            ToggleButtons(
-              onPressed: (int index) {
-                setState(() {
-                  // The button that is tapped is set to true, and the others to false
-                  for (int i = 0; i < _selectedModes.length; i++) {
-                    _selectedModes[i] = i == index;
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: ToggleButtons(
+                onPressed: (int index) {
+                  setState(() {
+                    // The button that is tapped is set to true, and the others to false
+                    for (int i = 0; i < _selectedModes.length; i++) {
+                      _selectedModes[i] = i == index;
+                    }
+                  });
+
+                  polylineState.transportMode = transportModes[index].mode;
+
+                  if (coordinatesState.coordinates.isEmpty) {
+                    return;
                   }
-                });
-
-                polylineState.transportMode = transportModes[index].mode;
-
-                if (coordinatesState.coordinates.isEmpty) {
-                  return;
-                }
-                polylineState.getPolyline(coordinatesState
-                    .coordinates); // only call this function when the route coordinates are available
-                _showModalBottomSheet();
-              },
-              selectedBorderColor: Colors.green[600],
-              renderBorder: false,
-              highlightColor: Colors.green[400],
-              selectedColor: Colors.white,
-              fillColor: Colors.green[600],
-              color: Colors.green[600],
-              constraints: const BoxConstraints(
-                minHeight: 40.0,
-                minWidth: 40.0,
-              ),
-              isSelected: _selectedModes,
-              children: transportModes
-                  .map(
-                    (mode) => Icon(
-                      mode.icon,
-                      size: 30.0,
-                    ),
-                  )
-                  .toList(),
-            ),
-            //),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 0.0),
-              child: Text(
-                currentMinMaxEmissions,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.green[700], fontWeight: FontWeight.bold),
+                  polylineState.getPolyline(coordinatesState
+                      .coordinates); // only call this function when the route coordinates are available
+                  _showModalBottomSheet();
+                },
+                //selectedBorderColor: Colors.green[600],
+                renderBorder: false,
+                highlightColor: Colors.green[400],
+                selectedColor: Colors.green[600],
+                color: Colors.grey[600],
+                splashColor: Colors.green[200],
+                fillColor: Colors.transparent,
+                constraints: const BoxConstraints(
+                  minHeight: 40.0,
+                  minWidth: 40.0,
+                ),
+                isSelected: _selectedModes,
+                children: transportModes
+                    .map(
+                      (travelMode) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 4.0),
+                              child: Icon(
+                                travelMode.icon,
+                                size: 30.0,
+                              ),
+                            ),
+                            if (travelMode.mode == 'motorcycling')
+                              Text(motorcycleEmissions,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            if (travelMode.mode == 'driving')
+                              Text(
+                                carEmissions,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            if (travelMode.mode == 'transit')
+                              Text(
+                                transitEmissions,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
               ),
             ),
           ],

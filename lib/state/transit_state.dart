@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class TransitState extends ChangeNotifier {
@@ -9,18 +11,10 @@ class TransitState extends ChangeNotifier {
   int get minEmissionValue => _minEmissions;
   int get maxEmissionValue => _maxEmissions;
 
-  void saveTransitEmissions(List<double> emissions) {
+  void updateTransitEmissions(List<double> emissions) {
     _transitEmissions = emissions;
+    _maxEmissions = emissions.reduce(max).round();
+    _minEmissions = emissions.reduce(min).round();
     notifyListeners();
-  }
-
-  void updateMinEmissions(int minEmissions) {
-    _minEmissions = minEmissions;
-    // notifyListeners();
-  }
-
-  void updateMaxEmissions(int maxEmissions) {
-    _maxEmissions = maxEmissions;
-    //notifyListeners();
   }
 }
