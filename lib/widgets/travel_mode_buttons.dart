@@ -119,6 +119,8 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
                   if (coordinatesState.coordinates.isEmpty) {
                     return;
                   }
+
+                  polylineState.setActiveRoute(polylineState.getActiveRoute());
                   polylineState.getPolyline(coordinatesState
                       .coordinates); // only call this function when the route coordinates are available
                   _showModalBottomSheet();

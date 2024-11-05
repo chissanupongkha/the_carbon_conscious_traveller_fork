@@ -16,11 +16,11 @@ class PolylinesState extends ChangeNotifier {
   final List<String> _distanceTexts = [];
   final List<String> _durationTexts = [];
   final List<String> _routeSummary = [];
-
+  int _carActiveRouteIndex = 0;
+  int _motorcycleActiveRouteIndex = 0;
+  int _transitActiveRouteIndex = 0;
   RoutesModel? routesModel;
-
   List<DirectionsRoute>? routes = [];
-
   List<DirectionsRoute> resultForPrivateVehicle = [];
 
   poly.PolylinePoints get polylinePoints => _polylinePoints;
@@ -32,6 +32,9 @@ class PolylinesState extends ChangeNotifier {
   List<String> get distanceTexts => _distanceTexts;
   List<String> get durationTexts => _durationTexts;
   List<String> get routeSummary => _routeSummary;
+  int get carActiveRouteIndex => _carActiveRouteIndex;
+  int get motorcycleActiveRouteIndex => _motorcycleActiveRouteIndex;
+  int get transit => _transitActiveRouteIndex;
 
   static const Map<String, TravelMode> _modeMap = {
     'driving': TravelMode.driving,
@@ -48,7 +51,6 @@ class PolylinesState extends ChangeNotifier {
 
   void resetPolyline() {
     _routeCoordinates.clear();
-    // _activeRouteIndex = 0;
     notifyListeners();
   }
 
@@ -111,11 +113,11 @@ class PolylinesState extends ChangeNotifier {
       PolylineId id = PolylineId('poly$i');
       Polyline polyline = Polyline(
         polylineId: id,
-        color: i == activeRouteIndex
+        color: i == _activeRouteIndex
             ? const Color.fromARGB(255, 40, 33, 243)
             : const Color.fromARGB(255, 136, 136, 136),
         points: routeCoordinates[i],
-        width: i == activeRouteIndex ? 7 : 5,
+        width: i == _activeRouteIndex ? 7 : 5,
         zIndex: i == _activeRouteIndex ? 1 : 0, // Put active route on top
         consumeTapEvents: true,
         onTap: () => setActiveRoute(i),
@@ -133,13 +135,32 @@ class PolylinesState extends ChangeNotifier {
 
   void setActiveRoute(int index) {
     if (index >= 0 && index < _routeCoordinates.length) {
-      _updateActiveRoute(index);
+      if (_mode == 'driving') {
+        _carActiveRouteIndex = index;
+        _updateActiveRoute(_carActiveRouteIndex);
+      } else if (_mode == 'motorcycling') {
+        _motorcycleActiveRouteIndex = index;
+        _updateActiveRoute(_motorcycleActiveRouteIndex);
+      } else if (_mode == 'transit') {
+        _transitActiveRouteIndex = index;
+        _updateActiveRoute(_transitActiveRouteIndex);
+      }
     }
     getDistanceValues();
     getDurationValues();
     getDistanceTexts();
     getDurationTexts();
     getRouteSummary();
+  }
+
+  int getActiveRoute() {
+    if (_mode == 'driving') {
+      return _carActiveRouteIndex;
+    } else if (_mode == 'motorcycling') {
+      return _motorcycleActiveRouteIndex;
+    } else {
+      return _activeRouteIndex;
+    }
   }
 
   void getDistanceValues() {

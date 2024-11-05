@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
-class PrivateVehicleListview extends StatefulWidget {
-  const PrivateVehicleListview(
+class MotorcycleListView extends StatefulWidget {
+  const MotorcycleListView(
       {super.key,
       required this.vehicleState,
       required this.polylinesState,
@@ -15,10 +15,10 @@ class PrivateVehicleListview extends StatefulWidget {
   final IconData icon;
 
   @override
-  State<PrivateVehicleListview> createState() => _PrivateVehicleListviewState();
+  State<MotorcycleListView> createState() => _MotorcycleListViewState();
 }
 
-class _PrivateVehicleListviewState extends State<PrivateVehicleListview> {
+class _MotorcycleListViewState extends State<MotorcycleListView> {
   @override
   Widget build(BuildContext context) {
     String formatNumber(int number) {
@@ -42,7 +42,7 @@ class _PrivateVehicleListviewState extends State<PrivateVehicleListview> {
             itemBuilder: (BuildContext context, int index) {
               widget.vehicleState.getTreeIcons(index);
 
-              selectedIndex = polylinesState.carActiveRouteIndex;
+              selectedIndex = polylinesState.motorcycleActiveRouteIndex;
 
               //Change the border color of the active route
               Color color = Colors.transparent;

@@ -4,7 +4,7 @@ import 'package:the_carbon_conscious_traveller/data/calculation_values.dart';
 import 'package:the_carbon_conscious_traveller/helpers/private_vehicle_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/state/private_motorcycle_state.dart';
-import 'package:the_carbon_conscious_traveller/widgets/private_vehicle_list_view.dart';
+import 'package:the_carbon_conscious_traveller/widgets/motorcycle_list_view.dart';
 
 class MotorcyleSettings extends StatefulWidget {
   const MotorcyleSettings({super.key});
@@ -119,7 +119,7 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
                     padding: const EdgeInsets.only(bottom: 40),
                     child: Column(
                       children: [
-                        PrivateVehicleListview(
+                        MotorcycleListView(
                           polylinesState: polylinesState,
                           vehicleState: motorcycleState,
                           icon: Icons.sports_motorsports_outlined,

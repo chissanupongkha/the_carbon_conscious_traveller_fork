@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/state/coordinates_state.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 import 'package:the_carbon_conscious_traveller/helpers/transit_emissions_calculator.dart';
+import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/transit_list_view.dart';
 
 class Transit extends StatefulWidget {
@@ -18,15 +19,18 @@ class _TransitState extends State<Transit> {
   RoutesModel? routesModel;
   List<DirectionsRoute>? routes = [];
   TransitEmissionsCalculator? _transitEmissionsCalculator;
+  late CoordinatesState coordsState;
+  late PolylinesState polylinesState;
 
   @override
   void initState() {
     _transitEmissionsCalculator = TransitEmissionsCalculator();
+    coordsState = Provider.of<CoordinatesState>(context, listen: false);
+    polylinesState = Provider.of<PolylinesState>(context, listen: false);
     super.initState();
   }
 
   Future<List<DirectionsRoute>> fetchRouteInfo() async {
-    final coordsState = Provider.of<CoordinatesState>(context, listen: false);
     routesModel = RoutesModel(
       origin: GeoCoord(coordsState.originCoords.latitude,
           coordsState.originCoords.longitude),
@@ -43,12 +47,18 @@ class _TransitState extends State<Transit> {
     }
   }
 
+  Future<List<DirectionsRoute>> handleTransitMode() async {
+    await fetchRouteInfo();
+    polylinesState.getPolyline(coordsState.coordinates);
+    return routes ?? [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
       child: FutureBuilder<List<DirectionsRoute>>(
-        future: fetchRouteInfo(),
+        future: handleTransitMode(),
         builder: (context, snapshot) {
           final emissions =
               _transitEmissionsCalculator?.calculateEmissions(context);
