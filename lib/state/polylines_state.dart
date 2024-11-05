@@ -43,34 +43,26 @@ class PolylinesState extends ChangeNotifier {
   set transportMode(String mode) {
     _transportMode = _modeMap[mode]!;
     _mode = mode;
-    debugPrint("Transport mode in model: ${_modeMap[mode]}");
     notifyListeners();
   }
 
   void resetPolyline() {
-    debugPrint("Resetting polyline");
     _routeCoordinates.clear();
     // _activeRouteIndex = 0;
     notifyListeners();
   }
 
   Future<void> getPolyline(List<LatLng> coordinates) async {
-    debugPrint("Getting polyline...");
-    debugPrint("Active route index: $_activeRouteIndex");
-
     resetPolyline();
 
     Future<List<DirectionsRoute>> fetchRouteInfo() async {
-      debugPrint("request sent");
       routesModel = RoutesModel(
         origin: GeoCoord(coordinates[0].latitude, coordinates[0].longitude),
         destination:
             GeoCoord(coordinates[1].latitude, coordinates[1].longitude),
         travelMode: _transportMode,
       );
-      debugPrint("request is about to return");
       routes = await routesModel?.getRouteInfo();
-      debugPrint("routes $routes");
       if (routes == null) {
         return [];
       } else {
@@ -96,7 +88,6 @@ class PolylinesState extends ChangeNotifier {
         List<LatLng> routeCoordinate = [];
 
         if (result[i].overviewPolyline!.points!.isEmpty) {
-          print("No points found");
           return;
         } else {
           List<LatLng> decodedPoints = _polylinePoints
@@ -117,23 +108,14 @@ class PolylinesState extends ChangeNotifier {
     polylines.clear();
 
     for (int i = 0; i < result.length; i++) {
-      List<PatternItem> dashPattern = [
-        PatternItem.dash(10.0),
-        PatternItem.gap(5.0),
-      ];
-      // this was (int i = 0; i < routeCoordinates.length.length; i++) {
       PolylineId id = PolylineId('poly$i');
       Polyline polyline = Polyline(
         polylineId: id,
-        //color: i == activeRouteIndex ? Colors.blue : Colors.grey,
-        //color: routeSegments[i].travelMode == 'WALKING' ? Colors.green : Colors.blue,
-        color: i == activeRouteIndex ? Colors.blue : Colors.grey,
-        patterns: result.first.legs?.first.steps?.first.travelMode.toString() ==
-                "WALKING"
-            ? dashPattern
-            : [],
+        color: i == activeRouteIndex
+            ? const Color.fromARGB(255, 40, 33, 243)
+            : const Color.fromARGB(255, 136, 136, 136),
         points: routeCoordinates[i],
-        width: i == activeRouteIndex ? 5 : 3,
+        width: i == activeRouteIndex ? 7 : 5,
         zIndex: i == _activeRouteIndex ? 1 : 0, // Put active route on top
         consumeTapEvents: true,
         onTap: () => setActiveRoute(i),
@@ -151,7 +133,6 @@ class PolylinesState extends ChangeNotifier {
 
   void setActiveRoute(int index) {
     if (index >= 0 && index < _routeCoordinates.length) {
-      print("Setting active route to $index");
       _updateActiveRoute(index);
     }
     getDistanceValues();
@@ -162,13 +143,12 @@ class PolylinesState extends ChangeNotifier {
   }
 
   void getDistanceValues() {
-    print("Getting distance values");
     if (result.isNotEmpty && _distances.length < result.length) {
       for (var route in result) {
         distances.add(route.legs!.first.distance!.value ?? 0);
       }
     } else {
-      print("No results");
+      "No results";
     }
   }
 
@@ -178,7 +158,7 @@ class PolylinesState extends ChangeNotifier {
         distanceTexts.add(route.legs!.first.distance!.text!);
       }
     } else {
-      debugPrint("No results");
+      "No results";
     }
   }
 
@@ -189,9 +169,8 @@ class PolylinesState extends ChangeNotifier {
         duration.add(route.legs!.first.duration!.value!);
       }
     } else {
-      debugPrint("No results");
+      "No results";
     }
-    debugPrint("Duration: $duration");
   }
 
   void getDurationTexts() {
@@ -200,18 +179,17 @@ class PolylinesState extends ChangeNotifier {
         _durationTexts.add(route.legs!.first.duration!.text!);
       }
     } else {
-      debugPrint("No results");
+      "No results";
     }
   }
 
   void getRouteSummary() {
     if (result.isNotEmpty) {
       for (var route in result) {
-        print("Route summary: ${route.summary}");
         _routeSummary.add(route.summary!);
       }
     } else {
-      print("No results");
+      "No results";
     }
   }
 }
