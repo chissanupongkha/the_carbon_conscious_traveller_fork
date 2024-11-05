@@ -258,19 +258,18 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   void _addDestinationMarker(LatLng destinationLatLng) {
     LatLng position = destinationLatLng;
 
-    final markerModel = Provider.of<MarkerState>(context, listen: false);
-    markerModel.addMarker(
+    final markerState = Provider.of<MarkerState>(context, listen: false);
+    markerState.addMarker(
       LatLng(position.latitude, position.longitude),
     );
 
-    final coordinatesModel =
-        Provider.of<CoordinatesState>(context, listen: false);
-    coordinatesModel.saveDestinationCoords(
+    final coordsState = Provider.of<CoordinatesState>(context, listen: false);
+    coordsState.saveDestinationCoords(
       LatLng(position.latitude, position.longitude),
     );
 
-    final polylineModel = Provider.of<PolylinesState>(context, listen: false);
-    polylineModel.getPolyline(coordinatesModel.coordinates);
+    final polylineState = Provider.of<PolylinesState>(context, listen: false);
+    polylineState.getPolyline(coordsState.coordinates);
   }
 
   void _showModalBottomSheet() {
