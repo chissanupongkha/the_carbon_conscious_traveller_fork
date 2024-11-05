@@ -28,10 +28,13 @@ class MapService {
             coords.latitude,
             coords.longitude,
           ),
-          zoom: 14.0,
+          zoom: 12.0,
         ),
       ),
     );
+    LatLngBounds bounds = await controller.getVisibleRegion();
+
+    print("bounds: $bounds");
   }
 
   void setController(GoogleMapController controller) {
