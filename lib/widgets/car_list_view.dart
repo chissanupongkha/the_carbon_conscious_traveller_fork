@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/tree_icons.dart';
 
-class PrivateVehicleListview extends StatefulWidget {
-  const PrivateVehicleListview(
+class CarListView extends StatefulWidget {
+  const CarListView(
       {super.key,
       required this.vehicleState,
       required this.polylinesState,
@@ -15,10 +15,10 @@ class PrivateVehicleListview extends StatefulWidget {
   final IconData icon;
 
   @override
-  State<PrivateVehicleListview> createState() => _PrivateVehicleListviewState();
+  State<CarListView> createState() => _CarListViewState();
 }
 
-class _PrivateVehicleListviewState extends State<PrivateVehicleListview> {
+class _CarListViewState extends State<CarListView> {
   @override
   Widget build(BuildContext context) {
     String formatNumber(int number) {
