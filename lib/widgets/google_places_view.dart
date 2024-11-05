@@ -129,7 +129,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
 
   Widget _buildPredictionItem(places.AutocompletePrediction item) {
     return InkWell(
-      onTap: () => _onItemClicked(item),
+      onTap: () => _onItemTapped(item),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,7 +197,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   }
 
   //When a predicted item is clicked, fetch the place details
-  void _onItemClicked(places.AutocompletePrediction item) async {
+  void _onItemTapped(places.AutocompletePrediction item) async {
     if (_fetchingPlace) {
       return; // Fetching in progress
     }
