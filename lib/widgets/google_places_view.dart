@@ -34,7 +34,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   places.LatLng? destinationLatLng; //end coordinates
   String? _predictLastText; // Last text used for prediction
   String fieldType = ""; // Origin or destination
-  final List<String> _countries = ['au']; // Preset countries
+  final List<String> _countries = []; // Preset countries
   List<places.AutocompletePrediction>? _predictions; // Predictions
   bool _predicting = false; // Predicting state
   bool _fetchingPlace = false; // Fetching place state
