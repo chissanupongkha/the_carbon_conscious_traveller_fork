@@ -154,7 +154,6 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
 
   //Save the last text input and the field type
   void _onPredictTextChanged(String value, String field) async {
-    print("text changed: $value");
     _predictLastText = value;
     fieldType = field;
 
@@ -195,13 +194,10 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
         _predicting = false;
       });
     }
-    print("Predictions: $_predictions");
   }
 
   //When a predicted item is clicked, fetch the place details
   void _onItemClicked(places.AutocompletePrediction item) async {
-    print("item: ${item.fullText}");
-
     if (_fetchingPlace) {
       return; // Fetching in progress
     }
@@ -240,9 +236,6 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
         }
         _showModalBottomSheet();
       }
-
-      print("start: $origin");
-      print("destination: $destination");
     } catch (err) {
       setState(() {
         _fetchingPlaceErr = err;
@@ -252,8 +245,6 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   }
 
   void _addOriginMarker(LatLng originLatLng) {
-    print("addOriginMarker reached!!! $originLatLng");
-
     LatLng position = originLatLng;
     final markerModel = Provider.of<MarkerState>(context, listen: false);
     markerModel.addMarker(LatLng(position.latitude, position.longitude));
@@ -265,7 +256,6 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   }
 
   void _addDestinationMarker(LatLng destinationLatLng) {
-    print("addDestinationMarker reached!!! $destinationLatLng");
     LatLng position = destinationLatLng;
 
     final markerModel = Provider.of<MarkerState>(context, listen: false);
@@ -278,8 +268,6 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
     coordinatesModel.saveDestinationCoords(
       LatLng(position.latitude, position.longitude),
     );
-
-    print("object coords: ${coordinatesModel.destinationCoords}");
 
     final polylineModel = Provider.of<PolylinesState>(context, listen: false);
     polylineModel.getPolyline(coordinatesModel.coordinates);
