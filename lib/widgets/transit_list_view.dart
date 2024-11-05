@@ -57,72 +57,76 @@ class TransitListView extends StatelessWidget {
               color = Colors.transparent;
             }
 
-            return Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: color,
-                    width: 4.0,
+            return InkWell(
+              onTap: () => polylinesState.setActiveRoute(index),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      color: color,
+                      width: 4.0,
+                    ),
                   ),
                 ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 12, right: 20, top: 16, bottom: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TransitSteps(
-                              steps: steps, stepEmissions: stepEmissions),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(
-                              legs.first.departureTime?.text == null
-                                  ? ""
-                                  : "${legs.first.departureTime?.text} - ${legs.first.arrivalTime?.text}",
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12, right: 20, top: 16, bottom: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TransitSteps(
+                                steps: steps, stepEmissions: stepEmissions),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Text(
+                                legs.first.departureTime?.text == null
+                                    ? ""
+                                    : "${legs.first.departureTime?.text} - ${legs.first.arrivalTime?.text}",
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(formatNumber(emissions[index]),
-                                  style: Theme.of(context).textTheme.bodyLarge),
-                              Image.asset('assets/icons/co2e.png',
-                                  width: 30, height: 30),
-                            ],
-                          ),
-                          Text(
-                            "${legs.first.distance?.text}",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          Text(
-                            "${legs.first.duration?.text}",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          TreeIcons(
-                              treeIconName: upDateTreeIcons(
-                                  emissions.map((e) => e.toInt()).toList(),
-                                  index)),
-                        ],
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(formatNumber(emissions[index]),
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge),
+                                Image.asset('assets/icons/co2e.png',
+                                    width: 30, height: 30),
+                              ],
+                            ),
+                            Text(
+                              "${legs.first.distance?.text}",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            Text(
+                              "${legs.first.duration?.text}",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            TreeIcons(
+                                treeIconName: upDateTreeIcons(
+                                    emissions.map((e) => e.toInt()).toList(),
+                                    index)),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },

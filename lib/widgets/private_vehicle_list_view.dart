@@ -41,65 +41,71 @@ class PrivateVehicleListview extends StatelessWidget {
               color = Colors.transparent;
             }
 
-            return Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: color,
-                    width: 4.0,
+            return InkWell(
+              onTap: () => polylinesState.setActiveRoute(index),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      color: color,
+                      width: 4.0,
+                    ),
                   ),
                 ),
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: Icon(icon, color: Colors.green, size: 30),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 30),
-                                child: Text(
-                                    'via ${polylinesState.routeSummary[index]}',
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge),
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(right: 10),
+                                child:
+                                    Icon(icon, color: Colors.green, size: 30),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 30),
+                                  child: Text(
+                                      'via ${polylinesState.routeSummary[index]}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(formatNumber(vehicleState.getEmission(index))),
-                            Image.asset('assets/icons/co2e.png',
-                                width: 30, height: 30),
-                          ],
-                        ),
-                        Text(polylinesState.distanceTexts[index],
-                            style: Theme.of(context).textTheme.bodySmall),
-                        Text(polylinesState.durationTexts[index],
-                            style: Theme.of(context).textTheme.bodySmall),
-                        TreeIcons(treeIconName: vehicleState.treeIcons),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(formatNumber(
+                                  vehicleState.getEmission(index))),
+                              Image.asset('assets/icons/co2e.png',
+                                  width: 30, height: 30),
+                            ],
+                          ),
+                          Text(polylinesState.distanceTexts[index],
+                              style: Theme.of(context).textTheme.bodySmall),
+                          Text(polylinesState.durationTexts[index],
+                              style: Theme.of(context).textTheme.bodySmall),
+                          TreeIcons(treeIconName: vehicleState.treeIcons),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
