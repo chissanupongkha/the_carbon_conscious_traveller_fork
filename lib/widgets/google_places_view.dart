@@ -97,6 +97,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
               ),
               TextFormField(
                 controller: destinationController,
+                enabled: origin != null,
                 onChanged: (value) =>
                     _onPredictTextChanged(value, "destination"),
                 decoration: const InputDecoration(
