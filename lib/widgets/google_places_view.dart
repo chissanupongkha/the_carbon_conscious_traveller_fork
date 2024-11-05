@@ -5,6 +5,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_directions_api/google_directions_api.dart' as dir;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_carbon_conscious_traveller/constants.dart';
+import 'package:the_carbon_conscious_traveller/helpers/map_service.dart';
 import 'package:the_carbon_conscious_traveller/state/marker_state.dart';
 import 'package:the_carbon_conscious_traveller/state/coordinates_state.dart';
 import 'package:provider/provider.dart';
@@ -219,6 +220,10 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
           _addOriginMarker(LatLng(originLatLng!.lat, originLatLng!.lng));
           _predictions = [];
         });
+        if (mounted) {
+          MapService().goToLocation(
+              context, LatLng(originLatLng!.lat, originLatLng!.lng));
+        }
       } else if (fieldType == "destination") {
         destinationController.text = item.fullText;
         setState(() {
@@ -229,6 +234,10 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
               LatLng(destinationLatLng!.lat, destinationLatLng!.lng));
           _predictions = [];
         });
+        if (mounted) {
+          MapService().goToLocation(
+              context, LatLng(destinationLatLng!.lat, destinationLatLng!.lng));
+        }
         _showModalBottomSheet();
       }
 

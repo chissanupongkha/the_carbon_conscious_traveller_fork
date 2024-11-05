@@ -1,7 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:the_carbon_conscious_traveller/helpers/map_service.dart';
 import 'package:the_carbon_conscious_traveller/state/marker_state.dart';
 import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 import 'package:provider/provider.dart';
@@ -14,13 +14,12 @@ class GoogleMapView extends StatefulWidget {
 }
 
 class GoogleMapViewState extends State<GoogleMapView> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
   Set<Marker> markers = {};
 
   static const CameraPosition _originPlace = CameraPosition(
-    target: LatLng(-33.83312702503771, 151.0854297797668),
-    zoom: 14.4746,
+    target: LatLng(-26.853387500000004,
+        133.27515449999999), // Australia in lieu of user location
+    zoom: 3.4746,
   );
 
   PolylinePoints polylinePoints = PolylinePoints();
@@ -34,14 +33,16 @@ class GoogleMapViewState extends State<GoogleMapView> {
       body: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: _originPlace,
-        onMapCreated: _onMapCreated,
+        onMapCreated: (GoogleMapController controller) {
+          MapService().setController(controller);
+        },
         markers: markerModel.markers,
         polylines: Set<Polyline>.of(polylineModel.polylines.values),
       ),
     );
   }
 
-  void _onMapCreated(GoogleMapController controller) async {
-    _controller.complete(controller);
-  }
+  // void _onMapCreated(GoogleMapController controller) async {
+  //   _controller.complete(controller);
+  // }
 }
