@@ -5,7 +5,7 @@ import 'package:the_carbon_conscious_traveller/state/coordinates_state.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 import 'package:the_carbon_conscious_traveller/helpers/transit_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
-import 'package:the_carbon_conscious_traveller/widgets/transit_list_view.dart';
+import 'package:the_carbon_conscious_traveller/widgets/list_view_transit.dart';
 
 class Transit extends StatefulWidget {
   const Transit({super.key});

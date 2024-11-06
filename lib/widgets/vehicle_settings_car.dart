@@ -4,7 +4,7 @@ import 'package:the_carbon_conscious_traveller/data/calculation_values.dart';
 import 'package:the_carbon_conscious_traveller/helpers/private_car_emissions_calculator.dart';
 import 'package:the_carbon_conscious_traveller/state/private_car_state.dart';
 import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
-import 'package:the_carbon_conscious_traveller/widgets/car_list_view.dart';
+import 'package:the_carbon_conscious_traveller/widgets/list_view_car.dart';
 
 class CarSettings extends StatefulWidget {
   const CarSettings({super.key});

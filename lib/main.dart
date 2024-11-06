@@ -9,7 +9,7 @@ import 'package:the_carbon_conscious_traveller/state/transit_state.dart';
 import 'package:the_carbon_conscious_traveller/widgets/drawer.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_map_view.dart';
 import 'package:the_carbon_conscious_traveller/widgets/google_places_view.dart';
-import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
+import 'package:the_carbon_conscious_traveller/widgets/bottom_sheet.dart';
 
 void main() {
   runApp(
