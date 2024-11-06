@@ -34,7 +34,7 @@ class PolylinesState extends ChangeNotifier {
   List<String> get routeSummary => _routeSummary;
   int get carActiveRouteIndex => _carActiveRouteIndex;
   int get motorcycleActiveRouteIndex => _motorcycleActiveRouteIndex;
-  int get transit => _transitActiveRouteIndex;
+  int get transitActiveRouteIndex => _transitActiveRouteIndex;
 
   static const Map<String, TravelMode> _modeMap = {
     'driving': TravelMode.driving,
@@ -158,6 +158,8 @@ class PolylinesState extends ChangeNotifier {
       return _carActiveRouteIndex;
     } else if (_mode == 'motorcycling') {
       return _motorcycleActiveRouteIndex;
+    } else if (_mode == 'transit') {
+      return _transitActiveRouteIndex;
     } else {
       return _activeRouteIndex;
     }

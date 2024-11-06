@@ -265,7 +265,11 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
           _predictions = [];
           final polylineState =
               Provider.of<PolylinesState>(context, listen: false);
-          polylineState.transportMode = polylineState.mode;
+          if (polylineState.mode == "") {
+            polylineState.transportMode = "driving";
+          } else {
+            polylineState.transportMode = polylineState.mode;
+          }
         });
         if (mounted) {
           MapService().goToLocation(
