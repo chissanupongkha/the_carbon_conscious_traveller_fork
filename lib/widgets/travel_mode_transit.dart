@@ -62,7 +62,7 @@ class _TransitState extends State<Transit> {
             _transitEmissionsCalculator?.calculateEmissions(context);
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
-            heightFactor: 10,
+            heightFactor: 2,
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
