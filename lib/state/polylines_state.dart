@@ -119,6 +119,9 @@ class PolylinesState extends ChangeNotifier {
         points: routeCoordinates[i],
         width: i == _activeRouteIndex ? 7 : 5,
         zIndex: i == _activeRouteIndex ? 1 : 0, // Put active route on top
+        geodesic: true,
+        startCap: Cap.roundCap,
+        endCap: Cap.roundCap,
         consumeTapEvents: true,
         onTap: () => setActiveRoute(i),
       );

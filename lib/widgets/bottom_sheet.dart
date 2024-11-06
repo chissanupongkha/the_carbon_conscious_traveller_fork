@@ -31,7 +31,7 @@ class _TravelModeBottomSheetState extends State<TravelModeBottomSheet> {
         }
         return Center(
           child: Text("Start by entering a start and end location",
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   )),
         );
