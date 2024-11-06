@@ -94,6 +94,12 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
             children: [
               TextFormField(
                 controller: originController,
+                onTapOutside: (PointerDownEvent event) {
+                  setState(() {
+                    //hide the keyboard when the user taps outside the textfield
+                    FocusScope.of(context).unfocus();
+                  });
+                },
                 onChanged: (value) => _onPredictTextChanged(value, "start"),
                 decoration: const InputDecoration(
                     label: Text("Enter a start location"),
@@ -102,6 +108,12 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
               ),
               TextFormField(
                 controller: destinationController,
+                onTapOutside: (PointerDownEvent event) {
+                  setState(() {
+                    //hide the keyboard when the user taps outside the textfield
+                    FocusScope.of(context).unfocus();
+                  });
+                },
                 enabled: origin != null,
                 onChanged: (value) =>
                     _onPredictTextChanged(value, "destination"),
