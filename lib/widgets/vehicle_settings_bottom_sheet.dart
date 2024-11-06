@@ -28,15 +28,9 @@ class _TravelModeBottomSheetState extends State<TravelModeBottomSheet> {
           } else if (polylinesState.mode == "driving") {
             return const CarSettings();
           }
-          return Center(
-            child: Text("Start by entering a start and end location",
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    )),
-          );
         }
         return Center(
-          child: Text("No travel mode selected",
+          child: Text("Start by entering a start and end location",
               style: Theme.of(context).textTheme.displayMedium?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                   )),
