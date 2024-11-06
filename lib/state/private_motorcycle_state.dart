@@ -18,7 +18,6 @@ class PrivateMotorcycleState extends ChangeNotifier {
   List<String> get treeIcons => _treeIcons;
 
   void updateSelectedValue(MotorcycleSize newValue) {
-    print("updateSelectedValue: $newValue");
     _selectedValue = newValue;
     notifyListeners();
   }

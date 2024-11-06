@@ -41,7 +41,6 @@ class RoutesModel {
         if (!completer.isCompleted) {
           completer.complete(routes);
         }
-        debugPrint("debug ROUTES ${routes?.length}");
       } else {
         debugPrint("Test Request unsuccessful");
         if (!completer.isCompleted) {

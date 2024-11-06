@@ -7,7 +7,6 @@ class TreeIcons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('tree icons treeIconName $treeIconName');
     return Wrap(
       children: [
         for (String treeIcon in treeIconName)

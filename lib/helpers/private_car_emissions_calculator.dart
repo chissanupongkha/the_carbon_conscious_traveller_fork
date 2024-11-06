@@ -16,7 +16,6 @@ class PrivateCarEmissionsCalculator {
   });
 
   void calculateFactor() {
-    print("Car Size: ${vehicleSize.index} ${vehicleFuelType.index}");
     if (vehicleSize == CarSize.label || vehicleFuelType == CarFuelType.label) {
       return; // Skip operation for enum 'label'
     } else {

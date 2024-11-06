@@ -5,7 +5,6 @@ import 'package:the_carbon_conscious_traveller/data/calculation_values.dart';
 
 class TransitEmissionsCalculator {
   double getPublicFactor(String vehicleTypeString) {
-    debugPrint("Vehicle type: $vehicleTypeString");
     try {
       switch (vehicleTypeString) {
         case 'BUS':

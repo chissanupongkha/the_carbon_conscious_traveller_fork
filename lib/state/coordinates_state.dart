@@ -34,11 +34,6 @@ class CoordinatesState with ChangeNotifier {
     for (var route in routeData) {
       if (_routeData.length < routeData.length) {
         _routeData.add(route);
-
-        for (var privateRoutes in _routeData) {
-          debugPrint(
-              "saveRouteInfo ${privateRoutes.legs?.first.distance?.text}");
-        }
       }
     }
     notifyListeners();
