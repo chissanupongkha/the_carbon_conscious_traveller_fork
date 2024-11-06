@@ -40,6 +40,8 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   bool _fetchingPlace = false; // Fetching place state
   dynamic _fetchingPlaceErr; // Fetching place error
   dynamic _predictErr; // Prediction error
+  bool _enableOriginForm = true; // Origin textfield state
+  bool _enableDestForm = false; // Destination textfield state
 
   RoutesModel? routes;
 
@@ -94,6 +96,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
             children: [
               TextFormField(
                 controller: originController,
+                enabled: _enableOriginForm,
                 onTapOutside: (PointerDownEvent event) {
                   setState(() {
                     //hide the keyboard when the user taps outside the textfield
@@ -114,7 +117,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
                     FocusScope.of(context).unfocus();
                   });
                 },
-                enabled: origin != null,
+                enabled: _enableDestForm,
                 onChanged: (value) =>
                     _onPredictTextChanged(value, "destination"),
                 decoration: const InputDecoration(
@@ -243,6 +246,8 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
           _fetchingPlace = false;
           originLatLng = origin?.latLng;
           _addOriginMarker(LatLng(originLatLng!.lat, originLatLng!.lng));
+          _enableOriginForm = false;
+          _enableDestForm = true;
           _predictions = [];
         });
         if (mounted) {
@@ -257,6 +262,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
           destinationLatLng = destination?.latLng;
           _addDestinationMarker(
               LatLng(destinationLatLng!.lat, destinationLatLng!.lng));
+          _enableDestForm = false;
           _predictions = [];
         });
         if (mounted) {
