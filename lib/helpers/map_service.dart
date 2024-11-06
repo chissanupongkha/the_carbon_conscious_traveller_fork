@@ -32,9 +32,6 @@ class MapService {
         ),
       ),
     );
-    LatLngBounds bounds = await controller.getVisibleRegion();
-
-    print("bounds: $bounds");
   }
 
   void setController(GoogleMapController controller) {
