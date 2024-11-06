@@ -54,122 +54,115 @@ class _CarSettingsState extends State<CarSettings> {
           carState.updateVisibility(isVisible);
         }
 
-        return Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Visibility(
-                  visible: !carState.isVisible,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Title(
-                          color: Colors.black,
-                          child: Text(
-                            "Car",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                        ),
+        return Column(
+          children: <Widget>[
+            Visibility(
+              visible: !carState.isVisible,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Title(
+                      color: Colors.black,
+                      child: Text(
+                        "Car",
+                        style: Theme.of(context).textTheme.displayLarge,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            DropdownMenu<CarSize>(
-                              width: 300,
-                              initialSelection: carState.selectedSize,
-                              requestFocusOnTap: false,
-                              label: const Text('Car Size'),
-                              onSelected: (CarSize? size) {
-                                carState
-                                    .updateSelectedSize(size ?? CarSize.label);
-                                setState(() {
-                                  selectedSize = carState.selectedSize;
-                                });
-                              },
-                              dropdownMenuEntries: CarSize.values
-                                  .map<DropdownMenuEntry<CarSize>>(
-                                      (CarSize size) {
-                                return DropdownMenuEntry<CarSize>(
-                                  value: size,
-                                  label: size.name,
-                                  enabled: size.name != 'Select',
-                                  style: MenuItemButton.styleFrom(
-                                      foregroundColor: Colors.black),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            DropdownMenu<CarFuelType>(
-                              width: 300,
-                              initialSelection: carState.selectedFuelType,
-                              requestFocusOnTap: false,
-                              label: const Text('Fuel Type'),
-                              onSelected: (CarFuelType? fuelType) {
-                                carState.updateSelectedFuelType(
-                                    fuelType ?? CarFuelType.label);
-                                setState(() {
-                                  selectedFuelType = fuelType;
-                                });
-                              },
-                              dropdownMenuEntries: CarFuelType.values
-                                  .map<DropdownMenuEntry<CarFuelType>>(
-                                      (CarFuelType type) {
-                                return DropdownMenuEntry<CarFuelType>(
-                                  value: type,
-                                  label: type.name,
-                                  enabled: type.name != 'Select',
-                                  style: MenuItemButton.styleFrom(
-                                      foregroundColor: Colors.black),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      FilledButton(
-                        onPressed: () {
-                          if (selectedSize == null ||
-                              selectedFuelType == null) {
-                            return;
-                          } else {
-                            changeVisibility(true);
-                            getMinMaxEmissions();
-                            getCarEmissions();
-                          }
-                        },
-                        child: const Text("Calculate Emissions"),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                Visibility(
-                  visible: carState.isVisible,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 40),
-                    child: Column(
-                      children: [
-                        CarListView(
-                          polylinesState: polylinesState,
-                          vehicleState: carState,
-                          icon: Icons.directions_car_outlined,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        DropdownMenu<CarSize>(
+                          width: 300,
+                          initialSelection: carState.selectedSize,
+                          requestFocusOnTap: false,
+                          label: const Text('Car Size'),
+                          onSelected: (CarSize? size) {
+                            carState.updateSelectedSize(size ?? CarSize.label);
+                            setState(() {
+                              selectedSize = carState.selectedSize;
+                            });
+                          },
+                          dropdownMenuEntries: CarSize.values
+                              .map<DropdownMenuEntry<CarSize>>((CarSize size) {
+                            return DropdownMenuEntry<CarSize>(
+                              value: size,
+                              label: size.name,
+                              enabled: size.name != 'Select',
+                              style: MenuItemButton.styleFrom(
+                                  foregroundColor: Colors.black),
+                            );
+                          }).toList(),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        DropdownMenu<CarFuelType>(
+                          width: 300,
+                          initialSelection: carState.selectedFuelType,
+                          requestFocusOnTap: false,
+                          label: const Text('Fuel Type'),
+                          onSelected: (CarFuelType? fuelType) {
+                            carState.updateSelectedFuelType(
+                                fuelType ?? CarFuelType.label);
+                            setState(() {
+                              selectedFuelType = fuelType;
+                            });
+                          },
+                          dropdownMenuEntries: CarFuelType.values
+                              .map<DropdownMenuEntry<CarFuelType>>(
+                                  (CarFuelType type) {
+                            return DropdownMenuEntry<CarFuelType>(
+                              value: type,
+                              label: type.name,
+                              enabled: type.name != 'Select',
+                              style: MenuItemButton.styleFrom(
+                                  foregroundColor: Colors.black),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  FilledButton(
+                    onPressed: () {
+                      if (selectedSize == null || selectedFuelType == null) {
+                        return;
+                      } else {
+                        changeVisibility(true);
+                        getMinMaxEmissions();
+                        getCarEmissions();
+                      }
+                    },
+                    child: const Text("Calculate Emissions"),
+                  ),
+                ],
+              ),
             ),
-          ),
+            Visibility(
+              visible: carState.isVisible,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 40),
+                child: Column(
+                  children: [
+                    CarListView(
+                      polylinesState: polylinesState,
+                      vehicleState: carState,
+                      icon: Icons.directions_car_outlined,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

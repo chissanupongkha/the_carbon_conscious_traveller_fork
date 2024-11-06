@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/models/routes_model.dart';
 import 'package:the_carbon_conscious_traveller/widgets/travel_mode_buttons.dart';
-import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
 
 class GooglePlacesView extends StatefulWidget {
   const GooglePlacesView({super.key});
@@ -264,12 +263,14 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
               LatLng(destinationLatLng!.lat, destinationLatLng!.lng));
           _enableDestForm = false;
           _predictions = [];
+          final polylineState =
+              Provider.of<PolylinesState>(context, listen: false);
+          polylineState.transportMode = polylineState.mode;
         });
         if (mounted) {
           MapService().goToLocation(
               context, LatLng(destinationLatLng!.lat, destinationLatLng!.lng));
         }
-        _showModalBottomSheet();
       }
     } catch (err) {
       setState(() {
@@ -305,21 +306,5 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
 
     final polylineState = Provider.of<PolylinesState>(context, listen: false);
     polylineState.getPolyline(coordsState.coordinates);
-  }
-
-  void _showModalBottomSheet() {
-    showModalBottomSheet<void>(
-      showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      context: context,
-      builder: (BuildContext context) {
-        return const TravelModeBottomSheet();
-      },
-    );
   }
 }

@@ -10,7 +10,7 @@ class PolylinesState extends ChangeNotifier {
   final List<List<LatLng>> _routeCoordinates = [];
   List<DirectionsRoute> result = [];
   TravelMode _transportMode = TravelMode.driving;
-  String _mode = 'driving';
+  String _mode = '';
   int _activeRouteIndex = 0;
   final List<num> _distances = [];
   final List<String> _distanceTexts = [];

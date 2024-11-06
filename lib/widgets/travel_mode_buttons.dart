@@ -5,7 +5,6 @@ import 'package:the_carbon_conscious_traveller/state/polylines_state.dart';
 import 'package:the_carbon_conscious_traveller/state/private_car_state.dart';
 import 'package:the_carbon_conscious_traveller/state/private_motorcycle_state.dart';
 import 'package:the_carbon_conscious_traveller/state/transit_state.dart';
-import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_bottom_sheet.dart';
 
 class TravelModeButtons extends StatefulWidget {
   const TravelModeButtons({super.key});
@@ -123,7 +122,6 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
                   polylineState.setActiveRoute(polylineState.getActiveRoute());
                   polylineState.getPolyline(coordinatesState
                       .coordinates); // only call this function when the route coordinates are available
-                  _showModalBottomSheet();
                 },
                 //selectedBorderColor: Colors.green[600],
                 renderBorder: false,
@@ -180,21 +178,5 @@ class _TravelModeButtonsState extends State<TravelModeButtons> {
         ),
       );
     });
-  }
-
-  void _showModalBottomSheet() {
-    showModalBottomSheet<void>(
-      showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      context: context,
-      builder: (BuildContext context) {
-        return const TravelModeBottomSheet();
-      },
-    );
   }
 }

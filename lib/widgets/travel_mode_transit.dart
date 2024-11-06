@@ -55,40 +55,37 @@ class _TransitState extends State<Transit> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SingleChildScrollView(
-      child: FutureBuilder<List<DirectionsRoute>>(
-        future: handleTransitMode(),
-        builder: (context, snapshot) {
-          final emissions =
-              _transitEmissionsCalculator?.calculateEmissions(context);
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              heightFactor: 10,
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (snapshot.hasData) {
-            return snapshot.data == null
-                ? const Text('No data available')
-                : Column(
-                    children: [
-                      if (emissions != null)
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TransitListView(
-                              snapshot: snapshot, emissions: emissions),
-                        )
-                      else
-                        const Text('No emissions data available')
-                    ],
-                  );
-          } else {
-            return const Text('No data available');
-          }
-        },
-      ),
-    ));
+    return FutureBuilder<List<DirectionsRoute>>(
+      future: handleTransitMode(),
+      builder: (context, snapshot) {
+        final emissions =
+            _transitEmissionsCalculator?.calculateEmissions(context);
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            heightFactor: 10,
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.hasData) {
+          return snapshot.data == null
+              ? const Text('No data available')
+              : Column(
+                  children: [
+                    if (emissions != null)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TransitListView(
+                            snapshot: snapshot, emissions: emissions),
+                      )
+                    else
+                      const Text('No emissions data available')
+                  ],
+                );
+        } else {
+          return const Text('No data available');
+        }
+      },
+    );
   }
 }

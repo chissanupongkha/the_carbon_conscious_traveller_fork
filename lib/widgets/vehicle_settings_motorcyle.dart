@@ -51,86 +51,81 @@ class _MotorcyleSettingsState extends State<MotorcyleSettings> {
           motorcycleState.saveEmissions(emissions);
         }
 
-        return Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Visibility(
-                  visible: !motorcycleState.isVisible,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Title(
-                          color: Colors.black,
-                          child: Text(
-                            "Motorcycle",
-                            style: Theme.of(context).textTheme.displayLarge,
-                          ),
-                        ),
+        return Column(
+          children: [
+            Visibility(
+              visible: !motorcycleState.isVisible,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Title(
+                      color: Colors.black,
+                      child: Text(
+                        "Motorcycle",
+                        style: Theme.of(context).textTheme.displayLarge,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            DropdownMenu<MotorcycleSize>(
-                              width: 300,
-                              initialSelection: motorcycleState.selectedValue,
-                              requestFocusOnTap: false,
-                              label: const Text('Motorcycle Size'),
-                              onSelected: (MotorcycleSize? size) {
-                                motorcycleState.updateSelectedValue(
-                                    size ?? MotorcycleSize.label);
-                                setState(() {
-                                  selectedSize = motorcycleState.selectedValue;
-                                });
-                              },
-                              dropdownMenuEntries: MotorcycleSize.values
-                                  .map<DropdownMenuEntry<MotorcycleSize>>(
-                                      (MotorcycleSize size) {
-                                return DropdownMenuEntry<MotorcycleSize>(
-                                  value: size,
-                                  label: size.name,
-                                  enabled:
-                                      size.name != MotorcycleSize.label.name,
-                                  style: MenuItemButton.styleFrom(
-                                      foregroundColor: Colors.black),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      FilledButton(
-                        onPressed: () {
-                          changeVisibility(true);
-                          getEmissions();
-                          getMinMaxEmissions();
-                        },
-                        child: const Text('Calculate Emissions'),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                Visibility(
-                  visible: motorcycleState.isVisible,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 40),
-                    child: Column(
-                      children: [
-                        MotorcycleListView(
-                          polylinesState: polylinesState,
-                          vehicleState: motorcycleState,
-                          icon: Icons.sports_motorsports_outlined,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        DropdownMenu<MotorcycleSize>(
+                          width: 300,
+                          initialSelection: motorcycleState.selectedValue,
+                          requestFocusOnTap: false,
+                          label: const Text('Motorcycle Size'),
+                          onSelected: (MotorcycleSize? size) {
+                            motorcycleState.updateSelectedValue(
+                                size ?? MotorcycleSize.label);
+                            setState(() {
+                              selectedSize = motorcycleState.selectedValue;
+                            });
+                          },
+                          dropdownMenuEntries: MotorcycleSize.values
+                              .map<DropdownMenuEntry<MotorcycleSize>>(
+                                  (MotorcycleSize size) {
+                            return DropdownMenuEntry<MotorcycleSize>(
+                              value: size,
+                              label: size.name,
+                              enabled: size.name != MotorcycleSize.label.name,
+                              style: MenuItemButton.styleFrom(
+                                  foregroundColor: Colors.black),
+                            );
+                          }).toList(),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  FilledButton(
+                    onPressed: () {
+                      changeVisibility(true);
+                      getEmissions();
+                      getMinMaxEmissions();
+                    },
+                    child: const Text('Calculate Emissions'),
+                  ),
+                ],
+              ),
             ),
-          ),
+            Visibility(
+              visible: motorcycleState.isVisible,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 40),
+                child: Column(
+                  children: [
+                    MotorcycleListView(
+                      polylinesState: polylinesState,
+                      vehicleState: motorcycleState,
+                      icon: Icons.sports_motorsports_outlined,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

@@ -6,24 +6,42 @@ import 'package:the_carbon_conscious_traveller/widgets/travel_mode_transit.dart'
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_car.dart';
 import 'package:the_carbon_conscious_traveller/widgets/vehicle_settings_motorcyle.dart';
 
-class TravelModeBottomSheet extends StatelessWidget {
+class TravelModeBottomSheet extends StatefulWidget {
   const TravelModeBottomSheet({super.key});
 
   @override
+  State<TravelModeBottomSheet> createState() => _TravelModeBottomSheetState();
+}
+
+class _TravelModeBottomSheetState extends State<TravelModeBottomSheet> {
+  @override
   Widget build(BuildContext context) {
-    final polylineModel = Provider.of<PolylinesState>(context, listen: false);
-    String travelMode = polylineModel.mode;
-    return Builder(
-      builder: (context) {
-        if (travelMode == "motorcycling") {
-          return const MotorcyleSettings();
-        } else if (travelMode == "transit") {
-          return const Transit();
-        } else if (travelMode == "flying") {
-          return const Flying();
+    return Consumer<PolylinesState>(builder: (context, polylinesState, child) {
+      return Builder(builder: (context) {
+        if (polylinesState.result.isNotEmpty) {
+          if (polylinesState.mode == "motorcycling") {
+            return const MotorcyleSettings();
+          } else if (polylinesState.mode == "transit") {
+            return const Transit();
+          } else if (polylinesState.mode == "flying") {
+            return const Flying();
+          } else if (polylinesState.mode == "driving") {
+            return const CarSettings();
+          }
+          return Center(
+            child: Text("Start by entering a start and end location",
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                    )),
+          );
         }
-        return const CarSettings();
-      },
-    );
+        return Center(
+          child: Text("No travel mode selected",
+              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  )),
+        );
+      });
+    });
   }
 }
