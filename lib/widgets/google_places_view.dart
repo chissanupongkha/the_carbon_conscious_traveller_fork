@@ -70,11 +70,16 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
   Widget build(BuildContext context) {
     final predictionsWidgets = _buildPredictionWidgets();
 
-    return Center(
-      child: Column(
-        children: [
-          ...predictionsWidgets,
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Column(
+          children: [
+            ...predictionsWidgets,
+          ],
+        ),
       ),
     );
   }
@@ -93,7 +98,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
                 decoration: const InputDecoration(
                     label: Text("Enter a start location"),
                     icon: Icon(Icons.location_searching_outlined,
-                        color: Colors.green)),
+                        color: Colors.grey)),
               ),
               TextFormField(
                 controller: destinationController,
@@ -103,7 +108,7 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
                 decoration: const InputDecoration(
                   label: Text("Enter a destination"),
                   icon: Icon(Icons.location_searching_outlined,
-                      color: Colors.green),
+                      color: Colors.grey),
                 ),
               ),
             ],
@@ -119,24 +124,35 @@ class _GooglePlacesViewState extends State<GooglePlacesView> {
               .toList(growable: false),
         ),
       ),
-      const TravelModeButtons(),
-      const Image(
-        image: places.FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
+      const Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: Image(
+          image: places.FlutterGooglePlacesSdk.ASSET_POWERED_BY_GOOGLE_ON_WHITE,
+        ),
       ),
-      _buildErrorWidget(_fetchingPlaceErr),
-      _buildErrorWidget(_predictErr),
+      const TravelModeButtons(),
+      if (_fetchingPlaceErr != null || _predictErr != null) ...[
+        _buildErrorWidget(_fetchingPlaceErr),
+        _buildErrorWidget(_predictErr),
+      ],
     ];
   }
 
   Widget _buildPredictionItem(places.AutocompletePrediction item) {
     return InkWell(
+      onFocusChange: (hasFocus) {
+        if (!hasFocus) {
+          _predictions = [];
+        }
+      },
       onTap: () => _onItemTapped(item),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.only(
+                  left: 40, right: 10, top: 10.0, bottom: 10),
               child: Text(item.fullText,
                   style: Theme.of(context).textTheme.bodyMedium),
             ),
